@@ -41,7 +41,13 @@ function logout() {
         <el-tag class="role-tag" size="large">{{ parseRole(role) }}版</el-tag>
       </el-col>
 
-      <el-col :span="16">
+      <el-col :span="3">
+        <router-link to="/createStore" v-slot="{navigate}" class="no-link">
+          <h1 @click="navigate" class="header-text">创建商店</h1>
+        </router-link>
+      </el-col>
+
+      <el-col :span="13">
       </el-col>
 
       <el-col :span="1" class="header-icon">
