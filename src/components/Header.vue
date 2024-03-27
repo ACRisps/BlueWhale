@@ -41,8 +41,9 @@ function logout() {
         <el-tag class="role-tag" size="large">{{ parseRole(role) }}版</el-tag>
       </el-col>
 
+      <!--“创建商店”button-->
       <el-col :span="3">
-        <router-link to="/createStore" v-slot="{navigate}" class="no-link">
+        <router-link to="/createStore" v-slot="{navigate}">
           <h1 @click="navigate" class="header-text">创建商店</h1>
         </router-link>
       </el-col>
@@ -52,13 +53,17 @@ function logout() {
 
       <el-col :span="1" class="header-icon">
         <router-link to="/dashboard" v-slot="{navigate}">
-          <el-icon @click="navigate" :size="35" color="white" ><User /></el-icon>
+          <el-icon @click="navigate" :size="35" color="white">
+            <User/>
+          </el-icon>
         </router-link>
       </el-col>
 
       <el-col :span="1" class="header-icon">
         <a @click="logout">
-          <el-icon :size="35" color="white" ><SwitchButton /></el-icon>
+          <el-icon :size="35" color="white">
+            <SwitchButton/>
+          </el-icon>
         </a>
       </el-col>
     </el-row>
@@ -86,7 +91,7 @@ function logout() {
 }
 
 .header-text {
-  color:white;
+  color: white;
   font-size: x-large;
   min-width: max-content;
   margin-top: 15px;
@@ -96,7 +101,7 @@ function logout() {
 .header-icon {
   display: flex;
   flex-direction: column;
-  align-items:center;
+  align-items: center;
   justify-content: center;
 }
 </style>

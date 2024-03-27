@@ -9,6 +9,8 @@
 import {ref} from 'vue'
 import {uploadImage} from '../../api/tools'
 
+import {UploadFilled} from "@element-plus/icons-vue";
+
 //这里为大家提供上传且仅能上传1张图片的代码实现。
 const imageFileList = ref([])
 const logoUrl = ref('')
