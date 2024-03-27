@@ -37,31 +37,33 @@ function logout() {
         </router-link>
       </el-col>
 
-      <el-col :span="2">
+      <el-col :span="3">
         <el-tag class="role-tag" size="large">{{ parseRole(role) }}版</el-tag>
       </el-col>
 
       <!--“创建商店”button-->
-      <el-col :span="3">
+      <el-col :span="4">
         <router-link to="/createStore" v-slot="{navigate}">
           <h1 @click="navigate" class="header-text">创建商店</h1>
         </router-link>
       </el-col>
 
-      <el-col :span="14">
+      <el-col :span="12">
       </el-col>
 
+      <!--用户button-->
       <el-col :span="1" class="header-icon">
         <router-link to="/dashboard" v-slot="{navigate}">
-          <el-icon @click="navigate" :size="35" color="white">
+          <el-icon @click="navigate" :size="30" color="white">
             <User/>
           </el-icon>
         </router-link>
       </el-col>
 
+      <!--退出登录button-->
       <el-col :span="1" class="header-icon">
         <a @click="logout">
-          <el-icon :size="35" color="white">
+          <el-icon :size="30" color="white">
             <SwitchButton/>
           </el-icon>
         </a>

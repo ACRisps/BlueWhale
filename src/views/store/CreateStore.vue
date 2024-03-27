@@ -15,6 +15,10 @@ import {UploadFilled} from "@element-plus/icons-vue";
 const imageFileList = ref([])
 const logoUrl = ref('')
 
+// dev
+let storeName = ref('');
+let storeIntro = ref('');
+
 function handleChange(file: any, fileList: any) {
   imageFileList.value = fileList
   let formData = new FormData()
@@ -37,7 +41,7 @@ function uploadHttpRequest() {
 <template>
   <el-main>
 
-    <el-form>
+    <el-form label-width="150px">
 
       <el-form-item label="商店Logo">
         <el-upload
@@ -58,6 +62,15 @@ function uploadHttpRequest() {
           </div>
         </el-upload>
       </el-form-item>
+
+      <!--dev-->
+      <el-form-item label="商店名称">
+        <el-input v-model="storeName" style="width: 240px" placeholder="给商店取个好听的名字" clearable/>
+      </el-form-item>
+      <el-form-item label="商店简介">
+        <el-input v-model="storeIntro" style="width: 240px" placeholder="商店简介"/>
+      </el-form-item>
+
 
     </el-form>
 
