@@ -48,7 +48,7 @@ function logout() {
         </router-link>
       </el-col>
 
-      <el-col :span="13">
+      <el-col :span="14">
       </el-col>
 
       <el-col :span="1" class="header-icon">
@@ -74,9 +74,6 @@ function logout() {
 <style scoped>
 .custom-header {
   background-color: #409eff;
-  border-bottom-left-radius: 20px;
-  border-bottom-right-radius: 20px;
-
   display: flex;
   flex-direction: column;
 }
@@ -104,4 +101,5 @@ function logout() {
   align-items: center;
   justify-content: center;
 }
+
 </style>
