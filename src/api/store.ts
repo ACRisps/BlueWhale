@@ -15,4 +15,8 @@ export const uploadStoreInfo = (payload: StoreInfo) => {
         .then(res => {
             return res
         })
+        .catch( err=>{
+            return err.response
+        }
+        )
 }

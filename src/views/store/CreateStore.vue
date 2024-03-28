@@ -45,6 +45,8 @@ function handleStoreInfo() {
     imgURL: logoUrl.value,
     description: storeIntro.value,
   }).then(res => {
+
+    
     if (res.data.code == '000') {
       ElMessage({
         message: "已提交，请勿重复提交",
@@ -52,8 +54,9 @@ function handleStoreInfo() {
         center: true,
       })
     } else {
+      console.log(res)
       ElMessage({
-        message: "提交错误。请稍后再试",
+        message: res.data.msg,
         type:'warning',
         center: true,
       })

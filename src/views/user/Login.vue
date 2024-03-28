@@ -28,6 +28,7 @@ function handleLogin() {
     password: password.value
   }).then(res => {
     if (res.data.code === '000') {
+      console.log(res)
       ElMessage({
         message: "登录成功！",
         type: 'success',
@@ -35,7 +36,7 @@ function handleLogin() {
       })
       const token = res.data.result
       sessionStorage.setItem('token', token)
-
+      console.log(res.data)
       userInfo().then(res => {
         sessionStorage.setItem('name', res.data.result.name)
         sessionStorage.setItem('role', res.data.result.role)

@@ -11,7 +11,9 @@ function hasToken() {
 //当前实例的拦截器，对所有要发送给后端的请求进行处理，在其中加入token
 service.interceptors.request.use(
     config => {
+        
         if(hasToken()) {
+            
             config.headers['token'] = sessionStorage.getItem('token')
         }
         return config
@@ -33,7 +35,7 @@ service.interceptors.response.use(
     },
     error => {
         console.log(error);
-        return Promise.reject();
+        return Promise.reject(error);
     }
 )
 
