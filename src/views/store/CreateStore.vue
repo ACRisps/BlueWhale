@@ -10,10 +10,8 @@ import {ref} from 'vue'
 import {uploadImage} from '../../api/tools'
 import {uploadStoreInfo} from '../../api/store.ts'
 
-
 import {UploadFilled} from "@element-plus/icons-vue";
 
-//这里为大家提供上传且仅能上传1张图片的代码实现。
 const imageFileList = ref([])
 const logoUrl = ref('')
 
@@ -45,8 +43,6 @@ function handleStoreInfo() {
     imgURL: logoUrl.value,
     description: storeIntro.value,
   }).then(res => {
-
-    
     if (res.data.code == '000') {
       ElMessage({
         message: "已提交，请勿重复提交",
@@ -54,12 +50,14 @@ function handleStoreInfo() {
         center: true,
       })
     } else {
-      console.log(res)
-      ElMessage({
-        message: res.data.msg,
-        type:'warning',
-        center: true,
-      })
+      // console.log(res)
+      // ElMessage({
+      //   message: res.data.msg,
+      //   type: 'warning',
+      //   center: true,
+      // })
+      console.log("error")
+
     }
   })
 

@@ -3,7 +3,7 @@
 import {axios} from '../utils/request'
 import {STORE_MODULE} from './_prefix'
 
-type StoreInfo = {
+export type StoreInfo = {
     address: string,
     storeName: string,
     imgURL: string,
@@ -15,8 +15,19 @@ export const uploadStoreInfo = (payload: StoreInfo) => {
         .then(res => {
             return res
         })
-        .catch( err=>{
-            return err.response
-        }
+        .catch(err => {
+                return err.response
+            }
         )
+}
+
+// 获取商店列表
+export const storesInfo = () => {
+    return axios.get(`${STORE_MODULE}/getStores`)
+        .then(res => {
+            return res
+        })
+        .catch(err => {
+            return err.response
+        })
 }
