@@ -9,3 +9,5 @@ export const USER_MODULE = `${API_MODULE}/users`
 export const STORE_MODULE = `${API_MODULE}/stores`
 //商品模块
 export const PRODUCT_MODULE = `${API_MODULE}/products`
+
+

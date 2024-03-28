@@ -8,16 +8,14 @@
 <script setup lang="ts">
 import {ref} from 'vue'
 import {uploadImage} from '../../api/tools'
+import {uploadStoreInfo} from '../../api/store.ts'
+
 
 import {UploadFilled} from "@element-plus/icons-vue";
 
 //这里为大家提供上传且仅能上传1张图片的代码实现。
 const imageFileList = ref([])
 const logoUrl = ref('')
-
-// dev
-let storeName = ref('');
-let storeIntro = ref('');
 
 function handleChange(file: any, fileList: any) {
   imageFileList.value = fileList
@@ -35,14 +33,42 @@ function handleExceed() {
 function uploadHttpRequest() {
   return new XMLHttpRequest()
 }
+
+let storeName = ref('');
+let storeIntro = ref('');
+let storeAddress = ref('');
+
+function handleStoreInfo() {
+  uploadStoreInfo({
+    address: storeAddress.value,
+    storeName: storeName.value,
+    imgURL: logoUrl.value,
+    description: storeIntro.value,
+  }).then(res => {
+    if (res.data.code == '000') {
+      ElMessage({
+        message: "已提交，请勿重复提交",
+        type: 'success',
+        center: true,
+      })
+    } else {
+      ElMessage({
+        message: "提交错误。请稍后再试",
+        type:'warning',
+        center: true,
+      })
+    }
+  })
+
+}
+
 </script>
 
 
 <template>
   <el-main>
 
-    <el-form label-width="150px">
-
+    <el-form>
       <el-form-item label="商店Logo">
         <el-upload
             v-model:file-list="imageFileList"
@@ -50,10 +76,11 @@ function uploadHttpRequest() {
             :on-change="handleChange"
             :on-exceed="handleExceed"
             :on-remove="handleChange"
-            class="upload-demo"
+            class="upload-demo input"
             list-type="picture"
             :http-request="uploadHttpRequest"
-            drag>
+            drag
+        >
           <el-icon class="el-icon--upload">
             <upload-filled/>
           </el-icon>
@@ -65,11 +92,26 @@ function uploadHttpRequest() {
 
       <!--dev-->
       <el-form-item label="商店名称">
-        <el-input v-model="storeName" style="width: 240px" placeholder="给商店取个好听的名字" clearable/>
+        <el-input v-model="storeName" class="input" placeholder="给商店取个好听的名字" clearable/>
+      </el-form-item>
+      <el-form-item label="商店地址">
+        <el-input v-model="storeAddress" class="input" placeholder="在这里写下商店地址"
+                  type="textarea" :rows="2" resize="none"/>
       </el-form-item>
       <el-form-item label="商店简介">
-        <el-input v-model="storeIntro" style="width: 240px" placeholder="商店简介"/>
+        <el-input v-model="storeIntro" class="input" placeholder="在这里写下商店简介"
+                  type="textarea" :rows="5" resize="none"/>
       </el-form-item>
+
+
+      <el-row>
+        <el-col :span="3"/>
+        <el-col :span="5">
+          <el-button type="primary" @click="handleStoreInfo"
+          >创建
+          </el-button>
+        </el-col>
+      </el-row>
 
 
     </el-form>
@@ -79,5 +121,7 @@ function uploadHttpRequest() {
 
 
 <style scoped>
-
+.input {
+  width: 500px;
+}
 </style>

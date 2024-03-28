@@ -48,8 +48,7 @@ function logout() {
         </router-link>
       </el-col>
 
-      <el-col :span="12">
-      </el-col>
+      <el-col :span="12"/>
 
       <!--用户button-->
       <el-col :span="1" class="header-icon">
