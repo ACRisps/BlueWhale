@@ -53,8 +53,8 @@ function handleStoreInfo() {
       })
     } else {
       ElMessage({
-        message: "提交错误。请稍后再试",
-        type:'warning',
+        message: "提交错误，请检查或稍后再试",
+        type: 'warning',
         center: true,
       })
     }
