@@ -24,6 +24,8 @@ function logout() {
     router.push({path: "/login"})
   })
 }
+
+console.log(role)
 </script>
 
 
@@ -43,7 +45,7 @@ function logout() {
 
       <!--“创建商店”button-->
       <el-col :span="4">
-        <router-link to="/createStore" v-slot="{navigate}">
+        <router-link to="/createStore" v-slot="{navigate}" v-if="role=='MANAGER'">
           <h1 @click="navigate" class="header-text">创建商店</h1>
         </router-link>
       </el-col>

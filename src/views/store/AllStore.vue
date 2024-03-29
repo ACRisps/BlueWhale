@@ -28,7 +28,10 @@ onMounted(() => {
 
 <template>
   <el-main>
-
+<!--    <el-carousel :interval="5000" type="card" height="300px">-->
+<!--      <el-carousel-item v-for="item in 6" :key="item">-->
+<!--      </el-carousel-item>-->
+<!--    </el-carousel>-->
     <div v-for="store in storeList">
       <el-row justify="center">
         <el-card style="width: 800px" class="card">
@@ -46,11 +49,7 @@ onMounted(() => {
             <el-col :span="6">
               <el-image style="width: 100px; height: 100px" :src="store.imgURL" :fit="'contain'"/>
             </el-col>
-            <el-col :span="18">
-              <el-carousel :interval="5000" type="card" height="100px">
-                <el-carousel-item v-for="item in 6" :key="item">
-                </el-carousel-item>
-              </el-carousel>
+            <el-col :span="16">
             </el-col>
           </el-row>
 
@@ -77,7 +76,7 @@ onMounted(() => {
   margin: 5px;
 }
 
-/* 走马灯 */
+/* 走马灯
 .el-carousel__item h3 {
   color: #475669;
   opacity: 0.75;
@@ -89,5 +88,5 @@ onMounted(() => {
 .el-carousel__item:nth-child(n) {
   background-color: #99a9bf;
 }
-
+*/
 </style>
