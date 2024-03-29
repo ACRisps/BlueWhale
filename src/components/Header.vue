@@ -24,8 +24,6 @@ function logout() {
     router.push({path: "/login"})
   })
 }
-
-console.log(role)
 </script>
 
 

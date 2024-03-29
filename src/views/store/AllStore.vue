@@ -11,14 +11,6 @@ function loadStores() {
   })
 }
 
-function showMessage() {
-  ElMessage({
-    message: "施工中",
-    type: 'warning',
-    center: true,
-  })
-}
-
 onMounted(() => {
   loadStores()
 })
@@ -28,10 +20,6 @@ onMounted(() => {
 
 <template>
   <el-main>
-<!--    <el-carousel :interval="5000" type="card" height="300px">-->
-<!--      <el-carousel-item v-for="item in 6" :key="item">-->
-<!--      </el-carousel-item>-->
-<!--    </el-carousel>-->
     <div v-for="store in storeList">
       <el-row justify="center">
         <el-card style="width: 800px" class="card">
@@ -41,7 +29,10 @@ onMounted(() => {
                 {{ store.storeName }}
               </el-col>
               <el-col :span="2">
-                <el-button type="primary" @click="showMessage">进店</el-button>
+                <router-link :to="'/storeDetail/'+store.storeId" v-slot="{navigate}" class="no-link">
+                  <el-button type="primary" @click="navigate">进店</el-button>
+                </router-link>
+
               </el-col>
             </el-row>
           </template>
@@ -76,17 +67,4 @@ onMounted(() => {
   margin: 5px;
 }
 
-/* 走马灯
-.el-carousel__item h3 {
-  color: #475669;
-  opacity: 0.75;
-  line-height: 200px;
-  margin: 0;
-  text-align: center;
-}
-
-.el-carousel__item:nth-child(n) {
-  background-color: #99a9bf;
-}
-*/
 </style>

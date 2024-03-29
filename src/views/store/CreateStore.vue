@@ -50,13 +50,13 @@ function handleStoreInfo() {
         center: true,
       })
     } else {
-      // console.log(res)
-      // ElMessage({
-      //   message: res.data.msg,
-      //   type: 'warning',
-      //   center: true,
-      // })
-      console.log("error")
+      console.log(res)
+      ElMessage({
+        message: "提交失败（" + res.data.msg + "）",
+        type: 'warning',
+        center: true,
+      })
+
 
     }
   })
@@ -68,55 +68,54 @@ function handleStoreInfo() {
 
 <template>
   <el-main>
+    <el-row justify="center">
+      <el-form>
+        <el-form-item label="商店Logo">
+          <el-upload
+              v-model:file-list="imageFileList"
+              :limit="1"
+              :on-change="handleChange"
+              :on-exceed="handleExceed"
+              :on-remove="handleChange"
+              class="upload-demo input"
+              list-type="picture"
+              :http-request="uploadHttpRequest"
+              drag
+          >
+            <el-icon class="el-icon--upload">
+              <upload-filled/>
+            </el-icon>
+            <div class="el-upload__text">
+              将文件拖到此处或单击此处上传。仅允许上传一份文件。
+            </div>
+          </el-upload>
+        </el-form-item>
 
-    <el-form>
-      <el-form-item label="商店Logo">
-        <el-upload
-            v-model:file-list="imageFileList"
-            :limit="1"
-            :on-change="handleChange"
-            :on-exceed="handleExceed"
-            :on-remove="handleChange"
-            class="upload-demo input"
-            list-type="picture"
-            :http-request="uploadHttpRequest"
-            drag
-        >
-          <el-icon class="el-icon--upload">
-            <upload-filled/>
-          </el-icon>
-          <div class="el-upload__text">
-            将文件拖到此处或单击此处上传。仅允许上传一份文件。
-          </div>
-        </el-upload>
-      </el-form-item>
+        <!--dev-->
+        <el-form-item label="商店名称">
+          <el-input v-model="storeName" class="input" placeholder="给商店取个好听的名字" clearable/>
+        </el-form-item>
+        <el-form-item label="商店地址">
+          <el-input v-model="storeAddress" class="input" placeholder="在这里写下商店地址"
+                    type="textarea" :rows="2" resize="none"/>
+        </el-form-item>
+        <el-form-item label="商店简介">
+          <el-input v-model="storeIntro" class="input" placeholder="在这里写下商店简介"
+                    type="textarea" :rows="5" resize="none"/>
+        </el-form-item>
 
-      <!--dev-->
-      <el-form-item label="商店名称">
-        <el-input v-model="storeName" class="input" placeholder="给商店取个好听的名字" clearable/>
-      </el-form-item>
-      <el-form-item label="商店地址">
-        <el-input v-model="storeAddress" class="input" placeholder="在这里写下商店地址"
-                  type="textarea" :rows="2" resize="none"/>
-      </el-form-item>
-      <el-form-item label="商店简介">
-        <el-input v-model="storeIntro" class="input" placeholder="在这里写下商店简介"
-                  type="textarea" :rows="5" resize="none"/>
-      </el-form-item>
+        <el-row justify="center">
+          <el-col :span="3"/>
+          <el-col :span="5">
+            <el-button type="primary" @click="handleStoreInfo"
+            >点击创建
+            </el-button>
+          </el-col>
+        </el-row>
 
 
-      <el-row>
-        <el-col :span="3"/>
-        <el-col :span="5">
-          <el-button type="primary" @click="handleStoreInfo"
-          >创建
-          </el-button>
-        </el-col>
-      </el-row>
-
-
-    </el-form>
-
+      </el-form>
+    </el-row>
   </el-main>
 </template>
 
