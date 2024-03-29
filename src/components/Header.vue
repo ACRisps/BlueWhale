@@ -46,6 +46,9 @@ function logout() {
         <router-link to="/createStore" v-slot="{navigate}" v-if="role=='MANAGER'">
           <h1 @click="navigate" class="header-text">创建商店</h1>
         </router-link>
+        <router-link to="/createProduct" v-slot="{navigate}" v-if="role=='STAFF'">
+          <h1 @click="navigate" class="header-text">创建商品</h1>
+        </router-link>
       </el-col>
 
       <el-col :span="12"/>
