@@ -11,14 +11,6 @@ function loadStores() {
   })
 }
 
-function showMessage() {
-  ElMessage({
-    message: "施工中",
-    type: 'warning',
-    center: true,
-  })
-}
-
 onMounted(() => {
   loadStores()
 })
@@ -75,17 +67,4 @@ onMounted(() => {
   margin: 5px;
 }
 
-/* 走马灯
-.el-carousel__item h3 {
-  color: #475669;
-  opacity: 0.75;
-  line-height: 200px;
-  margin: 0;
-  text-align: center;
-}
-
-.el-carousel__item:nth-child(n) {
-  background-color: #99a9bf;
-}
-*/
 </style>
