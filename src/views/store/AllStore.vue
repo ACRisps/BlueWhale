@@ -2,7 +2,6 @@
 <script setup lang="ts">
 import {onMounted, ref} from 'vue'
 import {storesInfo, type StoresInfo} from "../../api/store.ts";
-// import { ElMessage } from 'element-plus'
 
 const storeList = ref([] as StoresInfo)
 
@@ -15,7 +14,7 @@ function loadStores() {
 function showMessage() {
   ElMessage({
     message: "施工中",
-    type: 'Warning',
+    type: 'warning',
     center: true,
   })
 }
@@ -43,7 +42,18 @@ onMounted(() => {
               </el-col>
             </el-row>
           </template>
-          <el-image style="width: 100px; height: 100px" :src="store.imgURL" :fit="'contain'"/>
+          <el-row>
+            <el-col :span="6">
+              <el-image style="width: 100px; height: 100px" :src="store.imgURL" :fit="'contain'"/>
+            </el-col>
+            <el-col :span="18">
+              <el-carousel :interval="5000" type="card" height="100px">
+                <el-carousel-item v-for="item in 6" :key="item">
+                </el-carousel-item>
+              </el-carousel>
+            </el-col>
+          </el-row>
+
         </el-card>
       </el-row>
     </div>
@@ -66,4 +76,18 @@ onMounted(() => {
 .card {
   margin: 5px;
 }
+
+/* 走马灯 */
+.el-carousel__item h3 {
+  color: #475669;
+  opacity: 0.75;
+  line-height: 200px;
+  margin: 0;
+  text-align: center;
+}
+
+.el-carousel__item:nth-child(n) {
+  background-color: #99a9bf;
+}
+
 </style>
