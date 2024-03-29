@@ -1,10 +1,4 @@
 <!--Lab2新增-创建商店界面-->
-<!--你可以选择把创建商店改成一个弹窗或其他界面的一个部分。
-这样的话，就不需要有这样一个views下的创建商店文件了，因为views下的文件一般会是一个单独的界面。
-但如果你觉得这一个部分的代码较多，合到其他文件里会使那个文件太长，
-可以在store文件夹下创建一个components子文件夹，里面存放store模块下产生的组件界面。把这个创建商店子组件放在里面
-这个传递数据的过程可能需要用到props-->
-
 <script setup lang="ts">
 import {ref} from 'vue'
 import {uploadImage} from '../../api/tools'
@@ -56,8 +50,6 @@ function handleStoreInfo() {
         type: 'warning',
         center: true,
       })
-
-
     }
   })
 
@@ -91,7 +83,6 @@ function handleStoreInfo() {
           </el-upload>
         </el-form-item>
 
-        <!--dev-->
         <el-form-item label="商店名称">
           <el-input v-model="storeName" class="input" placeholder="给商店取个好听的名字" clearable/>
         </el-form-item>
