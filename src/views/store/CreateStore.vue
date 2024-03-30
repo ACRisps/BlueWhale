@@ -6,16 +6,20 @@ import {uploadStoreInfo} from '../../api/store.ts'
 
 import {UploadFilled} from "@element-plus/icons-vue";
 
-const imageFileList = ref([])
-const logoUrl = ref('')
+const imageFileList = ref([] as any)
+const logoURLs = ref([''])
 
-function handleChange(file: any, fileList: any) {
+function handleChangeUltimate() {
+  for (let image of imageFileList.value) {
+    let formData = new FormData()
+    formData.append('file', image.raw);
+    uploadImage(formData).then(res => {
+      logoURLs.value.push(res.data.result as string);
+    })
+  }
+}
+function handleChange(_file: any, fileList: any) {
   imageFileList.value = fileList
-  let formData = new FormData()
-  formData.append('file', file.raw)
-  uploadImage(formData).then(res => {
-    logoUrl.value = res.data.result
-  })
 }
 
 function handleExceed() {
@@ -31,10 +35,11 @@ let storeIntro = ref('');
 let storeAddress = ref('');
 
 function handleStoreInfo() {
+  handleChangeUltimate()
   uploadStoreInfo({
     address: storeAddress.value,
     storeName: storeName.value,
-    imgURL: logoUrl.value,
+    imgURL: logoURLs.value,
     description: storeIntro.value,
   }).then(res => {
     if (res.data.code == '000') {
