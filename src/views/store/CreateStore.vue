@@ -39,7 +39,7 @@ function handleStoreInfo() {
   uploadStoreInfo({
     address: storeAddress.value,
     storeName: storeName.value,
-    imgURL: logoURLs.value,
+    imgURL: logoURLs.value[0],
     description: storeIntro.value,
   }).then(res => {
     if (res.data.code == '000') {
@@ -49,7 +49,6 @@ function handleStoreInfo() {
         center: true,
       })
     } else {
-      console.log(res)
       ElMessage({
         message: "提交失败（" + res.data.msg + "）",
         type: 'warning',
@@ -57,7 +56,6 @@ function handleStoreInfo() {
       })
     }
   })
-
 }
 
 </script>

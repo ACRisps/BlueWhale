@@ -1,25 +1,14 @@
 <!--Lab2新增-创建商品界面-->
 <script setup lang="ts">
-import {onMounted, ref} from 'vue'
+import {ref} from 'vue'
 import {uploadImage} from '../../api/tools'
 
 import {UploadFilled} from "@element-plus/icons-vue";
 import {uploadProductInfo} from "../../api/product.ts";
-import {userInfo} from "../../api/user.ts";
 
+const storeId = sessionStorage.getItem('userStoreId')
 const imageFileList = ref([] as any)
 const imgURLs = ref([''])
-const storeId = ref()
-
-function getStoreId() {
-  userInfo().then(res => {
-    storeId.value = res.data.result.storeId
-  })
-}
-
-onMounted(() => {
-  getStoreId()
-})
 
 function handleChangeUltimate() {
   for (let image of imageFileList.value) {
@@ -55,7 +44,7 @@ function handleProductInfo() {
     imgURLs: imgURLs.value,
     description: productIntro.value,
     productType: '',
-    storeId: storeId.value,
+    storeId: Number(storeId),
     price: price.value
   }).then(res => {
     if (res.data.code == '000') {
@@ -65,7 +54,6 @@ function handleProductInfo() {
         center: true,
       })
     } else {
-      console.log(res)
       ElMessage({
         message: "提交失败（" + res.data.msg + "）",
         type: 'warning',
