@@ -23,6 +23,7 @@ async function handleChangeUltimate() {
   await loopUpload();
   handleProductInfo();
 }
+
 async function loopUpload() {
   for (let image of imageFileList.value) {
     let formData = new FormData();
@@ -30,6 +31,11 @@ async function loopUpload() {
     const res = await uploadImage(formData);
     imgURLs.value.push(res.data.result as string);
   }
+}
+
+// 在上传失败时，因为上传图片并保存url先于上传执行，将已经保存的url作废
+function resetImgCache() {
+  imgURLs.value = [];
 }
 
 //   清空缓存
@@ -68,6 +74,7 @@ function handleProductInfo() {
       });
       clearCache();
     } else {
+      resetImgCache();
       ElMessage({
         message: "提交失败（" + res.data.msg + "）",
         type: 'warning',

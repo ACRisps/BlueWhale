@@ -1,26 +1,44 @@
 <!--Lab2新增-创建商店界面-->
 <script setup lang="ts">
-import {ref} from 'vue'
-import {uploadImage} from '../../api/tools'
-import {uploadStoreInfo} from '../../api/store.ts'
+import {ref} from 'vue';
+import {uploadImage} from '../../api/tools';
+import {uploadStoreInfo} from '../../api/store.ts';
 
 import {UploadFilled} from "@element-plus/icons-vue";
 
-const imageFileList = ref([] as any)
-const logoURLs = ref([''])
+const imageFileList = ref([] as any);
+const imgURLs = ref(['']);
+
+let storeName = ref('');
+let storeIntro = ref('');
+let storeAddress = ref('');
 
 // 异步上传
 async function handleChangeUltimate() {
   await loopUpload();
   handleStoreInfo();
 }
+
 async function loopUpload() {
   for (let image of imageFileList.value) {
     let formData = new FormData();
     formData.append('file', image.raw);
     const res = await uploadImage(formData);
-    logoURLs.value.push(res.data.result as string);
+    imgURLs.value.push(res.data.result as string);
   }
+}
+
+// 在上传失败时，因为上传图片并保存url先于上传执行，将已经保存的url作废
+function resetImgCache() {
+  imgURLs.value = [];
+}
+// 成功时调用
+function clearCache() {
+  imgURLs.value = [];
+  imageFileList.value = [];
+  storeName.value = '';
+  storeIntro.value = '';
+  storeAddress.value = '';
 }
 
 function handleExceed() {
@@ -28,19 +46,15 @@ function handleExceed() {
 }
 
 function uploadHttpRequest() {
-  return new XMLHttpRequest()
+  return new XMLHttpRequest();
 }
 
-let storeName = ref('');
-let storeIntro = ref('');
-let storeAddress = ref('');
 
 function handleStoreInfo() {
-  handleChangeUltimate()
   uploadStoreInfo({
     address: storeAddress.value,
     storeName: storeName.value,
-    imgURL: logoURLs.value[0],
+    imgURL: imgURLs.value[0],
     description: storeIntro.value,
   }).then(res => {
     if (res.data.code == '000') {
@@ -48,15 +62,17 @@ function handleStoreInfo() {
         message: "已提交，请勿重复提交",
         type: 'success',
         center: true,
-      })
+      });
+      clearCache();
     } else {
+      resetImgCache();
       ElMessage({
         message: "提交失败（" + res.data.msg + "）",
         type: 'warning',
         center: true,
-      })
+      });
     }
-  })
+  });
 }
 
 </script>
@@ -70,9 +86,7 @@ function handleStoreInfo() {
           <el-upload
               v-model:file-list="imageFileList"
               :limit="1"
-              :on-change="handleChange"
               :on-exceed="handleExceed"
-              :on-remove="handleChange"
               class="upload-demo input"
               list-type="picture"
               :http-request="uploadHttpRequest"
