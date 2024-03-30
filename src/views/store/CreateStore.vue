@@ -6,8 +6,11 @@ import {uploadStoreInfo} from '../../api/store.ts';
 
 import {UploadFilled} from "@element-plus/icons-vue";
 
+// v-model 绑定file-list
 const imageFileList = ref([] as any);
-const imgURLs = ref(['']);
+
+// 存返回的imgUrl
+const imgURLs = ref([] as any);
 
 let storeName = ref('');
 let storeIntro = ref('');
@@ -15,7 +18,9 @@ let storeAddress = ref('');
 
 // 异步上传
 async function handleChangeUltimate() {
+  console.log(imgURLs);
   await loopUpload();
+  console.log(imgURLs);
   handleStoreInfo();
 }
 
@@ -32,6 +37,7 @@ async function loopUpload() {
 function resetImgCache() {
   imgURLs.value = [];
 }
+
 // 成功时调用
 function clearCache() {
   imgURLs.value = [];
@@ -51,6 +57,7 @@ function uploadHttpRequest() {
 
 
 function handleStoreInfo() {
+  console.log(imgURLs.value)
   uploadStoreInfo({
     address: storeAddress.value,
     storeName: storeName.value,
@@ -58,12 +65,12 @@ function handleStoreInfo() {
     description: storeIntro.value,
   }).then(res => {
     if (res.data.code == '000') {
+      clearCache();
       ElMessage({
         message: "已提交，请勿重复提交",
         type: 'success',
         center: true,
       });
-      clearCache();
     } else {
       resetImgCache();
       ElMessage({

@@ -7,6 +7,7 @@ import {UploadFilled} from "@element-plus/icons-vue";
 import {uploadProductInfo} from "../../api/product.ts";
 
 const storeId = sessionStorage.getItem('userStoreId');
+
 // v-model 绑定file-list
 const imageFileList = ref([] as any);
 
@@ -21,6 +22,7 @@ let price = ref();
 // 异步上传
 async function handleChangeUltimate() {
   await loopUpload();
+  console.log(imgURLs);
   handleProductInfo();
 }
 
@@ -38,7 +40,7 @@ function resetImgCache() {
   imgURLs.value = [];
 }
 
-//   清空缓存
+// 清空缓存
 function clearCache() {
   imgURLs.value = [];
   imageFileList.value = [];
@@ -58,6 +60,7 @@ function uploadHttpRequest() {
 
 
 function handleProductInfo() {
+  console.log(imgURLs.value)
   uploadProductInfo({
     productName: productName.value,
     imgURLs: imgURLs.value,
@@ -67,12 +70,12 @@ function handleProductInfo() {
     price: price.value
   }).then(res => {
     if (res.data.code == '000') {
+      clearCache();
       ElMessage({
         message: "已提交，请勿重复提交",
         type: 'success',
         center: true,
       });
-      clearCache();
     } else {
       resetImgCache();
       ElMessage({
