@@ -1,4 +1,4 @@
-import {createRouter, createWebHashHistory} from "vue-router"
+import {createRouter, createWebHashHistory} from "vue-router";
 
 const router = createRouter({
     history: createWebHashHistory(),
@@ -56,6 +56,12 @@ const router = createRouter({
                     permission: ['STAFF']
                 }
             },
+            {
+                path: '/productDetail/:productId',
+                name: 'productDetail',
+                component: () => import('../views/product/ProductDetail.vue'),
+                meta: {title: '商品详情'}
+            },
         ]
     }, {
         path: '/404',
@@ -66,35 +72,35 @@ const router = createRouter({
         path: '/:catchAll(.*)',
         redirect: '/404'
     }]
-})
+});
 
 router.beforeEach((to, _, next) => {
     const token: string | null = sessionStorage.getItem('token');
-    const role: string | null = sessionStorage.getItem('role')
+    const role: string | null = sessionStorage.getItem('role');
 
     if (to.meta.title) {
-        document.title = to.meta.title
+        document.title = to.meta.title;
     }
 
     if (token) {
         if (to.meta.permission) {
             if (to.meta.permission.includes(role!)) {
-                next()
+                next();
             } else {
-                next('/404')
+                next('/404');
             }
         } else {
-            next()
+            next();
         }
     } else {
         if (to.path === '/login') {
             next();
         } else if (to.path === '/register') {
-            next()
+            next();
         } else {
-            next('/login')
+            next('/login');
         }
     }
-})
+});
 
-export {router}
+export {router};
