@@ -1,7 +1,7 @@
 // Lab2新增
 
 import {axios} from "../utils/request.ts";
-import {PRODUCT_MODULE} from "./_prefix.ts";
+import {PRODUCT_MODULE, STORE_MODULE} from "./_prefix.ts";
 
 export type ProductInfo = {
     productName: string,
@@ -21,4 +21,14 @@ export const uploadProductInfo = (payload: ProductInfo) => {
                 return err.response
             }
         )
+}
+
+export const productInfoDetail = (productId: number) => {
+    return axios.get(`${STORE_MODULE}/getProductDetail`, {params: {storeId: productId}})
+        .then(res => {
+            return res
+        })
+        .catch(err => {
+            return err.response
+        })
 }

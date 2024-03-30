@@ -60,12 +60,12 @@ function uploadHttpRequest() {
 
 
 function handleProductInfo() {
-  console.log(imgURLs.value)
+  console.log(imgURLs.value);
   uploadProductInfo({
     productName: productName.value,
     imgURLs: imgURLs.value,
     description: productIntro.value,
-    productType: '',
+    productType: productType.value,
     storeId: Number(storeId),
     price: price.value
   }).then(res => {

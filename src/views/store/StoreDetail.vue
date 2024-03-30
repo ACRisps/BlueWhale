@@ -22,7 +22,7 @@ onMounted(() => {
 
 <template>
   <el-container>
-    <!--希望把商店详情的一部分内容放在这个侧边栏里，你要真不想放也没事-->
+    <!--商店详情的一部分内容放在侧边栏里-->
     <el-aside width="25%" class="page-aside">
       <el-row justify="center" align="middle">
         <el-col :span="4">
