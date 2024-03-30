@@ -26,7 +26,7 @@ onMounted(() => {
     <el-aside width="25%" class="page-aside">
       <el-row justify="center" align="middle">
         <el-col :span="4">
-          <router-link :to="'/allStore'" v-slot="{navigate}" class="no-link">
+          <router-link :to="'/allStore'" v-slot="{navigate}">
             <el-icon class="arrow" @click="navigate">
               <ArrowLeft/>
             </el-icon>

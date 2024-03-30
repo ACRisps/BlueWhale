@@ -7,7 +7,7 @@ import {UploadFilled} from "@element-plus/icons-vue";
 import {uploadProductInfo} from "../../api/product.ts";
 import {userInfo} from "../../api/user.ts";
 
-const imageFileList = ref([])
+const imageFileList = ref([] as any)
 const imgURLs = ref([''])
 const storeId = ref()
 
@@ -21,13 +21,18 @@ onMounted(() => {
   getStoreId()
 })
 
-function handleChange(file: any, fileList: any) {
+function handleChangeUltimate() {
+  for (let image of imageFileList.value) {
+    let formData = new FormData()
+    formData.append('file', image.raw);
+    uploadImage(formData).then(res => {
+      imgURLs.value.push(res.data.result as string);
+    })
+  }
+}
+
+function handleChange(_file: any, fileList: any) {
   imageFileList.value = fileList
-  let formData = new FormData()
-  formData.append('file', file.raw)
-  uploadImage(formData).then(res =>{
-    imgURLs.value.push(res.data.result as string);
-  })
 }
 
 function handleExceed() {
@@ -44,6 +49,7 @@ let price = ref();
 let productType = ('');
 
 function handleProductInfo() {
+  handleChangeUltimate();
   uploadProductInfo({
     productName: productName.value,
     imgURLs: imgURLs.value,
