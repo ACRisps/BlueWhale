@@ -33,7 +33,7 @@ function logout() {
 
       <el-col :span="3" class="header-icon">
         <router-link to="/allStore" v-slot="{navigate}" class="no-link">
-          <h1 @click="navigate" class="header-text"> 蓝鲸在线购物</h1>
+          <h1 @click="navigate" class="header-text">BlueWhale!</h1>
         </router-link>
       </el-col>
 
@@ -87,7 +87,7 @@ function logout() {
 }
 
 .role-tag {
-  margin-top: 20px;
+  margin-top: 15px;
   font-size: 20px;
 }
 

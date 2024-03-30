@@ -1,27 +1,45 @@
 <!--Lab2新增-创建商品界面-->
 <script setup lang="ts">
-import {ref} from 'vue'
-import {uploadImage} from '../../api/tools'
+import {ref} from 'vue';
+import {uploadImage} from '../../api/tools';
 
 import {UploadFilled} from "@element-plus/icons-vue";
 import {uploadProductInfo} from "../../api/product.ts";
 
-const storeId = sessionStorage.getItem('userStoreId')
-const imageFileList = ref([] as any)
-const imgURLs = ref([''])
+const storeId = sessionStorage.getItem('userStoreId');
+// v-model 绑定file-list
+const imageFileList = ref([] as any);
 
-function handleChangeUltimate() {
+// 存返回的imgUrl
+const imgURLs = ref([] as any);
+
+let productName = ref('');
+let productIntro = ref('');
+let productType = ref('');
+let price = ref();
+
+// 异步上传
+async function handleChangeUltimate() {
+  await loopUpload();
+  handleProductInfo();
+}
+async function loopUpload() {
   for (let image of imageFileList.value) {
-    let formData = new FormData()
+    let formData = new FormData();
     formData.append('file', image.raw);
-    uploadImage(formData).then(res => {
-      imgURLs.value.push(res.data.result as string);
-    })
+    const res = await uploadImage(formData);
+    imgURLs.value.push(res.data.result as string);
   }
 }
 
-function handleChange(_file: any, fileList: any) {
-  imageFileList.value = fileList
+//   清空缓存
+function clearCache() {
+  imgURLs.value = [];
+  imageFileList.value = [];
+  productName.value = '';
+  productIntro.value = '';
+  productType.value = '';
+  price.value = null;
 }
 
 function handleExceed() {
@@ -29,16 +47,11 @@ function handleExceed() {
 }
 
 function uploadHttpRequest() {
-  return new XMLHttpRequest()
+  return new XMLHttpRequest();
 }
 
-let productName = ref('');
-let productIntro = ref('');
-let price = ref();
-let productType = ('');
 
 function handleProductInfo() {
-  handleChangeUltimate();
   uploadProductInfo({
     productName: productName.value,
     imgURLs: imgURLs.value,
@@ -52,15 +65,16 @@ function handleProductInfo() {
         message: "已提交，请勿重复提交",
         type: 'success',
         center: true,
-      })
+      });
+      clearCache();
     } else {
       ElMessage({
         message: "提交失败（" + res.data.msg + "）",
         type: 'warning',
         center: true,
-      })
+      });
     }
-  })
+  });
 }
 </script>
 
@@ -73,9 +87,7 @@ function handleProductInfo() {
           <el-upload
               v-model:file-list="imageFileList"
               :limit="5"
-              :on-change="handleChange"
               :on-exceed="handleExceed"
-              :on-remove="handleChange"
               class="upload-demo input"
               list-type="picture"
               :http-request="uploadHttpRequest"
@@ -109,7 +121,7 @@ function handleProductInfo() {
         <el-row justify="center">
           <el-col :span="3"/>
           <el-col :span="5">
-            <el-button type="primary" @click="handleProductInfo"
+            <el-button type="primary" @click="handleChangeUltimate"
             >点击创建
             </el-button>
           </el-col>

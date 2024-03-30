@@ -13,3 +13,5 @@ export const uploadImage = (payload:FormData) => {
             return res
         })
 }
+
+

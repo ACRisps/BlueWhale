@@ -49,23 +49,25 @@ onMounted(() => {
     <el-main>
       <div>{{ storeDetail.products }}</div>
       <div v-for="product in storeDetail.products">
-        <el-row justify="center">
-          <el-card style="width: 600px" class="card">
-            <template #header>
-              <el-row>
-                <el-col :span="22">
-                  {{ product.productName }}
-                </el-col>
-                <el-col :span="2">
-                </el-col>
-              </el-row>
-            </template>
 
-            <div v-for="URL in product.imgURLs">
-              <img :src="URL" alt="">
-            </div>
-          </el-card>
+        <el-row justify="center">
+          <router-link :to="'/storeDetail/'" v-slot="{navigate}">
+            <el-card style="width: 600px" class="card" @click="navigate">
+              <template #header>
+                <el-row>
+                  <el-col :span="20">
+                    {{ product.productName }}
+                  </el-col>
+                </el-row>
+              </template>
+
+              <div v-for="URL in product.imgURLs">
+                <el-image :src="URL" alt=""/>
+              </div>
+            </el-card>
+          </router-link>
         </el-row>
+
       </div>
     </el-main>
   </el-container>
@@ -100,7 +102,11 @@ onMounted(() => {
   margin: 20px;
 }
 
-.card{
+.card {
   margin: 5px;
+}
+
+a {
+  text-decoration: none;
 }
 </style>

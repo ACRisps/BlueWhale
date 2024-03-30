@@ -9,17 +9,18 @@ import {UploadFilled} from "@element-plus/icons-vue";
 const imageFileList = ref([] as any)
 const logoURLs = ref([''])
 
-function handleChangeUltimate() {
-  for (let image of imageFileList.value) {
-    let formData = new FormData()
-    formData.append('file', image.raw);
-    uploadImage(formData).then(res => {
-      logoURLs.value.push(res.data.result as string);
-    })
-  }
+// 异步上传
+async function handleChangeUltimate() {
+  await loopUpload();
+  handleStoreInfo();
 }
-function handleChange(_file: any, fileList: any) {
-  imageFileList.value = fileList
+async function loopUpload() {
+  for (let image of imageFileList.value) {
+    let formData = new FormData();
+    formData.append('file', image.raw);
+    const res = await uploadImage(formData);
+    logoURLs.value.push(res.data.result as string);
+  }
 }
 
 function handleExceed() {
@@ -101,7 +102,7 @@ function handleStoreInfo() {
         <el-row justify="center">
           <el-col :span="3"/>
           <el-col :span="5">
-            <el-button type="primary" @click="handleStoreInfo"
+            <el-button type="primary" @click="handleChangeUltimate"
             >点击创建
             </el-button>
           </el-col>
