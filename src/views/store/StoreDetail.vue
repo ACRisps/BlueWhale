@@ -46,9 +46,7 @@ onMounted(() => {
     </el-aside>
 
     <el-main>
-      <div>{{ storeDetail.products }}</div>
       <div v-for="product in storeDetail.products">
-
         <el-row justify="center">
           <router-link :to="'/productDetail/'+product.productId" v-slot="{navigate}">
             <el-card style="width: 600px" class="card" @click="navigate">
@@ -59,10 +57,7 @@ onMounted(() => {
                   </el-col>
                 </el-row>
               </template>
-
-              <div v-for="URL in product.imgURLs">
-                <el-image :src="URL" alt=""/>
-              </div>
+              <el-image v-for="URL in product.imgURLs" :src="URL" alt="" class="img" :fit="'cover'" />
             </el-card>
           </router-link>
         </el-row>
@@ -104,9 +99,17 @@ onMounted(() => {
 
 .card {
   margin: 5px;
+  height: 300px;
 }
 
 a {
   text-decoration: none;
+}
+
+.img{
+  height: 200px;
+  width: 250px;
+  margin: 5px 15px;
+
 }
 </style>

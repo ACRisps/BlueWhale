@@ -38,7 +38,7 @@ onMounted(() => {
           </template>
           <el-row>
             <el-col :span="6">
-              <el-image style="width: 100px; height: 100px" :src="store.imgURL" :fit="'contain'"/>
+              <el-image style="width: 100px; height: 100px" :src="store.imgURL" :fit="'cover'"/>
             </el-col>
             <el-col :span="16">
             </el-col>

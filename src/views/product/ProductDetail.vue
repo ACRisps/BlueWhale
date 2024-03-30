@@ -49,7 +49,12 @@ onMounted(() => {
     </el-aside>
 
     <el-main>
+      <el-row justify="center">
+        <el-col :span="24" v-for="url in productDetail.imgURLs" style="text-align: center">
+          <el-image :src="url" alt="" :fit="'cover'" class="img"/>
+        </el-col>
 
+      </el-row>
     </el-main>
   </el-container>
 </template>
@@ -75,6 +80,13 @@ onMounted(() => {
 }
 
 .description {
+  margin: 20px;
+}
+
+
+.img {
+  height: 500px;
+  width: 600px;
   margin: 20px;
 }
 </style>
