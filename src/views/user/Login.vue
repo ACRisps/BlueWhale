@@ -1,25 +1,25 @@
 <script setup lang="ts">
-import {ElForm, ElFormItem} from "element-plus"
-import {ref, computed} from 'vue'
-import {router} from '../../router'
-import {userInfo, userLogin} from "../../api/user.ts"
+import {ElForm, ElFormItem} from "element-plus";
+import {ref, computed} from 'vue';
+import {router} from '../../router';
+import {userInfo, userLogin} from "../../api/user.ts";
 
 // 输入框值（需要在前端拦截不合法输入：是否为空+额外规则）
-const tel = ref('')
-const password = ref('')
+const tel = ref('');
+const password = ref('');
 
 // 电话号码是否为空
-const hasTelInput = computed(() => tel.value != '')
+const hasTelInput = computed(() => tel.value != '');
 // 密码是否为空
-const hasPasswordInput = computed(() => password.value != '')
+const hasPasswordInput = computed(() => password.value != '');
 // 电话号码的规则
-const chinaMobileRegex = /^1(3[0-9]|4[579]|5[0-35-9]|6[2567]|7[0-8]|8[0-9]|9[189])\d{8}$/
-const telLegal = computed(() => chinaMobileRegex.test(tel.value))
+const chinaMobileRegex = /^1(3[0-9]|4[579]|5[0-35-9]|6[2567]|7[0-8]|8[0-9]|9[189])\d{8}$/;
+const telLegal = computed(() => chinaMobileRegex.test(tel.value));
 // 密码不设置特殊规则
 // 登录按钮可用性
 const loginDisabled = computed(() => {
-  return !(hasTelInput.value && telLegal.value && hasPasswordInput.value)
-})
+  return !(hasTelInput.value && telLegal.value && hasPasswordInput.value);
+});
 
 // 登录按钮触发
 function handleLogin() {
@@ -28,29 +28,29 @@ function handleLogin() {
     password: password.value
   }).then(res => {
     if (res.data.code === '000') {
-      console.log(res)
+      console.log(res);
       ElMessage({
         message: "登录成功！",
         type: 'success',
         center: true,
-      })
-      const token = res.data.result
-      sessionStorage.setItem('token', token)
+      });
+      const token = res.data.result;
+      sessionStorage.setItem('token', token);
       userInfo().then(res => {
-        sessionStorage.setItem('name', res.data.result.name)
-        sessionStorage.setItem('role', res.data.result.role)
-        sessionStorage.setItem('userStoreId', res.data.result.storeId)
-        router.push({path: "/dashboard"})
-      })
+        sessionStorage.setItem('name', res.data.result.name);
+        sessionStorage.setItem('role', res.data.result.role);
+        sessionStorage.setItem('userStoreId', res.data.result.storeId);
+        router.push({path: "/allStore"});
+      });
     } else if (res.data.code === '400') {
       ElMessage({
         message: res.data.msg,
         type: 'error',
         center: true,
-      })
-      password.value = ''
+      });
+      password.value = '';
     }
-  })
+  });
 }
 </script>
 

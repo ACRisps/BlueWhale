@@ -25,6 +25,11 @@ export type ProductUploadInfo = {
     number: number
 }
 
+export type ProductNumUpdateInfo = {
+    productId: number,
+    number: number
+}
+
 export const uploadProductInfo = (payload: ProductUploadInfo) => {
     return axios.post(`${PRODUCT_MODULE}/create`, payload,)
         .then(res => {
@@ -44,4 +49,15 @@ export const productInfoDetail = (productId: number) => {
         .catch(err => {
             return err.response;
         });
+};
+
+export const uploadProductNumUpdate = (payload: ProductNumUpdateInfo) => {
+    return axios.post(`${PRODUCT_MODULE}`, payload,)
+        .then(res => {
+            return res;
+        })
+        .catch(err => {
+                return err.response;
+            }
+        );
 };
