@@ -17,7 +17,6 @@ function loadProductInfo(x: number) {
 
 onMounted(() => {
   const productId = Number(useRoute().params.productId);
-  console.log(productId);
   loadProductInfo(productId);
 });
 
@@ -45,6 +44,9 @@ onMounted(() => {
 
       <el-row>
         <el-text class="description">{{ productDetail.description }}</el-text>
+      </el-row>
+      <el-row>
+        <el-text class="number">剩余库存：{{ productDetail.number }}件</el-text>
       </el-row>
     </el-aside>
 
@@ -83,6 +85,10 @@ onMounted(() => {
   margin: 20px;
 }
 
+.number{
+  margin: 20px;
+  color: darksalmon;
+}
 
 .img {
   height: 500px;

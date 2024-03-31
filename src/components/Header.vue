@@ -41,7 +41,7 @@ function logout() {
         <el-tag class="role-tag" size="large">{{ parseRole(role) }}版</el-tag>
       </el-col>
       <el-col :span="12"/>
-      <!--“创建商店”button-->
+      <!--“创建”button-->
       <el-col :span="1" class="header-icon">
         <router-link to="/createStore" v-slot="{navigate}" v-if="role=='MANAGER'">
           <el-icon @click="navigate" :size="30" color="white">

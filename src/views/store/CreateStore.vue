@@ -57,7 +57,7 @@ function uploadHttpRequest() {
 
 
 function handleStoreInfo() {
-  console.log(imgURLs.value)
+  console.log(imgURLs.value);
   uploadStoreInfo({
     address: storeAddress.value,
     storeName: storeName.value,
@@ -87,6 +87,9 @@ function handleStoreInfo() {
 
 <template>
   <el-main>
+    <el-row justify="center">
+      <div class="title">您可以在这里创建新商店</div>
+    </el-row>
     <el-row justify="center">
       <el-form>
         <el-form-item label="商店Logo">
@@ -139,5 +142,12 @@ function handleStoreInfo() {
 <style scoped>
 .input {
   width: 500px;
+}
+
+.title {
+  margin-top: 10px;
+  margin-bottom: 40px;
+  font-size: large;
+  color: green;
 }
 </style>

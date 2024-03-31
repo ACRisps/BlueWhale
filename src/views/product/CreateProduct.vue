@@ -94,6 +94,9 @@ function handleProductInfo() {
 <template>
   <el-main>
     <el-row justify="center">
+      <div class="title">您可以在这里为您的商店创建商品</div>
+    </el-row>
+    <el-row justify="center">
       <el-form>
         <el-form-item label="商品图片">
           <el-upload
@@ -153,5 +156,12 @@ function handleProductInfo() {
 <style scoped>
 .input {
   width: 500px;
+}
+
+.title {
+  margin-top: 10px;
+  margin-bottom: 40px;
+  font-size: large;
+  color: dodgerblue;
 }
 </style>
