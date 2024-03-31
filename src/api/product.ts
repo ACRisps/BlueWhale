@@ -15,7 +15,17 @@ export type ProductInfo = {
     number: number
 }
 
-export const uploadProductInfo = (payload: ProductInfo) => {
+export type ProductUploadInfo = {
+    productName: string,
+    productType: string,
+    imgURLs: string[],
+    description: string
+    storeId: number
+    price: number
+    number: number
+}
+
+export const uploadProductInfo = (payload: ProductUploadInfo) => {
     return axios.post(`${PRODUCT_MODULE}/create`, payload,)
         .then(res => {
             return res;

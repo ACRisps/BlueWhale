@@ -17,6 +17,7 @@ const imgURLs = ref([] as any);
 let productName = ref('');
 let productIntro = ref('');
 let productType = ref('');
+let number = ref();
 let price = ref();
 
 // 异步上传
@@ -67,7 +68,8 @@ function handleProductInfo() {
     description: productIntro.value,
     productType: productType.value,
     storeId: Number(storeId),
-    price: price.value
+    price: price.value,
+    number: number.value,
   }).then(res => {
     if (res.data.code == '000') {
       clearCache();
@@ -121,6 +123,10 @@ function handleProductInfo() {
         </el-form-item>
         <el-form-item label="商品类型">
           <el-input v-model="productType" class="input" placeholder="FOOD"
+                    type="textarea" :rows="1" resize="none"/>
+        </el-form-item>
+        <el-form-item label="库存数量">
+          <el-input v-model="number" class="input" placeholder="现有库存数"
                     type="textarea" :rows="1" resize="none"/>
         </el-form-item>
         <el-form-item label="商品简介">

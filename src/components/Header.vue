@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import {router} from '../router';
 import {parseRole} from "../utils";
-import {User, SwitchButton} from "@element-plus/icons-vue";   //图标
+import {User, SwitchButton, Edit} from "@element-plus/icons-vue";   //图标
 
 const role = sessionStorage.getItem('role');    //登录的时候插入的
 
@@ -37,22 +37,23 @@ function logout() {
         </router-link>
       </el-col>
 
-      <el-col :span="3">
+      <el-col :span="6">
         <el-tag class="role-tag" size="large">{{ parseRole(role) }}版</el-tag>
       </el-col>
-
+      <el-col :span="12"/>
       <!--“创建商店”button-->
-      <el-col :span="4">
+      <el-col :span="1" class="header-icon">
         <router-link to="/createStore" v-slot="{navigate}" v-if="role=='MANAGER'">
-          <h1 @click="navigate" class="header-text">创建商店</h1>
+          <el-icon @click="navigate" :size="30" color="white">
+            <Edit/>
+          </el-icon>
         </router-link>
         <router-link to="/createProduct" v-slot="{navigate}" v-if="role=='STAFF'">
-          <h1 @click="navigate" class="header-text">创建商品</h1>
+          <el-icon @click="navigate" :size="30" color="white">
+            <Edit/>
+          </el-icon>
         </router-link>
       </el-col>
-
-      <el-col :span="12"/>
-
       <!--用户button-->
       <el-col :span="1" class="header-icon">
         <router-link to="/dashboard" v-slot="{navigate}">
