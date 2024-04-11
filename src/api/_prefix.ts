@@ -11,3 +11,4 @@ export const STORE_MODULE = `${API_MODULE}/stores`
 export const PRODUCT_MODULE = `${API_MODULE}/products`
 
 
+export const ORDERITEM_MODULE = `${API_MODULE}/orderItems`
