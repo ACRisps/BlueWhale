@@ -1,5 +1,6 @@
 // Lab2新增
 // 开发时请解除3-4行的注释
+import { pa } from 'element-plus/es/locales.mjs';
 import {axios} from '../utils/request'
 import {STORE_MODULE} from './_prefix'
 import {ProductInfo} from "./product.ts";
@@ -44,8 +45,8 @@ export const uploadStoreInfo = (payload: StoreInfo) => {
 }
 
 // 获取商店列表
-export const storesInfo = () => {
-    return axios.get(`${STORE_MODULE}/getStores`,)
+export const storesInfo = (page:number,size:number  ) => {
+    return axios.get(`${STORE_MODULE}/getStores`, {params: {page: page ,size:size}} )
         .then(res => {
             return res
         })

@@ -2,21 +2,35 @@
 <script setup lang="ts">
 import {onMounted, ref} from 'vue'
 import {storesInfo, type StoresInfo} from "../../api/store.ts";
+import { Pagination } from 'element-ui';
 
 const storeList = ref([] as StoresInfo)
+const currentPage = ref(1 as number) ;
+const pageSize = ref(5 as number);
+const totalItems  = ref(0 as number);
 
-function loadStores() {
-  storesInfo().then(res => {
-    storeList.value = res.data.result;
+function loadStores( page: number ) {
+  storesInfo( page-1, pageSize.value).then(res => {
+    totalItems.value = res.data.result.totalElements;
+    storeList.value = res.data.result.content;
   })
+}
+function handlePageChange(page: number) {
+  currentPage.value = page;
+  loadStores(page);
+}
+
+function handleSizeChange(newSize: number) {
+  pageSize.value = newSize;
+  currentPage.value = 1; // Reset to the first page
+  loadStores(currentPage.value);
 }
 
 onMounted(() => {
-  loadStores()
+  loadStores( currentPage.value)
 })
 
 </script>
-
 
 <template>
   <el-main>
@@ -51,13 +65,19 @@ onMounted(() => {
   </el-main>
 
   <el-footer>
-    <el-row justify="center">
-      <div class="example-pagination-block">
-        <el-pagination layout="prev, pager, next" :page-count="1"/>
-      </div>
-    </el-row>
+      <el-row justify="center">
+        <div class="example-pagination-block">
+          <el-pagination
+            layout="prev, pager, next"
+            :page-count="Math.ceil(totalItems / pageSize)"
+            :current-page="currentPage"
+            @current-change="handlePageChange"
+            @size-change="handleSizeChange"
+          />
+        </div>
+      </el-row>
+    </el-footer>
 
-  </el-footer>
 
 </template>
 
