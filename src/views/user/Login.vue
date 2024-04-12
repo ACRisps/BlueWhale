@@ -38,6 +38,8 @@ function handleLogin() {
       sessionStorage.setItem('token', token);
       userInfo().then(res => {
         sessionStorage.setItem('name', res.data.result.name);
+        sessionStorage.setItem('phone', res.data.result.phone);
+
         sessionStorage.setItem('role', res.data.result.role);
         sessionStorage.setItem('userStoreId', res.data.result.storeId);
         router.push({path: "/allStore"});

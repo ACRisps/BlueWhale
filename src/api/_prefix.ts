@@ -12,3 +12,5 @@ export const PRODUCT_MODULE = `${API_MODULE}/products`
 
 
 export const ORDERITEM_MODULE = `${API_MODULE}/orderItems`
+
+export const BIGORDER_MODULE = `${API_MODULE}/bigOrders`

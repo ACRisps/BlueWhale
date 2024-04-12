@@ -3,8 +3,12 @@
 
 import {onMounted, ref} from "vue";
 import {ProductInfo, productInfoDetail, uploadProductNumUpdate} from "../../api/product.ts";
+import {uploadOrderItem} from "../../api/orderItem.ts";
+
+import { uploadBigOrder } from "../../api/bigOrder.ts";
 import {useRoute} from "vue-router";
 import {ArrowLeft} from "@element-plus/icons-vue";
+
 
 const productDetail = ref({} as ProductInfo);
 
@@ -14,16 +18,26 @@ const storeId = (Number)(sessionStorage.getItem('userStoreId'));
 let newNumber = ref();
 let showNumUpdateInput = ref(false);
 
+let phone = String (sessionStorage.getItem("phone"));
+let productPrice=ref();
+let productNumber = ref(0 as number);
+let method=ref();
+let state=ref();
+let address=ref();
+
+
 // 加载；同时给newNumber初始化
 function loadProductInfo(x: number) {
   productInfoDetail(x).then(res => {
     productDetail.value = res.data.result;
     newNumber.value = productDetail.value.number;
+    productPrice.value=productDetail.value.price;
   });
 }
 
 onMounted(() => {
   const productId = Number(useRoute().params.productId);
+
   loadProductInfo(productId);
 });
 
@@ -51,6 +65,69 @@ function handleDialogConfirm() {
       });
     }
   });
+}
+
+function handleBuy(){
+  console.log()
+  console.log()
+  console.log(productNumber.value) 
+  uploadOrderItem
+      ({
+        productName: productDetail.value.productName,
+        storeId: Number(storeId),
+        productPrice: productDetail.value.price,
+        productNumber: 1,
+        orderSerialNumber: "",
+        deliverSerialNumber: "",
+        total:  String( parseFloat(productPrice.value) * productNumber.value),
+        productId: productDetail.value.productId,
+        imgURL: productDetail.value.imgURLs[0],
+        userPhone: phone,
+        method: method.value,
+        state: state.value,
+        address: address.value
+      }
+    ).then(res => {
+    if (res.data.code == '000') {
+        let orders=ref( [] as String[])
+        orders.value.push(res.data.result)
+      //应该再包装成大订单
+      uploadBigOrder({
+        orders: orders.value,
+        method: method.value,
+        state: state.value,
+        totalAfterCoupon:  String( parseFloat(productPrice.value) * productNumber.value),
+        totalBeforeCoupon:  String( parseFloat(productPrice.value) * productNumber.value),
+        userPhone: phone,
+        address: address.value
+      }).then(res=>{
+        if (res.data.code == '000') {
+          ElMessage({
+        message: "购买成功",
+        type: 'success',
+        center: true,
+      });
+
+      }else{
+      ElMessage({
+        message: "提交失败（" + res.data.msg + "）",
+        type: 'warning',
+        center: true,
+      });
+    }
+
+
+      })
+
+
+    }
+
+    }
+    
+  );
+
+
+
 }
 
 </script>
@@ -103,7 +180,12 @@ function handleDialogConfirm() {
           </el-dialog>
         </el-col>
 
-      </el-row>
+        <el-col>
+        <el-button type="primary" size="small" @click="handleBuy">购买  </el-button>
+        
+        </el-col>
+
+    </el-row>
     </el-aside>
 
     <el-main>
