@@ -1,7 +1,7 @@
 <!--Lab2新增-全部商店界面/主页-->
 <script setup lang="ts">
 import {onMounted, ref} from 'vue';
-import {storesInfo, type StoresInfo} from "../../api/store.ts";
+import {storesPageInfo, type StoresInfo} from "../../api/store.ts";
 
 const storeList = ref([] as StoresInfo);
 const currentPage = ref(1 as number);
@@ -9,8 +9,7 @@ const pageSize = ref(5 as number);
 const totalItems = ref(0 as number);
 
 function loadStores(page: number) {
-  storesInfo(page - 1, pageSize.value).then(res => {
-    console.log(res);
+  storesPageInfo(page - 1, pageSize.value).then(res => {
     totalItems.value = res.data.result.totalElements;
     storeList.value = res.data.result.content;
   });

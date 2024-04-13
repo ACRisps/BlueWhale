@@ -10,7 +10,7 @@ export type ProductInfo = {
     imgURLs: string[],
     description: string
     storeId: number
-    price: String
+    price: string
     createTime: string
     number: number
 }

@@ -2,7 +2,7 @@
 import {ref, computed,onMounted} from 'vue'
 import {router} from '../../router'
 import {userRegister} from "../../api/user.ts"
-import {storesInfo, type StoresInfo} from "../../api/store.ts";
+import {storesPageInfo, type StoresInfo} from "../../api/store.ts";
 // 输入框值（需要在前端拦截不合法输入：是否为空+额外规则）
 const name = ref('')
 const identity = ref('')
@@ -46,7 +46,7 @@ const registerDisabled = computed(() => {
 const storeList = ref([] as StoresInfo)
 
 function loadStores() {
-  storesInfo().then(res => {
+  storesPageInfo().then(res => {
     storeList.value = res.data.result;
   })
 }

@@ -28,7 +28,7 @@ const router = createRouter({
             {
                 path: '/allStore',
                 name: 'allStore',
-                component: () => import('../views/store/AllStore.vue'),
+                component: () => import('../views/store/AllStores.vue'),
                 meta: {title: '商品列表界面/主页'}
             },
             //你也可以把创建商店界面改成一个弹窗
@@ -61,6 +61,14 @@ const router = createRouter({
                 name: 'productDetail',
                 component: () => import('../views/product/ProductDetail.vue'),
                 meta: {title: '商品详情'}
+            },
+            {
+                path: '/orders',
+                name: 'orders',
+                component: () => import('../views/order/AllOrders.vue'),
+                meta: {
+                    title: '订单管理',
+                }
             },
         ]
     }, {

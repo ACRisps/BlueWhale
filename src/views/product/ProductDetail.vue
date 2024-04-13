@@ -9,7 +9,6 @@ import {uploadOrderContainer} from "../../api/orderContainer.ts";
 import {useRoute} from "vue-router";
 import {ArrowLeft} from "@element-plus/icons-vue";
 
-
 const productDetail = ref({} as ProductInfo);
 
 const role = sessionStorage.getItem("role");
@@ -37,7 +36,6 @@ function loadProductInfo(x: number) {
 
 onMounted(() => {
   const productId = Number(useRoute().params.productId);
-
   loadProductInfo(productId);
 });
 
@@ -115,13 +113,8 @@ function handleBuy() {
                 center: true,
               });
             }
-
-
           });
-
-
         }
-
       }
   );
 
@@ -160,22 +153,7 @@ function handleBuy() {
         <el-col :span="8" v-if="role==='STAFF'&&storeId===productDetail.storeId">
           <el-button type="primary" size="small" @click="showNumUpdateInput=true">修改库存数
           </el-button>
-          <el-dialog
-              v-model="showNumUpdateInput"
-              title="修改商品库存数"
-              width="500"
-          >
-            <el-input v-model="newNumber" class="input"
-                      type="textarea" :rows="1" resize="none"/>
-            <template #footer>
-              <div class="dialog-footer">
-                <el-button @click="handleDialogCancel">取消</el-button>
-                <el-button type="primary" @click="handleDialogConfirm">
-                  确认更改
-                </el-button>
-              </div>
-            </template>
-          </el-dialog>
+
         </el-col>
       </el-row>
 
@@ -195,6 +173,23 @@ function handleBuy() {
       </el-row>
     </el-main>
   </el-container>
+
+  <el-dialog
+      v-model="showNumUpdateInput"
+      title="修改商品库存数"
+      width="500"
+  >
+    <el-input v-model="newNumber" class="input"
+              type="textarea" :rows="1" resize="none"/>
+    <template #footer>
+      <div class="dialog-footer">
+        <el-button @click="handleDialogCancel">取消</el-button>
+        <el-button type="primary" @click="handleDialogConfirm">
+          确认更改
+        </el-button>
+      </div>
+    </template>
+  </el-dialog>
 </template>
 
 

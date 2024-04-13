@@ -19,6 +19,7 @@ export type StoresInfo = {
     description: string
 }[]
 
+
 // 用于单个商店展示
 export interface StoreInfoDetail {
     address: string;
@@ -44,8 +45,8 @@ export const uploadStoreInfo = (payload: StoreInfo) => {
 };
 
 // 获取商店列表
-export const storesInfo = (page: number, size: number) => {
-    return axios.get(`${STORE_MODULE}/getStores`, {params: {page: page, size: size}})
+export const storesPageInfo = (page: number, size: number) => {
+    return axios.get(`${STORE_MODULE}`, {params: {page: page, size: size}})
         .then(res => {
             return res;
         })
