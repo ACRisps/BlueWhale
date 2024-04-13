@@ -28,7 +28,7 @@ function logout() {
 
 
 <template>
-  <el-header class="custom-header" height="20">
+  <el-header class="header" height="20">
     <el-row :gutter="10">
 
       <el-col :span="3" class="header-icon">
@@ -44,12 +44,12 @@ function logout() {
       <!--“创建”button-->
       <el-col :span="1" class="header-icon">
         <router-link to="/createStore" v-slot="{navigate}" v-if="role=='MANAGER'">
-          <el-icon @click="navigate" :size="30" color="white">
+          <el-icon @click="navigate" :size="27" color="white">
             <Edit/>
           </el-icon>
         </router-link>
         <router-link to="/createProduct" v-slot="{navigate}" v-if="role=='STAFF'">
-          <el-icon @click="navigate" :size="30" color="white">
+          <el-icon @click="navigate" :size="27" color="white">
             <Edit/>
           </el-icon>
         </router-link>
@@ -57,7 +57,7 @@ function logout() {
       <!--用户button-->
       <el-col :span="1" class="header-icon">
         <router-link to="/dashboard" v-slot="{navigate}">
-          <el-icon @click="navigate" :size="30" color="white">
+          <el-icon @click="navigate" :size="27" color="white">
             <User/>
           </el-icon>
         </router-link>
@@ -66,7 +66,7 @@ function logout() {
       <!--退出登录button-->
       <el-col :span="1" class="header-icon">
         <a @click="logout">
-          <el-icon :size="30" color="white">
+          <el-icon :size="27" color="white">
             <SwitchButton/>
           </el-icon>
         </a>
@@ -77,10 +77,12 @@ function logout() {
 
 
 <style scoped>
-.custom-header {
+.header {
   background-color: #409eff;
   display: flex;
   flex-direction: column;
+  position: relative;
+  height: 50px;
 }
 
 .no-link {
@@ -88,7 +90,7 @@ function logout() {
 }
 
 .role-tag {
-  margin-top: 15px;
+  margin-top: 10px;
   font-size: 20px;
 }
 
@@ -96,7 +98,7 @@ function logout() {
   color: white;
   font-size: x-large;
   min-width: max-content;
-  margin-top: 15px;
+  margin-top: 10px;
   margin-bottom: 15px;
 }
 

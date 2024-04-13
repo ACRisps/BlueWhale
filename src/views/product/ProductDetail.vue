@@ -5,7 +5,7 @@ import {onMounted, ref} from "vue";
 import {ProductInfo, productInfoDetail, uploadProductNumUpdate} from "../../api/product.ts";
 import {uploadOrderItem} from "../../api/orderItem.ts";
 
-import { uploadBigOrder } from "../../api/bigOrder.ts";
+import {uploadOrderContainer} from "../../api/orderContainer.ts";
 import {useRoute} from "vue-router";
 import {ArrowLeft} from "@element-plus/icons-vue";
 
@@ -18,12 +18,12 @@ const storeId = (Number)(sessionStorage.getItem('userStoreId'));
 let newNumber = ref();
 let showNumUpdateInput = ref(false);
 
-let phone = String (sessionStorage.getItem("phone"));
-let productPrice=ref();
+let phone = String(sessionStorage.getItem("phone"));
+let productPrice = ref();
 let productNumber = ref(0 as number);
-let method=ref();
-let state=ref();
-let address=ref();
+let method = ref();
+let state = ref();
+let address = ref();
 
 
 // 加载；同时给newNumber初始化
@@ -31,7 +31,7 @@ function loadProductInfo(x: number) {
   productInfoDetail(x).then(res => {
     productDetail.value = res.data.result;
     newNumber.value = productDetail.value.number;
-    productPrice.value=productDetail.value.price;
+    productPrice.value = productDetail.value.price;
   });
 }
 
@@ -67,19 +67,19 @@ function handleDialogConfirm() {
   });
 }
 
-function handleBuy(){
-  console.log()
-  console.log()
-  console.log(productNumber.value) 
+function handleBuy() {
+  console.log();
+  console.log();
+  console.log(productNumber.value);
   uploadOrderItem
-      ({
+  ({
         productName: productDetail.value.productName,
         storeId: Number(storeId),
         productPrice: productDetail.value.price,
         productNumber: 1,
         orderSerialNumber: "",
         deliverSerialNumber: "",
-        total:  String( parseFloat(productPrice.value) * productNumber.value),
+        total: String(parseFloat(productPrice.value) * productNumber.value),
         productId: productDetail.value.productId,
         imgURL: productDetail.value.imgURLs[0],
         userPhone: phone,
@@ -87,45 +87,43 @@ function handleBuy(){
         state: state.value,
         address: address.value
       }
-    ).then(res => {
-    if (res.data.code == '000') {
-        let orders=ref( [] as String[])
-        orders.value.push(res.data.result)
-      //应该再包装成大订单
-      uploadBigOrder({
-        orders: orders.value,
-        method: method.value,
-        state: state.value,
-        totalAfterCoupon:  String( parseFloat(productPrice.value) * productNumber.value),
-        totalBeforeCoupon:  String( parseFloat(productPrice.value) * productNumber.value),
-        userPhone: phone,
-        address: address.value
-      }).then(res=>{
+  ).then(res => {
         if (res.data.code == '000') {
-          ElMessage({
-        message: "购买成功",
-        type: 'success',
-        center: true,
-      });
+          let orders = ref([] as String[]);
+          orders.value.push(res.data.result);
+          //应该再包装成大订单
+          uploadOrderContainer({
+            orders: orders.value,
+            method: method.value,
+            state: state.value,
+            totalAfterCoupon: String(parseFloat(productPrice.value) * productNumber.value),
+            totalBeforeCoupon: String(parseFloat(productPrice.value) * productNumber.value),
+            userPhone: phone,
+            address: address.value
+          }).then(res => {
+            if (res.data.code == '000') {
+              ElMessage({
+                message: "购买成功",
+                type: 'success',
+                center: true,
+              });
 
-      }else{
-      ElMessage({
-        message: "提交失败（" + res.data.msg + "）",
-        type: 'warning',
-        center: true,
-      });
-    }
+            } else {
+              ElMessage({
+                message: "提交失败（" + res.data.msg + "）",
+                type: 'warning',
+                center: true,
+              });
+            }
 
 
-      })
+          });
 
 
-    }
+        }
 
-    }
-    
+      }
   );
-
 
 
 }
@@ -179,16 +177,17 @@ function handleBuy(){
             </template>
           </el-dialog>
         </el-col>
+      </el-row>
 
-        <el-col>
-        <el-button type="primary" size="small" @click="handleBuy">购买  </el-button>
-        
+      <el-row justify="center" style="margin: 10px">
+        <el-col style="text-align: center">
+          <el-button type="primary" @click="handleBuy">购买</el-button>
         </el-col>
+      </el-row>
 
-    </el-row>
     </el-aside>
 
-    <el-main>
+    <el-main class="page-main">
       <el-row justify="center">
         <el-col :span="24" v-for="url in productDetail.imgURLs" style="text-align: center">
           <el-image :src="url" alt="" :fit="'cover'" class="img"/>
@@ -208,7 +207,21 @@ function handleBuy(){
 
 .page-aside {
   border-right: lightgrey solid 1px;
+  position: absolute;
+  left: 0;
+  top: 51px;
+  bottom: 0;
 }
+
+.page-main {
+  position: absolute;
+  left: 25%;
+  right: 0;
+  top: 52px;
+  bottom: 0;
+  overflow-y: scroll;
+}
+
 
 .productTitle {
   color: cornflowerblue;

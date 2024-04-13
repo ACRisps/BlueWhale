@@ -1,20 +1,21 @@
 <!--Lab2新增-全部商店界面/主页-->
 <script setup lang="ts">
-import {onMounted, ref} from 'vue'
+import {onMounted, ref} from 'vue';
 import {storesInfo, type StoresInfo} from "../../api/store.ts";
-import { Pagination } from 'element-ui';
 
-const storeList = ref([] as StoresInfo)
-const currentPage = ref(1 as number) ;
+const storeList = ref([] as StoresInfo);
+const currentPage = ref(1 as number);
 const pageSize = ref(5 as number);
-const totalItems  = ref(0 as number);
+const totalItems = ref(0 as number);
 
-function loadStores( page: number ) {
-  storesInfo( page-1, pageSize.value).then(res => {
+function loadStores(page: number) {
+  storesInfo(page - 1, pageSize.value).then(res => {
+    console.log(res);
     totalItems.value = res.data.result.totalElements;
     storeList.value = res.data.result.content;
-  })
+  });
 }
+
 function handlePageChange(page: number) {
   currentPage.value = page;
   loadStores(page);
@@ -27,13 +28,13 @@ function handleSizeChange(newSize: number) {
 }
 
 onMounted(() => {
-  loadStores( currentPage.value)
-})
+  loadStores(currentPage.value);
+});
 
 </script>
 
 <template>
-  <el-main>
+  <el-main class="page-main">
     <div v-for="store in storeList">
       <el-row justify="center">
         <el-card style="width: 800px" class="card">
@@ -61,28 +62,33 @@ onMounted(() => {
         </el-card>
       </el-row>
     </div>
-
-  </el-main>
-
-  <el-footer>
-      <el-row justify="center">
-        <div class="example-pagination-block">
-          <el-pagination
+    <el-row justify="center">
+      <div class="example-pagination-block">
+        <el-pagination
             layout="prev, pager, next"
             :page-count="Math.ceil(totalItems / pageSize)"
             :current-page="currentPage"
             @current-change="handlePageChange"
             @size-change="handleSizeChange"
-          />
-        </div>
-      </el-row>
-    </el-footer>
-
+        />
+      </div>
+    </el-row>
+  </el-main>
 
 </template>
 
 
 <style scoped>
+.page-main {
+  position: absolute;
+  top: 52px;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  overflow-y: scroll;
+}
+
+
 .card {
   margin: 5px;
 }

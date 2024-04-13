@@ -38,14 +38,14 @@ onMounted(() => {
         <el-col :span="4"></el-col>
       </el-row>
       <el-row justify="center">
-        <el-image class="storeImg" :src="storeDetail.imgURL" :fit="'fill'"/>
+        <el-image class="storeImg" :src="storeDetail.imgURL" :fit="'cover'"/>
       </el-row>
       <el-row>
         <el-text class="description">{{ storeDetail.description }}</el-text>
       </el-row>
     </el-aside>
 
-    <el-main>
+    <el-main class="page-main">
       <div v-for="product in storeDetail.products">
         <el-row justify="center">
           <router-link :to="'/productDetail/'+product.productId" v-slot="{navigate}">
@@ -57,7 +57,7 @@ onMounted(() => {
                   </el-col>
                 </el-row>
               </template>
-              <el-image v-for="URL in product.imgURLs" :src="URL" alt="" class="img" :fit="'cover'" />
+              <el-image v-for="URL in product.imgURLs" :src="URL" alt="" class="img" :fit="'cover'"/>
             </el-card>
           </router-link>
         </el-row>
@@ -71,7 +71,21 @@ onMounted(() => {
 <style scoped>
 .page-aside {
   border-right: lightgrey solid 1px;
+  position: absolute;
+  left: 0;
+  top: 51px;
+  bottom: 0;
 }
+
+.page-main {
+  position: absolute;
+  left: 25%;
+  right: 0;
+  top: 52px;
+  bottom: 0;
+  overflow-y: scroll;
+}
+
 
 .storeTitle {
   color: cornflowerblue;
@@ -84,7 +98,7 @@ onMounted(() => {
 .storeImg {
   margin-left: 20px;
   margin-right: 20px;
-  max-height: 400px;
+  max-height: 360px;
 }
 
 .arrow {
@@ -106,7 +120,7 @@ a {
   text-decoration: none;
 }
 
-.img{
+.img {
   height: 200px;
   width: 250px;
   margin: 5px 15px;
