@@ -80,7 +80,7 @@ function handleOrderConfirm() {
   uploadOrderItem
   ({
         productName: productDetail.value.productName,
-        storeId: Number(storeId),
+        storeId: productDetail.value.storeId,
         productPrice: productDetail.value.price,
         productNumber: buyNum.value,
         orderSerialNumber: "",
@@ -135,7 +135,7 @@ function handlePayImmediately() {
   uploadOrderItem
   ({
         productName: productDetail.value.productName,
-        storeId: Number(storeId),
+        storeId: productDetail.value.storeId,
         productPrice: productDetail.value.price,
         productNumber: buyNum.value,
         orderSerialNumber: "",
