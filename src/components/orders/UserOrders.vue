@@ -1,10 +1,7 @@
-<!--Lab2新增-全部商店界面/主页-->
 <script setup lang="ts">
 import {onMounted, ref} from 'vue';
 import {type OrderItemsInfo, orderItemPageInfo} from '../../api/orderItem.ts';
 import {uploadCommemt} from "../../api/comment.ts";
-
-const role = sessionStorage.getItem("role");
 
 const orderList = ref([] as OrderItemsInfo);
 const currentPage = ref(1 as number);
@@ -102,6 +99,9 @@ function handleDialogConfirm() {
 
 <template>
   <el-main class="page-main">
+    <el-row justify="center">
+      <div class="title">在这里查看您下的订单</div>
+    </el-row>
     <div v-for="order in orderList">
       <el-row justify="center">
         <el-card style="width: 800px" class="card">
@@ -178,6 +178,12 @@ function handleDialogConfirm() {
 
 .card {
   margin: 5px;
+}
+.title {
+  margin-top: 10px;
+  margin-bottom: 40px;
+  font-size: large;
+  color: cornflowerblue;
 }
 
 </style>
