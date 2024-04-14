@@ -46,8 +46,8 @@ const registerDisabled = computed(() => {
 const storeList = ref([] as StoresInfo)
 
 function loadStores() {
-  storesPageInfo().then(res => {
-    storeList.value = res.data.result;
+  storesPageInfo(1,1).then(res => {
+    storeList.value = res.data.result.content;
   })
 }
 onMounted(() => {
