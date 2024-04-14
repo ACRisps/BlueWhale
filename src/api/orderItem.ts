@@ -1,6 +1,5 @@
 import {axios} from "../utils/request.ts";
-import {ORDER_MODULE, PRODUCT_MODULE} from "./_prefix.ts";
-import {ProductNumUpdateInfo} from "./product.ts";
+import {ORDER_MODULE} from "./_prefix.ts";
 
 
 export type OrderItemInfo = {

@@ -4,6 +4,8 @@ import {onMounted, ref} from 'vue';
 import {type OrderItemsInfo, orderItemPageInfo} from '../../api/orderItem.ts';
 import {uploadCommemt} from "../../api/comment.ts";
 
+const role = sessionStorage.getItem("role");
+
 const orderList = ref([] as OrderItemsInfo);
 const currentPage = ref(1 as number);
 const pageSize = ref(5 as number);
@@ -59,14 +61,14 @@ function clearCommentCache() {
 function handleDialogConfirm() {
   if (rate.value < 1) {
     ElMessage({
-      message: "请别忘记为商品打分~",
+      message: "请别忘记为商品打分",
       type: 'warning',
       center: true,
     });
     return;
   } else if (comment.value === "") {
     ElMessage({
-      message: "请别忘记留下评论~",
+      message: "请别忘记留下评论",
       type: 'warning',
       center: true,
     });

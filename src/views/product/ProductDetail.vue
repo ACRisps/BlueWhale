@@ -17,10 +17,12 @@ const storeId = (Number)(sessionStorage.getItem('userStoreId'));
 let newNumber = ref();
 let showNumUpdateInput = ref(false);
 
+let showBuyOptions = ref(false);
+let useDelivery = ref(true);
+let buyNum = ref(1);
+
 let phone = String(sessionStorage.getItem("phone"));
 let productPrice = ref();
-let productNumber = ref(0 as number);
-let method = ref();
 let state = ref();
 let address = ref();
 
@@ -39,11 +41,11 @@ onMounted(() => {
   loadProductInfo(productId);
 });
 
-function handleDialogCancel() {
+function handleNumDialogCancel() {
   showNumUpdateInput.value = false;
 }
 
-function handleDialogConfirm() {
+function handleNumDialogConfirm() {
   uploadProductNumUpdate({
     productId: productDetail.value.productId,
     number: newNumber.value
@@ -65,23 +67,28 @@ function handleDialogConfirm() {
   });
 }
 
-function handleBuy() {
-  console.log();
-  console.log();
-  console.log(productNumber.value);
+function getMethod() {
+  if (useDelivery.value) {
+    return "DELIVERY";
+  } else {
+    return "PICKUP";
+  }
+}
+
+function handleBuyDialogConfirm() {
   uploadOrderItem
   ({
         productName: productDetail.value.productName,
         storeId: Number(storeId),
         productPrice: productDetail.value.price,
-        productNumber: 1,
+        productNumber: buyNum.value,
         orderSerialNumber: "",
         deliverSerialNumber: "",
-        total: String(parseFloat(productPrice.value) * productNumber.value),
+        total: String(parseFloat(productPrice.value) * buyNum.value),
         productId: productDetail.value.productId,
         imgURL: productDetail.value.imgURLs[0],
         userPhone: phone,
-        method: method.value,
+        method: getMethod(),
         state: state.value,
         address: address.value
       }
@@ -92,20 +99,23 @@ function handleBuy() {
           //应该再包装成大订单
           uploadOrderContainer({
             orders: orders.value,
-            method: method.value,
+            method: getMethod(),
             state: state.value,
-            totalAfterCoupon: String(parseFloat(productPrice.value) * productNumber.value),
-            totalBeforeCoupon: String(parseFloat(productPrice.value) * productNumber.value),
+            totalAfterCoupon: String(parseFloat(productPrice.value) * buyNum.value),
+            totalBeforeCoupon: String(parseFloat(productPrice.value) * buyNum.value),
             userPhone: phone,
             address: address.value
           }).then(res => {
             if (res.data.code == '000') {
+              {
+                showBuyOptions.value = false;
+                buyNum.value = 1;
+              }
               ElMessage({
                 message: "购买成功",
                 type: 'success',
                 center: true,
               });
-
             } else {
               ElMessage({
                 message: "提交失败（" + res.data.msg + "）",
@@ -118,11 +128,9 @@ function handleBuy() {
       }
   );
 
-
 }
 
 </script>
-
 
 <template>
   <el-container>
@@ -156,10 +164,13 @@ function handleBuy() {
 
         </el-col>
       </el-row>
+      <el-row>
+        <br>
+      </el-row>
 
       <el-row justify="center" style="margin: 10px">
         <el-col style="text-align: center">
-          <el-button type="primary" @click="handleBuy">购买</el-button>
+          <el-button type="primary" @click="showBuyOptions=true">立即购买</el-button>
         </el-col>
       </el-row>
 
@@ -170,6 +181,9 @@ function handleBuy() {
         <el-col :span="24" v-for="url in productDetail.imgURLs" style="text-align: center">
           <el-image :src="url" alt="" :fit="'cover'" class="img"/>
         </el-col>
+        <!--        <el-col :span="24" v-for="url in productDetail." style="text-align: center">-->
+        <!--          <el-image :src="url" alt="" :fit="'cover'" class="img"/>-->
+        <!--        </el-col>-->
       </el-row>
     </el-main>
   </el-container>
@@ -183,10 +197,33 @@ function handleBuy() {
               type="textarea" :rows="1" resize="none"/>
     <template #footer>
       <div class="dialog-footer">
-        <el-button @click="handleDialogCancel">取消</el-button>
-        <el-button type="primary" @click="handleDialogConfirm">
+        <el-button @click="handleNumDialogCancel">取消</el-button>
+        <el-button type="primary" @click="handleNumDialogConfirm">
           确认更改
         </el-button>
+      </div>
+    </template>
+  </el-dialog>
+
+  <el-dialog
+      v-model="showBuyOptions"
+      title="选择数量和提货方式"
+      width=40%
+  >
+    <el-row justify="center">
+      <el-switch v-model="useDelivery" active-text="快递送达" inactive-text="到店自提"
+                 style="--el-switch-off-color: #13ce66"/>
+    </el-row>
+    <br>
+    <el-row justify="center">
+      <el-input-number v-model="buyNum" :min="1" :max="100" size="small"/>
+    </el-row>
+
+
+    <template #footer>
+      <div class="dialog-footer">
+        <el-button type="primary" @click="handleBuyDialogConfirm">确认下单</el-button>
+        <el-button @click="showBuyOptions=false">取消</el-button>
       </div>
     </template>
   </el-dialog>
