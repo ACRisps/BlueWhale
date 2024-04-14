@@ -170,7 +170,7 @@ function handleBuyDialogConfirm() {
 
       <el-row justify="center" style="margin: 10px">
         <el-col style="text-align: center">
-          <el-button type="primary" @click="showBuyOptions=true">立即购买</el-button>
+          <el-button type="primary" v-if="role=='CUSTOMER'"  @click="showBuyOptions=true">立即购买</el-button>
         </el-col>
       </el-row>
 
