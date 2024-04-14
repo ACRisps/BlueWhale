@@ -8,6 +8,7 @@ import {uploadOrderItem} from "../../api/orderItem.ts";
 import {uploadOrderContainer} from "../../api/orderContainer.ts";
 import {useRoute} from "vue-router";
 import {ArrowLeft} from "@element-plus/icons-vue";
+import {uploadPay} from "../../api/pay.ts";
 
 const productDetail = ref({} as ProductInfo);
 
@@ -75,7 +76,7 @@ function getMethod() {
   }
 }
 
-function handleBuyDialogConfirm() {
+function handleOrderConfirm() {
   uploadOrderItem
   ({
         productName: productDetail.value.productName,
@@ -112,7 +113,7 @@ function handleBuyDialogConfirm() {
                 buyNum.value = 1;
               }
               ElMessage({
-                message: "购买成功",
+                message: "订单提交成功，可稍后支付",
                 type: 'success',
                 center: true,
               });
@@ -128,6 +129,70 @@ function handleBuyDialogConfirm() {
       }
   );
 
+}
+
+function handlePayImmediately() {
+  uploadOrderItem
+  ({
+        productName: productDetail.value.productName,
+        storeId: Number(storeId),
+        productPrice: productDetail.value.price,
+        productNumber: buyNum.value,
+        orderSerialNumber: "",
+        deliverSerialNumber: "",
+        total: String(parseFloat(productPrice.value) * buyNum.value),
+        productId: productDetail.value.productId,
+        imgURL: productDetail.value.imgURLs[0],
+        userPhone: phone,
+        method: getMethod(),
+        state: state.value,
+        address: address.value
+      }
+  ).then(res => {
+        if (res.data.code == '000') {
+          let orders = ref([] as String[]);
+          orders.value.push(res.data.result);
+          //应该再包装成大订单
+          uploadOrderContainer({
+            orders: orders.value,
+            method: getMethod(),
+            state: state.value,
+            totalAfterCoupon: String(parseFloat(productPrice.value) * buyNum.value),
+            totalBeforeCoupon: String(parseFloat(productPrice.value) * buyNum.value),
+            userPhone: phone,
+            address: address.value
+          }).then(res => {
+            if (res.data.code == '000') {
+              {
+                showBuyOptions.value = false;
+                buyNum.value = 1;
+              }
+              uploadPay(res.data.result).then(res => {
+                if (res.data.code == '000') {
+                  ElMessage({
+                    message: "购买成功",
+                    type: "success",
+                    center: true,
+                  });
+                } else {
+                  ElMessage({
+                    message: "支付失败（" + res.data.msg + "）",
+                    type: 'warning',
+                    center: true,
+                  });
+                }
+              });
+            } else {
+              ElMessage({
+                message: "产生订单失败（" + res.data.msg + "）",
+                type: 'warning',
+                center: true,
+              });
+            }
+          });
+        }
+      }
+  );
 }
 
 </script>
@@ -170,7 +235,7 @@ function handleBuyDialogConfirm() {
 
       <el-row justify="center" style="margin: 10px">
         <el-col style="text-align: center">
-          <el-button type="primary" v-if="role=='CUSTOMER'"  @click="showBuyOptions=true">立即购买</el-button>
+          <el-button type="primary" v-if="role=='CUSTOMER'" @click="showBuyOptions=true">立即购买</el-button>
         </el-col>
       </el-row>
 
@@ -222,7 +287,8 @@ function handleBuyDialogConfirm() {
 
     <template #footer>
       <div class="dialog-footer">
-        <el-button type="primary" @click="handleBuyDialogConfirm">确认下单</el-button>
+        <el-button type="primary" @click="handleOrderConfirm">提交订单</el-button>
+        <el-button type="primary" @click="handlePayImmediately">立即支付</el-button>
         <el-button @click="showBuyOptions=false">取消</el-button>
       </div>
     </template>
