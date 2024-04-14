@@ -6,10 +6,12 @@ import {useRoute} from "vue-router";
 import {ArrowLeft} from "@element-plus/icons-vue";
 
 const storeDetail = ref({} as StoreInfoDetail);
+const grade = ref<number>();
 
 function loadStoreDetail(x: number) {
   storeInfoDetail(x).then(res => {
     storeDetail.value = res.data.result;
+    grade.value = Number(storeDetail.value.grade);
   });
 }
 
@@ -36,6 +38,15 @@ onMounted(() => {
           <div class="storeTitle">{{ storeDetail.storeName }}</div>
         </el-col>
         <el-col :span="4"></el-col>
+      </el-row>
+      <el-row justify="center" class="grade-stars">
+        <el-rate
+            v-model="grade"
+            disabled
+            show-score
+            text-color="#ff9900"
+            score-template="{value} points"
+        />
       </el-row>
       <el-row justify="center">
         <el-image class="storeImg" :src="storeDetail.imgURL" :fit="'cover'"/>
@@ -69,6 +80,12 @@ onMounted(() => {
 
 
 <style scoped>
+.grade-stars {
+  margin-top: 1px;
+  margin-bottom: 30px;
+}
+
+
 .page-aside {
   border-right: lightgrey solid 1px;
   position: absolute;
@@ -91,7 +108,7 @@ onMounted(() => {
   color: cornflowerblue;
   font-size: 20px;
   margin-top: 15px;
-  margin-bottom: 15px;
+  margin-bottom: 25px;
   text-align: center;
 }
 
@@ -103,8 +120,9 @@ onMounted(() => {
 
 .arrow {
   font-size: 25px;
-  margin-top: 5px;
-  margin-left: 8px
+  margin-top: 16px;
+  margin-left: 8px;
+  margin-bottom: 25px;
 }
 
 .description {

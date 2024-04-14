@@ -29,6 +29,7 @@ export interface StoreInfoDetail {
     products: ProductInfo[];
     storeId: number;
     storeName: string;
+    grade: string
 
     [property: string]: any;
 }
