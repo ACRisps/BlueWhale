@@ -9,8 +9,11 @@ import {uploadOrderContainer} from "../../api/orderContainer.ts";
 import {useRoute} from "vue-router";
 import {ArrowLeft} from "@element-plus/icons-vue";
 import {uploadPay} from "../../api/pay.ts";
+import {parseTime} from "../../utils";
 
+// display
 const productDetail = ref({} as ProductInfo);
+const grade = ref();
 
 const role = sessionStorage.getItem("role");
 const storeId = (Number)(sessionStorage.getItem('userStoreId'));
@@ -22,11 +25,12 @@ let showBuyOptions = ref(false);
 let useDelivery = ref(true);
 let buyNum = ref(1);
 
+
+// buy
 let phone = String(sessionStorage.getItem("phone"));
 let productPrice = ref();
 let state = ref();
 let address = ref();
-
 
 // 加载；同时给newNumber初始化
 function loadProductInfo(x: number) {
@@ -34,6 +38,7 @@ function loadProductInfo(x: number) {
     productDetail.value = res.data.result;
     newNumber.value = productDetail.value.number;
     productPrice.value = productDetail.value.price;
+    grade.value = Number(productDetail.value.grade);
   });
 }
 
@@ -215,22 +220,28 @@ function handlePayImmediately() {
         </el-col>
         <el-col :span="4"></el-col>
       </el-row>
-
-      <el-row>
-        <el-text class="description">{{ productDetail.description }}</el-text>
+      <el-row justify="center" class="grade-stars">
+        <el-rate
+            v-model="grade"
+            disabled
+            show-score
+            text-color="#ff9900"
+            score-template="{value} points"
+        />
       </el-row>
-      <el-row>
+      <el-row style="height: 70%;">
+        <el-col :span="24">
+          <div class="description">
+            <el-text>{{ productDetail.description }}</el-text>
+          </div>
+        </el-col>
         <el-col :span="16">
           <el-text class="number">剩余库存：{{ productDetail.number }}件</el-text>
         </el-col>
         <el-col :span="8" v-if="role==='STAFF'&&storeId===productDetail.storeId">
           <el-button type="primary" size="small" @click="showNumUpdateInput=true">修改库存数
           </el-button>
-
         </el-col>
-      </el-row>
-      <el-row>
-        <br>
       </el-row>
 
       <el-row justify="center" style="margin: 10px">
@@ -246,10 +257,26 @@ function handlePayImmediately() {
         <el-col :span="24" v-for="url in productDetail.imgURLs" style="text-align: center">
           <el-image :src="url" alt="" :fit="'cover'" class="img"/>
         </el-col>
-        <!--        <el-col :span="24" v-for="url in productDetail." style="text-align: center">-->
-        <!--          <el-image :src="url" alt="" :fit="'cover'" class="img"/>-->
-        <!--        </el-col>-->
       </el-row>
+      <el-row justify="center">
+        <div class="comment-title">--- 评论 ---</div>
+      </el-row>
+      <el-row>
+        <el-col :span="24" v-for="comment in productDetail.productComments" class="comment-box">
+          <el-row justify="center">
+            <el-text>{{ comment.userName }}&nbsp;&nbsp;&nbsp;&nbsp;{{ parseTime(comment.createTime) }}&nbsp;&nbsp;&nbsp;&nbsp;{{
+                comment.grade
+              }}⭐
+            </el-text>
+          </el-row>
+          <el-row justify="center">
+            <el-text line-clamp="3" style="max-width: 50%">
+              {{ comment.content }}
+            </el-text>
+          </el-row>
+        </el-col>
+      </el-row>
+
     </el-main>
   </el-container>
 
@@ -283,8 +310,6 @@ function handlePayImmediately() {
     <el-row justify="center">
       <el-input-number v-model="buyNum" :min="1" :max="100" size="small"/>
     </el-row>
-
-
     <template #footer>
       <div class="dialog-footer">
         <el-button type="primary" @click="handleOrderConfirm">提交订单</el-button>
@@ -297,10 +322,28 @@ function handlePayImmediately() {
 
 
 <style scoped>
+.grade-stars {
+  margin-top: 1px;
+  margin-bottom: 30px;
+}
+
+.comment-box {
+  text-align: center;
+  margin: 10px;
+}
+
+.comment-title {
+  margin-top: 100px;
+  margin-bottom: 30px;
+  font-size: large;
+  color: dodgerblue;
+}
+
 .arrow {
   font-size: 25px;
-  margin-top: 5px;
-  margin-left: 8px
+  margin-top: 16px;
+  margin-left: 8px;
+  margin-bottom: 25px;
 }
 
 .page-aside {
@@ -325,7 +368,7 @@ function handlePayImmediately() {
   color: cornflowerblue;
   font-size: 20px;
   margin-top: 15px;
-  margin-bottom: 15px;
+  margin-bottom: 25px;
   text-align: center;
 }
 

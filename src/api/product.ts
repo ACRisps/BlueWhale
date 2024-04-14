@@ -8,11 +8,13 @@ export type ProductInfo = {
     productName: string,
     productType: string,
     imgURLs: string[],
-    description: string
-    storeId: number
-    price: string
-    createTime: string
-    number: number
+    description: string,
+    storeId: number,
+    price: string,
+    createTime: string,
+    number: number,
+    grade: string,
+    productComments: Comment[]
 }
 
 export type ProductUploadInfo = {
@@ -28,6 +30,15 @@ export type ProductUploadInfo = {
 export type ProductNumUpdateInfo = {
     productId: number,
     number: number
+}
+
+export type Comment = {
+    orderSerialNumber: string,
+    createTime: string,
+    grade: number,
+    userName: string,
+    productId: number,
+    content: string
 }
 
 export const uploadProductInfo = (payload: ProductUploadInfo) => {
