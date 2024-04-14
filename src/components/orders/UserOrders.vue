@@ -155,7 +155,7 @@ function handleDialogConfirm() {
                            @click="handleToCommentButton(order.orderSerialNumber,order.productId)">评论
                 </el-button>
                 <el-button type="primary" v-else-if="order.state=='UNGET'"
-                           @click="handleToGet(order.orderSerialNumber)">确认收货
+                           @click="handleToGet(order.orderSerialNumber)">签收
                 </el-button>
                 <el-button type="primary" v-else-if="order.state=='UNPAID'"
                            @click="handleToPay(order.orderSerialNumber)">支付

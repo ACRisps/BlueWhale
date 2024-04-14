@@ -228,23 +228,31 @@ function handlePayImmediately() {
             score-template="{value} points"
         />
       </el-row>
-      <el-row style="height: 70%;">
+      <el-row>
         <el-col :span="24">
           <div class="description">
             <el-text>{{ productDetail.description }}</el-text>
           </div>
         </el-col>
+      </el-row>
+      <el-row>
         <el-col :span="16">
           <el-text class="number">剩余库存：{{ productDetail.number }}件</el-text>
         </el-col>
+
         <el-col :span="8" v-if="role==='STAFF'&&storeId===productDetail.storeId">
           <el-button type="primary" size="small" @click="showNumUpdateInput=true">修改库存数
           </el-button>
         </el-col>
       </el-row>
+      <el-row style="height: 40%"></el-row>
 
       <el-row justify="center" style="margin: 10px">
-        <el-col style="text-align: center">
+        <el-col :span="24" class="price">
+          <el-text size="large">ONLY {{ productDetail.price }} ¥!
+          </el-text>
+        </el-col>
+        <el-col :span="24" style="text-align: center">
           <el-button type="primary" v-if="role=='CUSTOMER'" @click="showBuyOptions=true">立即购买</el-button>
         </el-col>
       </el-row>
@@ -321,6 +329,11 @@ function handlePayImmediately() {
 
 
 <style scoped>
+.price {
+  text-align: center;
+  margin: 20px;
+}
+
 .grade-stars {
   margin-top: 1px;
   margin-bottom: 30px;
