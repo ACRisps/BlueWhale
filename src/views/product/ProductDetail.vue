@@ -206,7 +206,6 @@ function handlePayImmediately() {
   <el-container>
     <!--商品详情的一部分内容放在侧边栏里-->
     <el-aside width="25%" class="page-aside">
-
       <el-row justify="center" align="middle">
         <el-col :span="4">
           <router-link :to="'/storeDetail/'+productDetail.storeId" v-slot="{navigate}">

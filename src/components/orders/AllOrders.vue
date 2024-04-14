@@ -57,6 +57,15 @@ onMounted(() => {
               <el-image style="width: 100px; height: 100px" :src="order.imgURL" :fit="'cover'"/>
             </el-col>
             <el-col :span="16">
+              <el-row>
+                <el-text>订单状态：{{ order.state }}</el-text>
+              </el-row>
+              <el-row>
+                <el-text>订单编号：{{ order.orderSerialNumber }}</el-text>
+              </el-row>
+              <el-row>
+                <el-text>下单时间：{{ order.createTime }}</el-text>
+              </el-row>
             </el-col>
           </el-row>
         </el-card>

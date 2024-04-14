@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import {onMounted, ref} from 'vue';
-import {type OrderItemsInfo, orderItemPageInfo} from '../../api/orderItem.ts';
+import {type OrderItemsInfo, orderItemPageInfo, orderItemGet} from '../../api/orderItem.ts';
 import {uploadCommemt} from "../../api/comment.ts";
+import {uploadPayItem} from "../../api/pay.ts";
 
 const orderList = ref([] as OrderItemsInfo);
 const currentPage = ref(1 as number);
@@ -36,6 +37,45 @@ function handleSizeChange(newSize: number) {
 onMounted(() => {
   loadOrders(currentPage.value);
 });
+
+function handleToGet(orderSerialNumber: string) {
+  orderItemGet(orderSerialNumber).then(res => {
+    if (res.data.code == '000') {
+      ElMessage({
+        message: "确认收货成功",
+        type: 'success',
+        center: true,
+      });
+      loadOrders(currentPage.value);
+    } else {
+      ElMessage({
+        message: "确认收货失败（" + res.data.msg + "）",
+        type: 'warning',
+        center: true,
+      });
+    }
+  });
+}
+
+function handleToPay(orderSerialNumber: string) {
+  uploadPayItem(orderSerialNumber).then(res => {
+    if (res.data.code == '000') {
+      ElMessage({
+        message: "支付成功",
+        type: 'success',
+        center: true,
+      });
+      loadOrders(currentPage.value);
+    } else {
+      ElMessage({
+        message: "支付失败（" + res.data.msg + "）",
+        type: 'warning',
+        center: true,
+      });
+    }
+  });
+
+}
 
 function handleToCommentButton(orderSerialNumber: string, productId: number) {
   showCommentInput.value = true;
@@ -79,7 +119,7 @@ function handleDialogConfirm() {
     grade: rate.value
   }).then(res => {
     if (res.data.code == '000') {
-      handleDialogClose()
+      handleDialogClose();
       ElMessage({
         message: "已提交，请勿重复提交",
         type: 'success',
@@ -107,12 +147,25 @@ function handleDialogConfirm() {
         <el-card style="width: 800px" class="card">
           <template #header>
             <el-row>
-              <el-col :span="22">
+              <el-col :span="21">
                 {{ order.productName }}
               </el-col>
-              <el-col :span="2">
-                <el-button type="primary" @click="handleToCommentButton(order.orderSerialNumber,order.productId)">评论
+              <el-col :span="3" style="text-align: center">
+                <el-button type="primary" v-if="order.state=='UNCOMMENT'"
+                           @click="handleToCommentButton(order.orderSerialNumber,order.productId)">评论
                 </el-button>
+                <el-button type="primary" v-else-if="order.state=='UNGET'"
+                           @click="handleToGet(order.orderSerialNumber)">确认收货
+                </el-button>
+                <el-button type="primary" v-else-if="order.state=='UNPAID'"
+                           @click="handleToPay(order.orderSerialNumber)">支付
+                </el-button>
+                <el-text v-else-if="order.state=='UNSEND'">待发货
+                </el-text>
+                <el-text v-else-if="order.state=='DONE'">已完成
+                </el-text>
+                <el-text v-else-if="order.state=='CANCEL'">已取消
+                </el-text>
               </el-col>
             </el-row>
           </template>
@@ -121,6 +174,15 @@ function handleDialogConfirm() {
               <el-image style="width: 100px; height: 100px" :src="order.imgURL" :fit="'cover'"/>
             </el-col>
             <el-col :span="16">
+              <el-row>
+                <el-text>订单状态：{{ order.state }}</el-text>
+              </el-row>
+              <el-row>
+                <el-text>订单编号：{{ order.orderSerialNumber }}</el-text>
+              </el-row>
+              <el-row>
+                <el-text>下单时间：{{ order.createTime }}</el-text>
+              </el-row>
             </el-col>
           </el-row>
         </el-card>
@@ -179,6 +241,7 @@ function handleDialogConfirm() {
 .card {
   margin: 5px;
 }
+
 .title {
   margin-top: 10px;
   margin-bottom: 40px;
