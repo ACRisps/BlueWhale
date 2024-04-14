@@ -7,6 +7,7 @@ export {}
 
 declare module 'vue' {
   export interface GlobalComponents {
+    AllOrders: typeof import('./src/components/orders/AllOrders.vue')['default']
     ElAside: typeof import('element-plus/es')['ElAside']
     ElAvatar: typeof import('element-plus/es')['ElAvatar']
     ElButton: typeof import('element-plus/es')['ElButton']
@@ -41,7 +42,7 @@ declare module 'vue' {
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     StoreItem: typeof import('./src/components/StoreItem.vue')['default']
-    StoreOrders: typeof import('./src/components/storeOrders.vue')['default']
-    UserOrders: typeof import('./src/components/userOrders.vue')['default']
+    StoreOrders: typeof import('./src/components/orders/StoreOrders.vue')['default']
+    UserOrders: typeof import('./src/components/orders/UserOrders.vue')['default']
   }
 }

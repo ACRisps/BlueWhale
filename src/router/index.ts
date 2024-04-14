@@ -65,7 +65,7 @@ const router = createRouter({
             {
                 path: '/orders',
                 name: 'orders',
-                component: () => import('../views/order/AllOrders.vue'),
+                component: () => import('../views/order/Orders.vue'),
                 meta: {
                     title: '订单管理',
                 }
