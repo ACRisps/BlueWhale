@@ -137,13 +137,13 @@ function handleDialogConfirm() {
 
 function parseState(stateStr: string): string {
   if (stateStr == 'UNPAID') {
-    return '已下单|未支付';
+    return '已下单&未支付';
   } else if (stateStr == 'UNSEND') {
-    return '已支付|未发货';
+    return '已支付&未发货';
   } else if (stateStr == 'UNGET') {
-    return '已发货|未签收';
+    return '已发货&未签收';
   } else if (stateStr == 'UNCOMMENT') {
-    return '已签收|未评价';
+    return '已签收&未评价';
   } else if (stateStr == 'DONE') {
     return '订单已完成';
   } else if (stateStr == 'CANCEL') {

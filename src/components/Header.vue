@@ -1,9 +1,12 @@
 <script setup lang="ts">
 import {router} from '../router';
 import {parseRole} from "../utils";
-import {User, SwitchButton, Edit, Tickets} from "@element-plus/icons-vue";   //图标
+import {User, SwitchButton, Edit, Tickets} from "@element-plus/icons-vue";
+import {ref} from "vue";   //图标
 
 const role = sessionStorage.getItem('role');    //登录的时候插入的
+
+let showEditDialog = ref(false);
 
 //退出登录
 function logout() {
@@ -24,6 +27,25 @@ function logout() {
     router.push({path: "/login"});
   });
 }
+
+function toCreateStore() {
+  showEditDialog.value = false;
+  router.push({path: '/createStore'});
+}
+
+function toCreateProduct() {
+  showEditDialog.value = false;
+  router.push({path: '/createProduct'});
+}
+
+function toCreateStoreCoupon() {
+  showEditDialog.value = false;
+}
+
+function toCreateGlobalCoupon() {
+  showEditDialog.value = false;
+}
+
 </script>
 
 
@@ -41,16 +63,12 @@ function logout() {
       <el-col :span="11"/>
       <!--“创建”button-->
       <el-col :span="1" class="header-icon">
-        <router-link to="/createStore" v-slot="{navigate}" v-if="role=='MANAGER'">
-          <el-icon @click="navigate" :size="27" color="white">
+        <div v-if="role=='MANAGER'||role=='STAFF'">
+          <el-icon @click="showEditDialog=true" :size="27" color="white">
             <Edit/>
           </el-icon>
-        </router-link>
-        <router-link to="/createProduct" v-slot="{navigate}" v-if="role=='STAFF'">
-          <el-icon @click="navigate" :size="27" color="white">
-            <Edit/>
-          </el-icon>
-        </router-link>
+        </div>
+
       </el-col>
       <!--订单button-->
       <el-col :span="1" class="header-icon">
@@ -78,6 +96,30 @@ function logout() {
       </el-col>
     </el-row>
   </el-header>
+
+  <el-dialog
+      v-model="showEditDialog"
+      title="选择您想进行的操作"
+      width=30%
+  >
+    <el-row justify="center">
+      <div v-if="role=='MANAGER'">
+        <el-button type="primary" @click="toCreateStore">创建商店</el-button>
+        <el-button type="primary" @click="toCreateGlobalCoupon">发布全局优惠券</el-button>
+
+      </div>
+      <div v-if="role=='STAFF'">
+        <el-button type="primary" @click="toCreateProduct">创建商品</el-button>
+        <el-button type="primary" @click="toCreateStoreCoupon">发布商店优惠券</el-button>
+      </div>
+
+    </el-row>
+    <template #footer>
+      <div class="dialog-footer">
+        <el-button @click="showEditDialog=false">取消</el-button>
+      </div>
+    </template>
+  </el-dialog>
 </template>
 
 
