@@ -27,6 +27,23 @@ function handleSizeChange(newSize: number) {
   loadOrders(currentPage.value);
 }
 
+function parseState(stateStr: string): string {
+  if (stateStr == 'UNPAID') {
+    return '已下单|未支付';
+  } else if (stateStr == 'UNSEND') {
+    return '已支付|未发货';
+  } else if (stateStr == 'UNGET') {
+    return '已发货|未签收';
+  } else if (stateStr == 'UNCOMMENT') {
+    return '已签收|未评价';
+  } else if (stateStr == 'DONE') {
+    return '订单已完成';
+  } else if (stateStr == 'CANCEL') {
+    return '订单已取消';
+  }
+  return 'parse state failed:' + stateStr;
+}
+
 onMounted(() => {
   loadOrders(currentPage.value);
 });
@@ -58,13 +75,16 @@ onMounted(() => {
             </el-col>
             <el-col :span="16">
               <el-row>
-                <el-text>订单状态：{{ order.state }}</el-text>
+                <el-text>订单状态：{{ parseState(order.state) }}</el-text>
               </el-row>
               <el-row>
                 <el-text>订单编号：{{ order.orderSerialNumber }}</el-text>
               </el-row>
               <el-row>
                 <el-text>下单时间：{{ order.createTime }}</el-text>
+              </el-row>
+              <el-row>
+                <el-text>订单金额：{{ order.total }} ￥</el-text>
               </el-row>
             </el-col>
           </el-row>
