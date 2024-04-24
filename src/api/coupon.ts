@@ -4,7 +4,7 @@ import {COUPON_MODULE} from "./_prefix.ts";
 
 export type CouponUploadInfo = {
     couponType: string;
-    createTime: string;
+    effectiveTime: string;
     expiredTime: string;
     full: number;
     reduction: number;
@@ -13,8 +13,8 @@ export type CouponUploadInfo = {
 }
 
 
-export const uploadCouponInfo = (payload: CouponUploadInfo) => {
-    return axios.post(`${COUPON_MODULE}/publish`, payload,)
+export const uploadCouponInfo = (payload: CouponUploadInfo, num: number) => {
+    return axios.post(`${COUPON_MODULE}/publish`, payload, {params: {couponNum: num}})
         .then(res => {
             return res;
         })

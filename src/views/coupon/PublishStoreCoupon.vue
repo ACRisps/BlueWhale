@@ -7,9 +7,7 @@ const storeId = sessionStorage.getItem('userStoreId');
 
 
 let couponType = ref('FULL_REDUCTION');
-let time = ref('');
-let effectiveTime = ref();
-let expiredTime = ref();
+let timeArray = ref();
 let number = ref();
 let full = ref();
 let reduction = ref();
@@ -17,26 +15,26 @@ let reduction = ref();
 
 // 清空缓存
 function clearCache() {
-  couponType.value = '';
-  expiredTime.value = '';
+  couponType.value = 'FULL_REDUCTION';
+  timeArray.value = null;
   number.value = '';
   reduction.value = null;
 }
 
 function handlePublish() {
-  parseTime();
   handleCouponInfo();
 }
 
 function handleCouponInfo() {
+  console.log(timeArray.value[0]);
   uploadCouponInfo({
     couponType: couponType.value,
-    createTime: time.value,
-    expiredTime: expiredTime.value,
+    effectiveTime: timeArray.value[0],
+    expiredTime: timeArray.value[1],
     full: full.value,
     reduction: reduction.value,
     storeId: Number(storeId),
-  }).then(res => {
+  }, 20).then(res => {
     if (res.data.code == '000') {
       clearCache();
       ElMessage({
@@ -52,11 +50,6 @@ function handleCouponInfo() {
       });
     }
   });
-}
-
-function parseTime() {
-  effectiveTime.value = time.value[0];
-  expiredTime.value = time.value[1];
 }
 
 </script>
@@ -81,9 +74,10 @@ function parseTime() {
 
         <el-form-item label="起止日期">
           <el-date-picker
-              v-model="time"
+              v-model="timeArray"
               type="daterange"
               range-separator="To"
+              value-format="YYYY-MM-DD"
               start-placeholder="生效日期"
               end-placeholder="截至日期"
           />
