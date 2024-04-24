@@ -8,7 +8,6 @@ const storeId = sessionStorage.getItem('userStoreId');
 
 let couponType = ref('FULL_REDUCTION');
 let timeArray = ref();
-let number = ref();
 let full = ref();
 let reduction = ref();
 
@@ -17,7 +16,7 @@ let reduction = ref();
 function clearCache() {
   couponType.value = 'FULL_REDUCTION';
   timeArray.value = null;
-  number.value = '';
+  full.value = null;
   reduction.value = null;
 }
 
