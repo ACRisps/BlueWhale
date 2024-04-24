@@ -91,7 +91,7 @@ function handleStoreInfo() {
       <div class="title">您可以在这里创建新商店</div>
     </el-row>
     <el-row justify="center">
-      <el-form>
+      <el-form style="width: 540px">
         <el-form-item label="商店Logo">
           <el-upload
               v-model:file-list="imageFileList"

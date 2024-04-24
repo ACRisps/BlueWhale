@@ -40,10 +40,12 @@ function toCreateProduct() {
 
 function toCreateStoreCoupon() {
   showEditDialog.value = false;
+  router.push({path: '/publishStoreCoupon'});
 }
 
 function toCreateGlobalCoupon() {
   showEditDialog.value = false;
+  router.push({path: '/publishGlobalCoupon'});
 }
 
 </script>

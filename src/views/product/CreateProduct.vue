@@ -97,7 +97,7 @@ function handleProductInfo() {
       <div class="title">您可以在这里为您的商店创建商品</div>
     </el-row>
     <el-row justify="center">
-      <el-form>
+      <el-form style="width: 540px">
         <el-form-item label="商品图片">
           <el-upload
               v-model:file-list="imageFileList"

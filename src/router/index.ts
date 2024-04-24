@@ -70,6 +70,22 @@ const router = createRouter({
                     title: '订单管理',
                 }
             },
+            {
+                path: '/publishGlobalCoupon',
+                name: 'publishGlobalCoupon',
+                component: () => import('../views/coupon/PublishGlobalCoupon.vue'),
+                meta: {
+                    title: '创建全局优惠券',
+                }
+            },
+            {
+                path: '/publishStoreCoupon',
+                name: 'publishStoreCoupon',
+                component: () => import('../views/coupon/PublishStoreCoupon.vue'),
+                meta: {
+                    title: '创建商店优惠券',
+                }
+            },
         ]
     }, {
         path: '/404',
