@@ -65,7 +65,6 @@ onMounted(() => {
                 {{ order.productName }}
               </el-col>
               <el-col :span="2">
-
               </el-col>
             </el-row>
           </template>

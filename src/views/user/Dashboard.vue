@@ -1,42 +1,41 @@
 <script setup lang="ts">
-import {computed, ref} from 'vue'
-import {userInfo, userInfoUpdate} from '../../api/user.ts'
-import {parseRole, parseTime} from "../../utils"
-import {router} from '../../router'
-import {UserFilled} from "@element-plus/icons-vue"
+import {computed, ref} from 'vue';
+import {userInfo, userInfoUpdate} from '../../api/user.ts';
+import {parseRole, parseTime} from "../../utils";
+import {router} from '../../router';
+import {UserFilled} from "@element-plus/icons-vue";
 
-const role = sessionStorage.getItem("role")
-const name = ref('')
-const storeName = ref('')
-const tel = ref('')
-const address = ref('')
-const regTime = ref()
+const role = sessionStorage.getItem("role");
+const name = ref('');
+const storeName = ref('');
+const tel = ref('');
+const address = ref('');
+const regTime = ref();
 
-const newName = ref('')
+const newName = ref('');
 
-const displayInfoCard = ref(false)
+const displayInfoCard = ref(false);
 
-const password = ref('')
-const confirmPassword = ref('')
+const password = ref('');
+const confirmPassword = ref('');
 
-const hasConfirmPasswordInput = computed(() => confirmPassword.value != '')
-const isPasswordIdentical = computed(() => password.value == confirmPassword.value)
+const hasConfirmPasswordInput = computed(() => confirmPassword.value != '');
+const isPasswordIdentical = computed(() => password.value == confirmPassword.value);
 const changeDisabled = computed(() => {
-  return !(hasConfirmPasswordInput.value && isPasswordIdentical.value)
-})
+  return !(hasConfirmPasswordInput.value && isPasswordIdentical.value);
+});
 
-getUserInfo()
+getUserInfo();
 
 function getUserInfo() {
   userInfo().then(res => {
-    name.value = res.data.result.name
-    tel.value = res.data.result.phone
-    storeName.value = res.data.result.storeName
-    address.value = res.data.result.address
-    regTime.value = parseTime(res.data.result.createTime)
-
-    newName.value = name.value
-  })
+    name.value = res.data.result.name;
+    tel.value = res.data.result.phone;
+    storeName.value = res.data.result.storeName;
+    address.value = res.data.result.address;
+    regTime.value = parseTime(res.data.result.createTime);
+    newName.value = name.value;
+  });
 }
 
 function updateInfo() {
@@ -50,16 +49,16 @@ function updateInfo() {
         customClass: 'customMessage',
         type: 'success',
         message: '更新成功！',
-      })
-      getUserInfo()
+      });
+      getUserInfo();
     } else if (res.data.code === '400') {
       ElMessage({
         customClass: 'customMessage',
         type: 'error',
         message: res.data.msg,
-      })
+      });
     }
-  })
+  });
 }
 
 function updatePassword() {
@@ -69,8 +68,8 @@ function updatePassword() {
     address: undefined
   }).then(res => {
     if (res.data.code === '000') {
-      password.value = ''
-      confirmPassword.value = ''
+      password.value = '';
+      confirmPassword.value = '';
       ElMessageBox.alert(
           `请重新登录`,
           '修改成功',
@@ -81,17 +80,17 @@ function updatePassword() {
             showClose: false,
             roundButton: true,
             center: true
-          }).then(() => router.push({path: "/login"}))
+          }).then(() => router.push({path: "/login"}));
     } else if (res.data.code === '400') {
       ElMessage({
         customClass: 'customMessage',
         type: 'error',
         message: res.data.msg,
-      })
-      password.value = ''
-      confirmPassword.value = ''
+      });
+      password.value = '';
+      confirmPassword.value = '';
     }
-  })
+  });
 }
 </script>
 
@@ -168,6 +167,7 @@ function updatePassword() {
                     v-model="address" placeholder="中华门"></el-input>
         </el-form-item>
       </el-form>
+      <el-button></el-button>
     </el-card>
 
     <el-card v-if="!displayInfoCard" class="change-card">

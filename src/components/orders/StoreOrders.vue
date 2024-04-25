@@ -89,9 +89,9 @@ function parseState(stateStr: string): string {
                 </el-text>
                 <el-text v-else-if="order.state=='UNPAID'">不可发货
                 </el-text>
-                <el-text v-else-if="order.state=='DONE'">已完成
+                <el-text style="color: #13ce66" v-else-if="order.state=='DONE'">已完成
                 </el-text>
-                <el-text v-else-if="order.state=='CANCEL'">已取消
+                <el-text style="color: indianred" v-else-if="order.state=='CANCEL'">已取消
                 </el-text>
               </el-col>
             </el-row>
