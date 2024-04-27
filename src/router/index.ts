@@ -78,6 +78,14 @@ const router = createRouter({
                     title: '创建优惠券',
                 }
             },
+            {
+                path: '/coupons',
+                name: 'coupons',
+                component: () => import('../views/coupon/Coupons.vue'),
+                meta: {
+                    title: '查看优惠券',
+                }
+            },
 
         ]
     }, {

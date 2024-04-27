@@ -58,7 +58,6 @@ export const orderItemPageInfo = (page: number, size: number) => {
 };
 
 export const orderItemSend = (orderSerialNumber: string) => {
-
     return axios.get(`${ORDER_MODULE}/orderItems/send`, {params: {orderSerialNumber: orderSerialNumber}})
         .then(res => {
             return res;
@@ -69,7 +68,6 @@ export const orderItemSend = (orderSerialNumber: string) => {
 };
 
 export const orderItemGet = (orderSerialNumber: string) => {
-
     return axios.get(`${ORDER_MODULE}/orderItems/get`, {params: {orderSerialNumber: orderSerialNumber}})
         .then(res => {
             return res;

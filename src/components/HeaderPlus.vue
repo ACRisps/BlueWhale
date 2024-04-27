@@ -1,12 +1,9 @@
 <script setup lang="ts">
 import {router} from '../router';
 // import {parseRole} from "../utils";
-import {User, SwitchButton, Edit, Tickets, Menu} from "@element-plus/icons-vue";
-import {ref} from "vue";   //图标
+import {User, SwitchButton, Edit, Tickets, Menu, Present} from "@element-plus/icons-vue";
 
 const role = sessionStorage.getItem('role');    //登录的时候插入的
-
-let activeIndex = ref('0');
 
 //退出登录
 function logout() {
@@ -28,11 +25,6 @@ function logout() {
   });
 }
 
-
-const handleSelect = (key: string, keyPath: string[]) => {
-  console.log(key, keyPath);
-  console.log(activeIndex.value);
-};
 </script>
 
 
@@ -42,9 +34,9 @@ const handleSelect = (key: string, keyPath: string[]) => {
         :default-active="$route.path"
         class="el-menu"
         mode="horizontal"
-        @select="handleSelect"
         router
         :ellipsis-icon="Menu"
+        :ellipsis="false"
     >
       <el-menu-item index="/allStore"><img
           style="width: 30px"
@@ -65,7 +57,15 @@ const handleSelect = (key: string, keyPath: string[]) => {
         <el-menu-item v-if="role=='MANAGER'" index="/createStore">创建商店</el-menu-item>
         <el-menu-item v-if="role=='STAFF'" index="/createProduct">创建商品</el-menu-item>
         <el-menu-item v-if="role=='MANAGER'||role=='STAFF'" index="/publishCoupon">发布优惠券</el-menu-item>
+        <el-menu-item v-if="role=='MANAGER'||role=='STAFF'" index="/coupons">管理优惠券</el-menu-item>
       </el-sub-menu>
+
+      <el-menu-item v-if="role=='CUSTOMER'" index="/coupons">
+        <el-icon :size="20">
+          <Present/>
+        </el-icon>
+        券包
+      </el-menu-item>
 
       <el-menu-item index="/orders">
         <el-icon :size="20">
@@ -81,7 +81,7 @@ const handleSelect = (key: string, keyPath: string[]) => {
         个人
       </el-menu-item>
       <el-menu-item index="" @click="logout">
-        <el-icon :size="20" >
+        <el-icon :size="20">
           <SwitchButton/>
         </el-icon>
       </el-menu-item>

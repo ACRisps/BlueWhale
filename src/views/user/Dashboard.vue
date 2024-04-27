@@ -112,7 +112,7 @@ function updatePassword() {
           title="个人信息"
       >
         <template #extra>
-          <el-button type="primary"
+          <el-button type="primary" size="small"
                      @click="displayInfoCard = displayInfoCard === false;">
             <span v-if="displayInfoCard">修改密码</span>
             <span v-else>修改个人信息</span>

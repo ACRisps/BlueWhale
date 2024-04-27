@@ -4,9 +4,9 @@ import {type OrderItemsInfo, orderItemPageInfo} from '../../api/orderItem.ts';
 
 
 const orderList = ref([] as OrderItemsInfo);
-const currentPage = ref(1 as number);
-const pageSize = ref(5 as number);
-const totalItems = ref(0 as number);
+const currentPage = ref(1);
+const pageSize = ref(5);
+const totalItems = ref(0);
 
 
 function loadOrders(page: number) {
@@ -52,7 +52,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <el-main class="page-main">
+  <el-main class="main">
     <el-row justify="center">
       <div class="title">在这里查看商场全部订单</div>
     </el-row>
@@ -108,12 +108,13 @@ onMounted(() => {
 </template>
 
 <style scoped>
-.page-main {
+
+.main {
   position: absolute;
+  right: 0;
+  left: 0;
   top: 52px;
   bottom: 0;
-  left: 0;
-  right: 0;
   overflow-y: scroll;
 }
 
@@ -125,6 +126,6 @@ onMounted(() => {
   margin-top: 10px;
   margin-bottom: 40px;
   font-size: large;
-  color: green;
+  color: mediumpurple;
 }
 </style>

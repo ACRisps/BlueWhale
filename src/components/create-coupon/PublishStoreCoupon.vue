@@ -114,6 +114,6 @@ function handleCouponInfo() {
   margin-top: 10px;
   margin-bottom: 40px;
   font-size: large;
-  color: dodgerblue;
+  color: darkgreen;
 }
 </style>

@@ -70,7 +70,7 @@ function parseState(stateStr: string): string {
 </script>
 
 <template>
-  <el-main class="page-main">
+  <el-main class="main">
     <el-row justify="center">
       <div class="title">在这里查看您的商店收到的订单</div>
     </el-row>
@@ -135,12 +135,12 @@ function parseState(stateStr: string): string {
 
 
 <style scoped>
-.page-main {
+.main {
   position: absolute;
+  right: 0;
+  left: 0;
   top: 52px;
   bottom: 0;
-  left: 0;
-  right: 0;
   overflow-y: scroll;
 }
 
@@ -152,6 +152,6 @@ function parseState(stateStr: string): string {
   margin-top: 10px;
   margin-bottom: 40px;
   font-size: large;
-  color: dodgerblue;
+  color: darkgreen;
 }
 </style>

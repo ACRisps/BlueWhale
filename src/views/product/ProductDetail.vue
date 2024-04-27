@@ -11,7 +11,9 @@ import {ArrowLeft} from "@element-plus/icons-vue";
 import {uploadPay} from "../../api/pay.ts";
 import {parseTime} from "../../utils";
 
-// display
+import PayDialog from "../../components/PayDialog.vue";
+
+
 const productDetail = ref({} as ProductInfo);
 const grade = ref();
 
@@ -26,13 +28,22 @@ let useDelivery = ref(true);
 let buyNum = ref(1);
 
 
-// buy
 let phone = String(sessionStorage.getItem("phone"));
 let productPrice = ref();
 let state = ref();
 let address = ref();
 
-// 加载；同时给newNumber初始化
+let showPayDialog = ref(false);
+
+const payDialog = ref();
+
+
+onMounted(() => {
+  const productId = Number(useRoute().params.productId);
+  loadProductInfo(productId);
+
+});
+
 function loadProductInfo(x: number) {
   productInfoDetail(x).then(res => {
     productDetail.value = res.data.result;
@@ -41,11 +52,6 @@ function loadProductInfo(x: number) {
     grade.value = Number(productDetail.value.grade);
   });
 }
-
-onMounted(() => {
-  const productId = Number(useRoute().params.productId);
-  loadProductInfo(productId);
-});
 
 function handleNumDialogCancel() {
   showNumUpdateInput.value = false;
@@ -81,7 +87,7 @@ function getMethod() {
   }
 }
 
-function handleOrderConfirm() {
+function handlePayLater() {
   uploadOrderItem
   ({
         productName: productDetail.value.productName,
@@ -133,7 +139,6 @@ function handleOrderConfirm() {
         }
       }
   );
-
 }
 
 function handlePayImmediately() {
@@ -198,6 +203,16 @@ function handlePayImmediately() {
         }
       }
   );
+}
+
+function callPayDialog() {
+  showBuyOptions.value = false;
+  payDialog.value.openDialog();
+
+}
+
+function handlePaymentFinish() {
+
 }
 
 </script>
@@ -319,12 +334,15 @@ function handlePayImmediately() {
     </el-row>
     <template #footer>
       <div class="dialog-footer">
-        <el-button type="primary" @click="handleOrderConfirm">提交订单</el-button>
+        <el-button type="primary" @click="handlePayLater">提交订单</el-button>
         <el-button type="primary" @click="handlePayImmediately">立即支付</el-button>
+        <el-button type="primary" @click="callPayDialog()">立即支付(beta)</el-button>
         <el-button @click="showBuyOptions=false">取消</el-button>
       </div>
     </template>
   </el-dialog>
+
+  <PayDialog :show="showPayDialog" ref="payDialog" @payment-finish="handlePaymentFinish"></PayDialog>
 </template>
 
 

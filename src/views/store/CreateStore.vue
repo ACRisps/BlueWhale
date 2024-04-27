@@ -88,7 +88,7 @@ function handleStoreInfo() {
 <template>
   <el-main>
     <el-row justify="center">
-      <div class="title">您可以在这里创建新商店</div>
+      <div class="title">在这里创建新商店</div>
     </el-row>
     <el-row justify="center">
       <el-form style="width: 540px">
@@ -148,6 +148,6 @@ function handleStoreInfo() {
   margin-top: 10px;
   margin-bottom: 40px;
   font-size: large;
-  color: green;
+  color: mediumpurple;
 }
 </style>

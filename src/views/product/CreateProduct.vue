@@ -94,7 +94,7 @@ function handleProductInfo() {
 <template>
   <el-main>
     <el-row justify="center">
-      <div class="title">您可以在这里为您的商店创建商品</div>
+      <div class="title">在这里为您的商店创建商品</div>
     </el-row>
     <el-row justify="center">
       <el-form style="width: 540px">
@@ -162,6 +162,6 @@ function handleProductInfo() {
   margin-top: 10px;
   margin-bottom: 40px;
   font-size: large;
-  color: dodgerblue;
+  color: darkgreen;
 }
 </style>

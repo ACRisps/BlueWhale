@@ -7,6 +7,7 @@ export {}
 
 declare module 'vue' {
   export interface GlobalComponents {
+    AllCoupons: typeof import('./src/components/view-coupon/AllCoupons.vue')['default']
     AllOrders: typeof import('./src/components/orders/AllOrders.vue')['default']
     ElAside: typeof import('element-plus/es')['ElAside']
     ElAvatar: typeof import('element-plus/es')['ElAvatar']
@@ -39,6 +40,8 @@ declare module 'vue' {
     ElSelect: typeof import('element-plus/es')['ElSelect']
     ElSubMenu: typeof import('element-plus/es')['ElSubMenu']
     ElSwitch: typeof import('element-plus/es')['ElSwitch']
+    ElTable: typeof import('element-plus/es')['ElTable']
+    ElTableColumn: typeof import('element-plus/es')['ElTableColumn']
     ElTag: typeof import('element-plus/es')['ElTag']
     ElText: typeof import('element-plus/es')['ElText']
     ElUpload: typeof import('element-plus/es')['ElUpload']
@@ -46,13 +49,16 @@ declare module 'vue' {
     HeaderPlus: typeof import('./src/components/HeaderPlus.vue')['default']
     HeaderTest: typeof import('./src/components/HeaderTest.vue')['default']
     Pagination: typeof import('./src/components/Pagination.vue')['default']
+    PayDialog: typeof import('./src/components/PayDialog.vue')['default']
     ProductItem: typeof import('./src/components/ProductItem.vue')['default']
     PublishGlobalCoupon: typeof import('./src/components/create-coupon/PublishGlobalCoupon.vue')['default']
     PublishStoreCoupon: typeof import('./src/components/create-coupon/PublishStoreCoupon.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
+    StoreCoupons: typeof import('./src/components/view-coupon/StoreCoupons.vue')['default']
     StoreItem: typeof import('./src/components/StoreItem.vue')['default']
     StoreOrders: typeof import('./src/components/orders/StoreOrders.vue')['default']
+    UserCoupons: typeof import('./src/components/view-coupon/UserCoupons.vue')['default']
     UserOrders: typeof import('./src/components/orders/UserOrders.vue')['default']
   }
 }
