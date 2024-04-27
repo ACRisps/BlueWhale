@@ -10,6 +10,7 @@ let couponType = ref('FULL_REDUCTION');
 let timeArray = ref();
 let full = ref();
 let reduction = ref();
+let couponNum = ref();
 
 
 // 清空缓存
@@ -33,7 +34,7 @@ function handleCouponInfo() {
     full: full.value,
     reduction: reduction.value,
     storeId: Number(storeId),
-  }, 20).then(res => {
+  }, couponNum.value).then(res => {
     if (res.data.code == '000') {
       clearCache();
       ElMessage({
@@ -88,6 +89,10 @@ function handleCouponInfo() {
         </el-form-item>
         <el-form-item label="折扣金额" v-if="couponType=='FULL_REDUCTION'">
           <el-input v-model="reduction" class="input" placeholder="减多少 （单位：元）"
+                    type="number"/>
+        </el-form-item>
+        <el-form-item label="优惠券数">
+          <el-input v-model="couponNum" class="input" placeholder="发多少张"
                     type="number"/>
         </el-form-item>
         <el-row justify="center">
