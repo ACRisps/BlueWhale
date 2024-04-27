@@ -47,7 +47,7 @@ function logout() {
 
       <div class="flex-grow"/>
 
-      <el-sub-menu v-if="role=='MANAGER'||role=='STAFF'" index="">
+      <el-sub-menu v-if="role=='MANAGER'||role=='STAFF'||role=='CEO'" index="">
         <template #title>
           <el-icon :size="20">
             <Edit/>
@@ -56,8 +56,9 @@ function logout() {
         </template>
         <el-menu-item v-if="role=='MANAGER'" index="/createStore">创建商店</el-menu-item>
         <el-menu-item v-if="role=='STAFF'" index="/createProduct">创建商品</el-menu-item>
-        <el-menu-item v-if="role=='MANAGER'||role=='STAFF'" index="/publishCoupon">发布优惠券</el-menu-item>
-        <el-menu-item v-if="role=='MANAGER'||role=='STAFF'" index="/coupons">管理优惠券</el-menu-item>
+        <el-menu-item v-if="role=='MANAGER'||role=='STAFF'||role=='CEO'" index="/publishCoupon">发布优惠券
+        </el-menu-item>
+        <el-menu-item v-if="role=='MANAGER'||role=='STAFF'||role=='CEO'" index="/coupons">管理优惠券</el-menu-item>
       </el-sub-menu>
 
       <el-menu-item v-if="role=='CUSTOMER'" index="/coupons">
