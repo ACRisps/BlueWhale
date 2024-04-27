@@ -3,7 +3,7 @@ import {computed, ref} from 'vue';
 import {userInfo, userInfoUpdate} from '../../api/user.ts';
 import {parseRole, parseTime} from "../../utils";
 import {router} from '../../router';
-import {UserFilled} from "@element-plus/icons-vue";
+// import {UserFilled} from "@element-plus/icons-vue";
 
 const role = sessionStorage.getItem("role");
 const name = ref('');
@@ -99,7 +99,11 @@ function updatePassword() {
   <el-main class="main-container">
     <el-card class="aside-card">
       <div class="avatar-area">
-        <el-avatar :icon="UserFilled" :size="80">
+        <!--        <el-avatar :icon="UserFilled" :size="80">-->
+        <!--          {{name}}-->
+        <!--        </el-avatar>-->
+        <el-avatar :size="80">
+          {{ name }}
         </el-avatar>
         <span class="avatar-text"> 欢迎您，{{ name }}</span>
       </div>
@@ -167,7 +171,6 @@ function updatePassword() {
                     v-model="address" placeholder="中华门"></el-input>
         </el-form-item>
       </el-form>
-      <el-button></el-button>
     </el-card>
 
     <el-card v-if="!displayInfoCard" class="change-card">

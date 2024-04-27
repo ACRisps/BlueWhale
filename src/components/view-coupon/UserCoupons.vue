@@ -1,9 +1,8 @@
 <script setup lang="ts">
 import {onMounted, ref} from "vue";
-import {UserCouponInfo, UserCouponParsedInfo, userCouponsInfo,} from "../../api/coupon.ts";
+import {UserCouponInfo, userCouponsInfo,} from "../../api/coupon.ts";
 
 const couponData = ref([] as UserCouponInfo[]);
-const parsedCouponData = ref([] as UserCouponParsedInfo[]);
 
 const currentPage = ref(1);
 const totalItems = ref(0);
@@ -13,8 +12,7 @@ function loadCoupons(page: number) {
   userCouponsInfo(page - 1).then(res => {
     couponData.value = res.data.result.content;
     totalItems.value = res.data.result.totalElements;
-    console.log(couponData.value[0])
-    parseCouponData();
+    console.log(couponData.value[0]);
   });
 }
 
@@ -24,29 +22,27 @@ onMounted(() => {
 
 function handlePageChange(page: number) {
   currentPage.value = page;
-  parsedCouponData.value = [];
   loadCoupons(page);
 }
 
-function parseCouponData() {
-  for (let i in couponData.value) {
-    parsedCouponData.value[i] = {
-      couponType: parseCouponType(couponData.value[i].couponType) as string,
-      effective: couponData.value[i].effective,
-      effectiveTime: String(couponData.value[i].effectiveTime),
-      expiredTime: String(couponData.value[i].expiredTime),
-      full: couponData.value[i].full,
-      reduction: couponData.value[i].reduction,
-      storeName: couponData.value[i].storeName,
-    };
+
+function couponTypeFormatter(row: any) {
+  if (row.couponType == "FULL_REDUCTION") {
+    return "满减券";
+  } else if (row.couponType == "SPECIAL") {
+    return "蓝鲸券";
+  } else {
+    return 'invalid coupon type';
   }
 }
 
-function parseCouponType(raw: string) {
-  if (raw == "FULL_REDUCTION") {
-    return "满减券";
-  } else if (raw == "SPECIAL") {
-    return "蓝鲸券";
+function couponContentFormatter(row: any) {
+  if (row.couponType == "FULL_REDUCTION") {
+    return "满 " + row.full + " 减 " + row.reduction;
+  } else if (row.couponType == "SPECIAL") {
+    return "蓝鲸券 标准优惠";
+  } else {
+    return 'invalid coupon type';
   }
 }
 
@@ -58,13 +54,20 @@ function parseCouponType(raw: string) {
       <div class="title">在这里查看已领取的优惠券</div>
     </el-row>
     <el-row justify="center">
-      <el-table :data="parsedCouponData" class="coupon-table">
-        <el-table-column prop="couponType" label="优惠类型"/>
+      <el-table :data="couponData" class="coupon-table">
+        <el-table-column prop="couponType" label="优惠类型" :formatter="couponTypeFormatter"/>
         <el-table-column prop="storeName" label="所属商店"/>
         <el-table-column prop="effectiveTime" label="生效日期"/>
         <el-table-column prop="expiredTime" label="截止日期"/>
+        <el-table-column label="折扣明细" :formatter="couponContentFormatter"/>
+        <el-table-column label="状态">
+          <template #default="scope">
+            <el-text v-if="scope.row.effective==2" style="color: forestgreen">√生效中</el-text>
+            <el-text v-if="scope.row.effective==1" style="color: deepskyblue">+未生效</el-text>
+            <el-text v-if="scope.row.effective==0" style="color: indianred">×已过期</el-text>
+          </template>
+        </el-table-column>
       </el-table>
-
 
     </el-row>
     <el-row justify="center">
@@ -83,8 +86,9 @@ function parseCouponType(raw: string) {
 </template>
 
 <style scoped>
+
 .coupon-table {
-  width: 50%;
+  width: 60%;
   margin: 20px;
 }
 

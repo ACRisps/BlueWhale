@@ -51,10 +51,11 @@ onMounted(() => {
             </el-row>
           </template>
           <el-row>
-            <el-col :span="6">
+            <el-col :span="7">
               <el-image style="width: 100px; height: 100px" :src="store.imgURL" :fit="'cover'"/>
             </el-col>
-            <el-col :span="16">
+            <el-col :span="12">
+              <el-text line-clamp="4">{{ store.description }}</el-text>
             </el-col>
           </el-row>
 

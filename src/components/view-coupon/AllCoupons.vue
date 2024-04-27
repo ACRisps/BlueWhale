@@ -1,11 +1,100 @@
 <script setup lang="ts">
+import {onMounted, ref} from "vue";
+import {couponsInfo, UserCouponInfo} from "../../api/coupon.ts";
+
+const couponData = ref([] as UserCouponInfo[]);
+
+const currentPage = ref(1);
+const totalItems = ref(0);
+const pageSize = ref(10);
+
+function loadCoupons(page: number) {
+  couponsInfo(page - 1).then(res => {
+    couponData.value = res.data.result.content;
+    totalItems.value = res.data.result.totalElements;
+    console.log(couponData.value);
+  });
+}
+
+onMounted(() => {
+  loadCoupons(currentPage.value);
+});
+
+function handlePageChange(page: number) {
+  currentPage.value = page;
+  loadCoupons(page);
+}
+
+
+function couponTypeFormatter(row: any) {
+  if (row.couponType == "FULL_REDUCTION") {
+    return "满减券";
+  } else if (row.couponType == "SPECIAL") {
+    return "蓝鲸券";
+  } else {
+    return 'invalid coupon type';
+  }
+}
+
+function couponContentFormatter(row: any) {
+  if (row.couponType == "FULL_REDUCTION") {
+    return "满 " + row.full + " 减 " + row.reduction;
+  } else if (row.couponType == "SPECIAL") {
+    return "蓝鲸券 标准优惠";
+  } else {
+    return 'invalid coupon type';
+  }
+}
 
 </script>
 
 <template>
-  这里是管理员优惠券界面，施工中
+  <el-main>
+    <el-row justify="center">
+      <div class="title">在这里查看商场全部优惠券组</div>
+    </el-row>
+    <el-row justify="center">
+      <el-table :data="couponData" class="coupon-table">
+        <el-table-column prop="couponType" label="优惠类型" :formatter="couponTypeFormatter"/>
+        <el-table-column prop="storeName" label="所属商店"/>
+        <el-table-column prop="effectiveTime" label="生效日期"/>
+        <el-table-column prop="expiredTime" label="截止日期"/>
+        <el-table-column label="折扣明细" :formatter="couponContentFormatter"/>
+        <el-table-column label="状态">
+          <template #default="scope">
+            <el-text v-if="scope.row.effective" style="color: forestgreen">√生效中</el-text>
+            <el-text v-if="!scope.row.effective" style="color: indianred">×不可用</el-text>
+          </template>
+        </el-table-column>
+      </el-table>
+
+    </el-row>
+    <el-row justify="center">
+      <div>
+        <el-pagination
+            layout="prev, pager, next"
+            :page-count="Math.ceil(totalItems / pageSize)"
+            :current-page="currentPage"
+            @current-change="handlePageChange"
+        />
+      </div>
+    </el-row>
+  </el-main>
+
+
 </template>
 
 <style scoped>
 
+.coupon-table {
+  width: 60%;
+  margin: 20px;
+}
+
+.title {
+  margin-top: 10px;
+  margin-bottom: 40px;
+  font-size: large;
+  color: mediumpurple;
+}
 </style>

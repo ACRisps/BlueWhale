@@ -9,7 +9,7 @@ const role = sessionStorage.getItem("role");
 
 <template>
   <PublishStoreCoupon v-if="role=='STAFF'"/>
-  <PublishGlobalCoupon v-if="role=='MANAGER'"/>
+  <PublishGlobalCoupon v-if="role=='MANAGER'||role=='CEO'"/>
 </template>
 
 <style scoped>
