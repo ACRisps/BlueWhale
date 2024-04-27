@@ -166,7 +166,7 @@ function handleRegister() {
 
             <el-col :span="7" v-if="identity==='STAFF'">
               <el-form-item>
-                <label for="address">
+                <label for="storeName">
                   所属商店
                 </label>
                 <el-select id="storeName"
