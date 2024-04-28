@@ -25,7 +25,6 @@ function handlePageChange(page: number) {
   loadCoupons(page);
 }
 
-
 function couponTypeFormatter(row: any) {
   if (row.couponType == "FULL_REDUCTION") {
     return "满减券";
@@ -73,9 +72,10 @@ function receiveCoupon(id: number) {
       <div class="title">在这里领取商场优惠券</div>
     </el-row>
     <el-row justify="center">
-      <el-table :data="couponData" class="coupon-table">
+      <el-table :data="couponData" class="coupon-table" :cell-style="{'text-align':'center'}"
+                :header-cell-style="{'text-align':'center'}">
         <el-table-column prop="couponType" label="优惠类型" :formatter="couponTypeFormatter"/>
-        <el-table-column prop="storeName" label="所属商店" width="160"/>
+        <el-table-column prop="storeName" label="所属商店" width="180"/>
         <el-table-column prop="effectiveTime" label="生效日期"/>
         <el-table-column prop="expiredTime" label="截止日期"/>
         <el-table-column label="折扣明细" :formatter="couponContentFormatter"/>
@@ -88,11 +88,12 @@ function receiveCoupon(id: number) {
         </el-table-column>
         <el-table-column label="" fixed="right">
           <template #default="scope">
-            <el-button v-if="scope.row.received==false" size="small" type="primary"
+            <el-button v-if="scope.row.received==false&&scope.row.effective>0" size="small" type="primary"
                        @click="receiveCoupon(scope.row.id)">
               领取
             </el-button>
-            <el-text v-if="scope.row.received==true">已领取</el-text>
+            <el-text v-else-if="scope.row.received==true" style="color: #13ce66" size="large">√</el-text>
+            <el-text v-else size="small" style="color: lightgray">不可领取</el-text>
           </template>
         </el-table-column>
       </el-table>

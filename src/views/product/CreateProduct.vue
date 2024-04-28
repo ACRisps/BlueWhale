@@ -61,7 +61,6 @@ function uploadHttpRequest() {
 
 
 function handleProductInfo() {
-  console.log(imgURLs.value);
   uploadProductInfo({
     productName: productName.value,
     imgURLs: imgURLs.value,

@@ -46,6 +46,8 @@ function couponContentFormatter(row: any) {
   }
 }
 
+
+
 </script>
 
 <template>
@@ -54,7 +56,8 @@ function couponContentFormatter(row: any) {
       <div class="title">在这里查看已领取的优惠券</div>
     </el-row>
     <el-row justify="center">
-      <el-table :data="couponData" class="coupon-table">
+      <el-table :data="couponData" class="coupon-table"  :cell-style="{'text-align':'center'}"
+                :header-cell-style="{'text-align':'center'}">
         <el-table-column prop="couponType" label="优惠类型" :formatter="couponTypeFormatter"/>
         <el-table-column prop="storeName" label="所属商店"/>
         <el-table-column prop="effectiveTime" label="生效日期"/>

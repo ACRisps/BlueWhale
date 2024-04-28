@@ -65,3 +65,32 @@ export const uploadReceiveCouponsInfo = (id: number) => {
         });
 };
 
+export const userStoreCouponsInfo = (page: number, size: number, storeId: number) => {
+    return axios.get(`${COUPON_MODULE}/shop`, {params: {page: page, storeId: storeId, size: size}})
+        .then(res => {
+            return res;
+        })
+        .catch(err => {
+            return err.response;
+        });
+};
+
+export const storeCouponNumInfo = (storeId: number) => {
+    return axios.get(`${COUPON_MODULE}/shop/number`, {params: {storeId: storeId}})
+        .then(res => {
+            return res;
+        })
+        .catch(err => {
+            return err.response;
+        });
+};
+
+export const payCouponsInfo = () => {
+    return axios.get(`${COUPON_MODULE}/pay`)
+        .then(res => {
+            return res;
+        })
+        .catch(err => {
+            return err.response;
+        });
+};

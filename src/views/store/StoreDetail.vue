@@ -1,17 +1,29 @@
-<!--Lab2新增-商店详情界面-->
 <script setup lang="ts">
 import {storeInfoDetail, type StoreInfoDetail} from "../../api/store.ts";
 import {onMounted, ref} from "vue";
 import {useRoute} from "vue-router";
 import {ArrowLeft} from "@element-plus/icons-vue";
+import {storeCouponNumInfo, uploadReceiveCouponsInfo, userStoreCouponsInfo} from "../../api/coupon.ts";
 
 const storeDetail = ref({} as StoreInfoDetail);
 const grade = ref<number>();
+const storeId = ref();
+
+const badgeCnt = ref(0);
+const showCouponsDialog = ref(false);
+
+const couponData = ref();
+const currentPage = ref(1);
+const totalItems = ref(0);
+const pageSize = ref(4);
 
 function loadStoreDetail(x: number) {
   storeInfoDetail(x).then(res => {
     storeDetail.value = res.data.result;
     grade.value = Number(storeDetail.value.grade);
+    storeId.value = res.data.result.storeId;
+
+    loadStoreCoupons(currentPage.value);
   });
 }
 
@@ -19,6 +31,64 @@ onMounted(() => {
   const storeId = Number(useRoute().params.storeId);
   loadStoreDetail(storeId);
 });
+
+function couponContentFormatter(row: any) {
+  if (row.couponType == "FULL_REDUCTION") {
+    return "满 " + row.full + " 减 " + row.reduction;
+  } else if (row.couponType == "SPECIAL") {
+    return "蓝鲸券 标准优惠";
+  } else {
+    return 'invalid coupon type';
+  }
+}
+
+function couponTypeFormatter(row: any) {
+  if (row.couponType == "FULL_REDUCTION") {
+    return "满减券";
+  } else if (row.couponType == "SPECIAL") {
+    return "蓝鲸券";
+  } else {
+    return 'invalid coupon type';
+  }
+}
+
+function receiveCoupon(id: number) {
+  uploadReceiveCouponsInfo(id).then(res => {
+    if (res.data.code == '000') {
+      loadStoreCoupons(currentPage.value);
+      ElMessage({
+        message: "已领取",
+        type: 'success',
+        center: true,
+      });
+    } else {
+      ElMessage({
+        message: "领取失败（" + res.data.msg + "）",
+        type: 'warning',
+        center: true,
+      });
+    }
+  });
+}
+
+function loadStoreCoupons(page: number) {
+  userStoreCouponsInfo(page - 1, pageSize.value, storeId.value).then(res => {
+    couponData.value = res.data.result.content;
+    totalItems.value = res.data.result.totalElements;
+    getCouponCnt();
+  });
+}
+
+function handlePageChange(page: number) {
+  currentPage.value = page;
+  loadStoreCoupons(page);
+}
+
+function getCouponCnt() {
+  storeCouponNumInfo(storeId.value).then(res => {
+    badgeCnt.value = res.data.result;
+  });
+}
 </script>
 
 
@@ -57,8 +127,8 @@ onMounted(() => {
       <el-row style="height: 20px">
       </el-row>
       <el-row justify="center">
-        <el-badge :value="10" type="primary">
-          <el-button>本店优惠券</el-button>
+        <el-badge :value="badgeCnt" type="primary" :show-zero="false">
+          <el-button @click="showCouponsDialog= true">本店优惠券</el-button>
         </el-badge>
 
       </el-row>
@@ -84,6 +154,53 @@ onMounted(() => {
       </div>
     </el-main>
   </el-container>
+
+
+  <el-dialog
+      v-model="showCouponsDialog"
+      title="本店可领取优惠券"
+      width="50%"
+  >
+    <el-row justify="center">
+      <el-table :data="couponData" class="coupon-table" style="width: 90%; min-height: 300px"
+                :cell-style="{'text-align':'center'}"
+                :header-cell-style="{'text-align':'center'}">
+        <el-table-column prop="couponType" label="优惠类型" :formatter="couponTypeFormatter"/>
+        <el-table-column prop="effectiveTime" label="生效日期"/>
+        <el-table-column prop="expiredTime" label="截止日期"/>
+        <el-table-column label="折扣明细" :formatter="couponContentFormatter"/>
+        <el-table-column label="状态">
+          <template #default="scope">
+            <el-text v-if="scope.row.effective==2" style="color: forestgreen">√生效中</el-text>
+            <el-text v-if="scope.row.effective==1" style="color: deepskyblue">+未生效</el-text>
+            <el-text v-if="scope.row.effective==0" style="color: indianred">×已过期</el-text>
+          </template>
+        </el-table-column>
+        <el-table-column label="">
+          <template #default="scope">
+            <el-button v-if="scope.row.received==false&&scope.row.effective>0" size="small" type="primary"
+                       @click="receiveCoupon(scope.row.id)">
+              领取
+            </el-button>
+            <el-text v-else-if="scope.row.received==true" style="color: #13ce66" size="large">√</el-text>
+            <el-text v-else size="small" style="color: lightgray">不可领取</el-text>
+          </template>
+        </el-table-column>
+      </el-table>
+
+    </el-row>
+    <el-row justify="center">
+      <div>
+        <el-pagination
+            layout="prev, pager, next"
+            :page-count="Math.ceil(totalItems / pageSize)"
+            :current-page="currentPage"
+            @current-change="handlePageChange"
+        />
+      </div>
+    </el-row>
+
+  </el-dialog>
 </template>
 
 

@@ -56,7 +56,7 @@ function couponContentFormatter(row: any) {
     <el-row justify="center">
       <el-table :data="couponData" class="coupon-table">
         <el-table-column prop="couponType" label="优惠类型" :formatter="couponTypeFormatter"/>
-        <el-table-column prop="storeName" label="所属商店"/>
+        <el-table-column prop="storeName" label="所属商店" width="180"/>
         <el-table-column prop="effectiveTime" label="生效日期"/>
         <el-table-column prop="expiredTime" label="截止日期"/>
         <el-table-column label="折扣明细" :formatter="couponContentFormatter"/>
