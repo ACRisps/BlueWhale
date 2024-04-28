@@ -12,17 +12,17 @@ export type CouponUploadInfo = {
     [property: string]: any;
 }
 
-export type UserCouponInfo = {
-    couponType: string;
-    effective: number;
-    effectiveTime: Date;
-    expiredTime: Date;
-    full: number;
-    reduction: number;
-    storeName: string;
-    storeId: number;
-    [property: string]: any;
-}
+// export type CouponInfo = {
+//     couponType: string;
+//     effective: number;
+//     effectiveTime: Date;
+//     expiredTime: Date;
+//     full: number;
+//     reduction: number;
+//     storeName: string;
+//     storeId: number;
+//     [property: string]: any;
+// }
 
 export const uploadCouponInfo = (payload: CouponUploadInfo, num: number) => {
     return axios.post(`${COUPON_MODULE}/publish`, payload, {params: {couponNum: num}})
@@ -47,6 +47,16 @@ export const userCouponsInfo = (page: number) => {
 
 export const couponsInfo = (page: number) => {
     return axios.get(`${COUPON_MODULE}`, {params: {page: page}})
+        .then(res => {
+            return res;
+        })
+        .catch(err => {
+            return err.response;
+        });
+};
+
+export const uploadReceiveCouponsInfo = (id: number) => {
+    return axios.get(`${COUPON_MODULE}/receive`, {params: {couponGroupId: id}})
         .then(res => {
             return res;
         })

@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import {onMounted, ref} from "vue";
-import {couponsInfo, UserCouponInfo} from "../../api/coupon.ts";
+import {couponsInfo} from "../../api/coupon.ts";
 
-const couponData = ref([] as UserCouponInfo[]);
+const couponData = ref();
 
 const currentPage = ref(1);
 const totalItems = ref(0);
@@ -13,6 +13,7 @@ function loadCoupons(page: number) {
     couponData.value = res.data.result.content;
     totalItems.value = res.data.result.totalElements;
     console.log(couponData.value);
+    console.log(res.data);
   });
 }
 
@@ -61,8 +62,9 @@ function couponContentFormatter(row: any) {
         <el-table-column label="折扣明细" :formatter="couponContentFormatter"/>
         <el-table-column label="状态">
           <template #default="scope">
-            <el-text v-if="scope.row.effective" style="color: forestgreen">√生效中</el-text>
-            <el-text v-if="!scope.row.effective" style="color: indianred">×不可用</el-text>
+            <el-text v-if="scope.row.effective==2" style="color: forestgreen">√生效中</el-text>
+            <el-text v-if="scope.row.effective==1" style="color: deepskyblue">+未生效</el-text>
+            <el-text v-if="scope.row.effective==0" style="color: indianred">×已过期</el-text>
           </template>
         </el-table-column>
       </el-table>
@@ -94,6 +96,6 @@ function couponContentFormatter(row: any) {
   margin-top: 10px;
   margin-bottom: 40px;
   font-size: large;
-  color: cornflowerblue;
+  color: darkgreen;
 }
 </style>

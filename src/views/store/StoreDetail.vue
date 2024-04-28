@@ -54,6 +54,14 @@ onMounted(() => {
       <el-row>
         <el-text class="description">{{ storeDetail.description }}</el-text>
       </el-row>
+      <el-row style="height: 20px">
+      </el-row>
+      <el-row justify="center">
+        <el-badge :value="10" type="primary">
+          <el-button>本店优惠券</el-button>
+        </el-badge>
+
+      </el-row>
     </el-aside>
 
     <el-main class="page-main">

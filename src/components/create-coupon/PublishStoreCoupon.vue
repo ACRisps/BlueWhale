@@ -27,6 +27,7 @@ function handlePublish() {
 
 function handleCouponInfo() {
   console.log(timeArray.value[0]);
+  console.log(Number(storeId));
   uploadCouponInfo({
     couponType: couponType.value,
     effectiveTime: timeArray.value[0],
@@ -58,7 +59,7 @@ function handleCouponInfo() {
 <template>
   <el-main>
     <el-row justify="center">
-      <div class="title">您可以在这里为您的商店发布优惠券</div>
+      <div class="title">在这里为您的商店发布优惠券</div>
     </el-row>
     <el-row justify="center">
       <el-form style="width: 540px">

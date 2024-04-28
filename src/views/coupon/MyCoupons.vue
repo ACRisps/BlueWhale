@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import {onMounted, ref} from "vue";
-import {couponsInfo} from "../../api/coupon.ts";
+import {userCouponsInfo,} from "../../api/coupon.ts";
 
 const couponData = ref();
 
@@ -9,10 +9,10 @@ const totalItems = ref(0);
 const pageSize = ref(10);
 
 function loadCoupons(page: number) {
-  couponsInfo(page - 1).then(res => {
+  userCouponsInfo(page - 1).then(res => {
     couponData.value = res.data.result.content;
     totalItems.value = res.data.result.totalElements;
-    console.log(couponData.value);
+    console.log(couponData.value[0]);
   });
 }
 
@@ -51,7 +51,7 @@ function couponContentFormatter(row: any) {
 <template>
   <el-main>
     <el-row justify="center">
-      <div class="title">在这里查看商场全部优惠券组</div>
+      <div class="title">在这里查看已领取的优惠券</div>
     </el-row>
     <el-row justify="center">
       <el-table :data="couponData" class="coupon-table">
@@ -96,6 +96,6 @@ function couponContentFormatter(row: any) {
   margin-top: 10px;
   margin-bottom: 40px;
   font-size: large;
-  color: mediumpurple;
+  color: cornflowerblue;
 }
 </style>

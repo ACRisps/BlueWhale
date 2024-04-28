@@ -76,6 +76,7 @@ const router = createRouter({
                 component: () => import('../views/coupon/PublishCoupon.vue'),
                 meta: {
                     title: '创建优惠券',
+                    permission: ['STAFF', 'CEO']
                 }
             },
             {
@@ -84,6 +85,16 @@ const router = createRouter({
                 component: () => import('../views/coupon/Coupons.vue'),
                 meta: {
                     title: '查看优惠券',
+                    permission: ['CUSTOMER', 'STAFF', 'CEO']
+                }
+            },
+            {
+                path: '/myCoupons',
+                name: 'myCoupons',
+                component: () => import('../views/coupon/MyCoupons.vue'),
+                meta: {
+                    title: '我的券包',
+                    permission: ['CUSTOMER']
                 }
             },
 

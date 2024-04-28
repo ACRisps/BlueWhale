@@ -1,18 +1,18 @@
 <script setup lang="ts">
 import {onMounted, ref} from "vue";
-import {UserCouponInfo, userCouponsInfo,} from "../../api/coupon.ts";
+import {couponsInfo, uploadReceiveCouponsInfo} from "../../api/coupon.ts";
 
-const couponData = ref([] as UserCouponInfo[]);
+const couponData = ref();
 
 const currentPage = ref(1);
 const totalItems = ref(0);
 const pageSize = ref(10);
 
 function loadCoupons(page: number) {
-  userCouponsInfo(page - 1).then(res => {
+  couponsInfo(page - 1).then(res => {
     couponData.value = res.data.result.content;
     totalItems.value = res.data.result.totalElements;
-    console.log(couponData.value[0]);
+    console.log(res.data.result.content);
   });
 }
 
@@ -46,17 +46,36 @@ function couponContentFormatter(row: any) {
   }
 }
 
+function receiveCoupon(id: number) {
+  uploadReceiveCouponsInfo(id).then(res => {
+    if (res.data.code == '000') {
+      loadCoupons(currentPage.value);
+      ElMessage({
+        message: "已领取",
+        type: 'success',
+        center: true,
+      });
+    } else {
+      ElMessage({
+        message: "领取失败（" + res.data.msg + "）",
+        type: 'warning',
+        center: true,
+      });
+    }
+  });
+}
+
 </script>
 
 <template>
   <el-main>
     <el-row justify="center">
-      <div class="title">在这里查看已领取的优惠券</div>
+      <div class="title">在这里领取商场优惠券</div>
     </el-row>
     <el-row justify="center">
       <el-table :data="couponData" class="coupon-table">
         <el-table-column prop="couponType" label="优惠类型" :formatter="couponTypeFormatter"/>
-        <el-table-column prop="storeName" label="所属商店"/>
+        <el-table-column prop="storeName" label="所属商店" width="160"/>
         <el-table-column prop="effectiveTime" label="生效日期"/>
         <el-table-column prop="expiredTime" label="截止日期"/>
         <el-table-column label="折扣明细" :formatter="couponContentFormatter"/>
@@ -65,6 +84,15 @@ function couponContentFormatter(row: any) {
             <el-text v-if="scope.row.effective==2" style="color: forestgreen">√生效中</el-text>
             <el-text v-if="scope.row.effective==1" style="color: deepskyblue">+未生效</el-text>
             <el-text v-if="scope.row.effective==0" style="color: indianred">×已过期</el-text>
+          </template>
+        </el-table-column>
+        <el-table-column label="" fixed="right">
+          <template #default="scope">
+            <el-button v-if="scope.row.received==false" size="small" type="primary"
+                       @click="receiveCoupon(scope.row.id)">
+              领取
+            </el-button>
+            <el-text v-if="scope.row.received==true">已领取</el-text>
           </template>
         </el-table-column>
       </el-table>
