@@ -31,7 +31,7 @@ const setCurrent = (row?: any) => {
 
 const handleCurrentChange = (val: any) => {
   currentRow.value = val;
-  console.log(currentRow.value);
+  // console.log(currentRow.value);
   loadCurrentPrice();
 };
 
@@ -87,11 +87,11 @@ function getData(orderContainerId: number) {
   loadOrderDetail();
   loadOriginalPrice();
   loadCurrentPrice();
+  loadPayCoupons();
 }
 
 function loadOrderDetail() {
   getOrderItems(orderId.value).then(res => {
-    console.log(res.data.result);
     orderDetail.value = res.data.result;
   });
 }
@@ -169,7 +169,7 @@ function couponContentFormatter(row: any) {
       <el-collapse v-model="activeNames" style="width: 90%">
         <el-collapse-item name="0" title="订单明细">
           <div v-for="item in orderDetail">
-            <el-text> {{ item.productName }}&nbsp;*{{item.productNumber}}</el-text>
+            <el-text> {{ item.productName }}&nbsp;*{{ item.productNumber }}</el-text>
           </div>
         </el-collapse-item>
         <el-collapse-item name="1">
