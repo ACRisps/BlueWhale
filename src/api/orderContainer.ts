@@ -9,11 +9,20 @@ export type OrderContainer = {
     orders: String[]
     userPhone: String
     address: String
+    storeId: number
 };
 
 export const uploadOrderContainer = (payload: OrderContainer) => {
-
     return axios.post(`${ORDER_MODULE}/multiOrders/create`, payload)
+        .then(res => {
+            return res;
+        })
+        .catch(err => {
+            return err.response;
+        });
+};
+export const getOrderItems = (id: number) => {
+    return axios.get(`${ORDER_MODULE}/multiOrders/${id}`)
         .then(res => {
             return res;
         })

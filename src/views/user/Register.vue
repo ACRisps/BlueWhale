@@ -173,10 +173,8 @@ function handleRegister() {
                            v-model="storeId"
                            placeholder="请选择"
                            style="width: 100%;"
-                          
                 >
                 <el-option v-for="store in storeList"
-                    
                           :label="store.storeName"
                           :value="store.storeId" />
                 </el-select>

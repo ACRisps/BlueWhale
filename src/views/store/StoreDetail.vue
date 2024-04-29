@@ -267,6 +267,5 @@ a {
   height: 200px;
   width: 250px;
   margin: 5px 15px;
-
 }
 </style>

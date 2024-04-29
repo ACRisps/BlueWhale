@@ -8,7 +8,6 @@ import {uploadOrderItem} from "../../api/orderItem.ts";
 import {uploadOrderContainer} from "../../api/orderContainer.ts";
 import {useRoute} from "vue-router";
 import {ArrowLeft} from "@element-plus/icons-vue";
-import {uploadPay} from "../../api/pay.ts";
 import {parseTime} from "../../utils";
 
 import PayDialog from "../../components/PayDialog.vue";
@@ -32,8 +31,6 @@ let phone = String(sessionStorage.getItem("phone"));
 let productPrice = ref();
 let state = ref();
 let address = ref();
-
-let showPayDialog = ref(false);
 
 const payDialog = ref();
 
@@ -167,6 +164,7 @@ function handlePayImmediately() {
             orders: orders.value,
             method: getMethod(),
             state: state.value,
+            storeId:productDetail.value.storeId,
             totalAfterCoupon: String(parseFloat(productPrice.value) * buyNum.value),
             totalBeforeCoupon: String(parseFloat(productPrice.value) * buyNum.value),
             userPhone: phone,
@@ -177,21 +175,28 @@ function handlePayImmediately() {
                 showBuyOptions.value = false;
                 buyNum.value = 1;
               }
-              uploadPay(res.data.result).then(res => {
-                if (res.data.code == '000') {
-                  ElMessage({
-                    message: "购买成功",
-                    type: "success",
-                    center: true,
-                  });
-                } else {
-                  ElMessage({
-                    message: "支付失败（" + res.data.msg + "）",
-                    type: 'warning',
-                    center: true,
-                  });
-                }
+              ElMessage({
+                message: "订单已提交，等待支付",
+                type: 'success',
+                center: true,
               });
+              callPayDialog();
+              payDialog.value.getData(res.data.result);
+              // uploadPay(res.data.result).then(res => {
+              //   if (res.data.code == '000') {
+              //     ElMessage({
+              //       message: "购买成功",
+              //       type: "success",
+              //       center: true,
+              //     });
+              //   } else {
+              //     ElMessage({
+              //       message: "支付失败（" + res.data.msg + "）",
+              //       type: 'warning',
+              //       center: true,
+              //     });
+              //   }
+              // });
             } else {
               ElMessage({
                 message: "产生订单失败（" + res.data.msg + "）",
@@ -212,7 +217,11 @@ function callPayDialog() {
 }
 
 function handlePaymentFinish() {
-
+  // ElMessage({
+  //   message: "支付成功！",
+  //   type: 'success',
+  //   center: true,
+  // });
 }
 
 </script>
@@ -336,13 +345,12 @@ function handlePaymentFinish() {
       <div class="dialog-footer">
         <el-button type="primary" @click="handlePayLater">提交订单</el-button>
         <el-button type="primary" @click="handlePayImmediately">立即支付</el-button>
-        <el-button type="primary" @click="callPayDialog()">立即支付(beta)</el-button>
         <el-button @click="showBuyOptions=false">取消</el-button>
       </div>
     </template>
   </el-dialog>
 
-  <PayDialog :show="showPayDialog" ref="payDialog" @payment-finish="handlePaymentFinish"></PayDialog>
+  <PayDialog ref="payDialog" @payment-finish="handlePaymentFinish"></PayDialog>
 </template>
 
 
