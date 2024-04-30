@@ -16,7 +16,7 @@ const showCouponsDialog = ref(false);
 const couponData = ref();
 const currentPage = ref(1);
 const totalItems = ref(0);
-const pageSize = ref(4);
+const pageSize = ref(5);
 
 function loadStoreDetail(x: number) {
   storeInfoDetail(x).then(res => {
@@ -37,7 +37,7 @@ function couponContentFormatter(row: any) {
   if (row.couponType == "FULL_REDUCTION") {
     return "满 " + row.full + " 减 " + row.reduction;
   } else if (row.couponType == "SPECIAL") {
-    return "蓝鲸券 标准优惠";
+    return "蓝鲸券 标准";
   } else {
     return 'invalid coupon type';
   }
@@ -88,6 +88,8 @@ function handlePageChange(page: number) {
 function getCouponCnt() {
   storeCouponNumInfo(storeId.value).then(res => {
     badgeCnt.value = res.data.result;
+    console.log("hi");
+    console.log(res.data.result);
   });
 }
 </script>
@@ -173,7 +175,8 @@ function getCouponCnt() {
 
         <el-table-column label="领取状态">
           <template #default="scope">
-            <el-progress :percentage="scope.row.currentCouponNum*100/scope.row.allCouponNum" :color="progressColors">
+            <el-progress :percentage="scope.row.allCouponNum==0?0:scope.row.currentCouponNum*100/scope.row.allCouponNum"
+                         :color="progressColors">
               <el-text>{{ scope.row.currentCouponNum }} / {{ scope.row.allCouponNum }}</el-text>
             </el-progress>
 
@@ -189,14 +192,17 @@ function getCouponCnt() {
         </el-table-column>
         <el-table-column label="">
           <template #default="scope">
-            <el-button v-if="scope.row.received==false&&scope.row.effective>0&&!scope.row.used" size="small"
-                       type="primary"
-                       @click="receiveCoupon(scope.row.id)">
+            <el-button
+                v-if="scope.row.received==false&&scope.row.effective>0&&!scope.row.used&&scope.row.currentCouponNum"
+                size="small"
+                type="primary"
+                @click="receiveCoupon(scope.row.id)">
               领取
             </el-button>
             <el-text v-else-if="scope.row.received==true&&!scope.row.used" style="color: #13ce66" size="large">√
             </el-text>
             <el-text v-else-if="scope.row.used" style="color: lightgray" size="small">已使用</el-text>
+            <el-text v-else-if="!scope.row.currentCouponNum" style="color: lightgray" size="small">已领完</el-text>
             <el-text v-else size="small" style="color: lightgray">不可领取</el-text>
           </template>
         </el-table-column>
