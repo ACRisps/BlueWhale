@@ -4,7 +4,7 @@ import {payCouponsInfo} from "../api/coupon.ts";
 import {CirclePlus, CircleCheckFilled, Remove} from "@element-plus/icons-vue";
 import {ElTable} from "element-plus";
 import {getOrderItems} from "../api/orderContainer.ts";
-import {calculatePrice, uploadPay} from "../api/pay.ts";
+import {calculateBest, calculatePrice, uploadPay} from "../api/pay.ts";
 
 defineExpose({openDialog, getData});
 const emit = defineEmits(['payment-finish']);
@@ -20,6 +20,8 @@ const orderId = ref();
 const orderDetail = ref();
 const oriPrice = ref<number>();
 const currentPrice = ref<number>();
+
+const bestCouponId = ref();
 
 const paySuccess = ref(false);
 
@@ -89,6 +91,7 @@ function getData(orderContainerId: number) {
   loadOriginalPrice();
   loadCurrentPrice();
   loadPayCoupons();
+  loadBestPrice();
 }
 
 function loadOrderDetail() {
@@ -115,8 +118,29 @@ function loadCurrentPrice() {
   }
 }
 
+function loadBestPrice() {
+  calculateBest(orderId.value).then(res => {
+    if (res.data.code == '000') {
+      ElMessage({
+        message: "已自动选择最优优惠",
+        type: "success",
+        center: true,
+      });
+      bestCouponId.value = res.data.result;
+      console.log("best")
+      console.log(bestCouponId.value)
+      for(let coupon of couponData.value) {
+        // if(coupon.id == bestCouponId.value) {
+        //   setCurrent(coupon.id);
+        // }
+        console.log(coupon);
+      }
+    }
+
+  });
+}
+
 onMounted(() => {
-  loadPayCoupons();
 });
 
 function couponTypeFormatter(row: any) {

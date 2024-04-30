@@ -38,3 +38,18 @@ export const calculatePrice = (multiOrderId: number, coupons: number[]) => {
             return err.response;
         });
 };
+
+export const calculateBest = (multiOrderId: number) => {
+
+    return axios.get(`${PAY_MODULE}/best`, {
+        params: {
+            multiOrderId: multiOrderId,
+        }
+    })
+        .then(res => {
+            return res;
+        })
+        .catch(err => {
+            return err.response;
+        });
+};

@@ -189,11 +189,14 @@ function getCouponCnt() {
         </el-table-column>
         <el-table-column label="">
           <template #default="scope">
-            <el-button v-if="scope.row.received==false&&scope.row.effective>0" size="small" type="primary"
+            <el-button v-if="scope.row.received==false&&scope.row.effective>0&&!scope.row.used" size="small"
+                       type="primary"
                        @click="receiveCoupon(scope.row.id)">
               领取
             </el-button>
-            <el-text v-else-if="scope.row.received==true" style="color: #13ce66" size="large">√</el-text>
+            <el-text v-else-if="scope.row.received==true&&!scope.row.used" style="color: #13ce66" size="large">√
+            </el-text>
+            <el-text v-else-if="scope.row.used" style="color: lightgray" size="small">已使用</el-text>
             <el-text v-else size="small" style="color: lightgray">不可领取</el-text>
           </template>
         </el-table-column>
