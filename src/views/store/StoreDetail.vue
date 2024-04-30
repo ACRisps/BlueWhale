@@ -4,6 +4,7 @@ import {onMounted, ref} from "vue";
 import {useRoute} from "vue-router";
 import {ArrowLeft} from "@element-plus/icons-vue";
 import {storeCouponNumInfo, uploadReceiveCouponsInfo, userStoreCouponsInfo} from "../../api/coupon.ts";
+import {progressColors} from "../../utils/style.ts";
 
 const storeDetail = ref({} as StoreInfoDetail);
 const grade = ref<number>();
@@ -159,7 +160,7 @@ function getCouponCnt() {
   <el-dialog
       v-model="showCouponsDialog"
       title="本店可领取优惠券"
-      width="50%"
+      width="60%"
   >
     <el-row justify="center">
       <el-table :data="couponData" class="coupon-table" style="width: 90%; min-height: 300px"
@@ -169,6 +170,16 @@ function getCouponCnt() {
         <el-table-column prop="effectiveTime" label="生效日期"/>
         <el-table-column prop="expiredTime" label="截止日期"/>
         <el-table-column label="折扣明细" :formatter="couponContentFormatter"/>
+
+        <el-table-column label="领取状态">
+          <template #default="scope">
+            <el-progress :percentage="scope.row.currentCouponNum*100/scope.row.allCouponNum" :color="progressColors">
+              <el-text>{{ scope.row.currentCouponNum }} / {{ scope.row.allCouponNum }}</el-text>
+            </el-progress>
+
+          </template>
+        </el-table-column>
+
         <el-table-column label="状态">
           <template #default="scope">
             <el-text v-if="scope.row.effective==2" style="color: forestgreen">√生效中</el-text>

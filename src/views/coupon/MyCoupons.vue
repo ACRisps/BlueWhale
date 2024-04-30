@@ -40,7 +40,7 @@ function couponContentFormatter(row: any) {
   if (row.couponType == "FULL_REDUCTION") {
     return "满 " + row.full + " 减 " + row.reduction;
   } else if (row.couponType == "SPECIAL") {
-    return "蓝鲸券 标准优惠";
+    return "蓝鲸券 标准";
   } else {
     return 'invalid coupon type';
   }

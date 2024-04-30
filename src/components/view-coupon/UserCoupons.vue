@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import {onMounted, ref} from "vue";
 import {couponsInfo, uploadReceiveCouponsInfo} from "../../api/coupon.ts";
+import {progressColors} from "../../utils/style.ts";
 
 const couponData = ref();
 
@@ -39,7 +40,7 @@ function couponContentFormatter(row: any) {
   if (row.couponType == "FULL_REDUCTION") {
     return "满 " + row.full + " 减 " + row.reduction;
   } else if (row.couponType == "SPECIAL") {
-    return "蓝鲸券 标准优惠";
+    return "蓝鲸券 标准";
   } else {
     return 'invalid coupon type';
   }
@@ -64,6 +65,7 @@ function receiveCoupon(id: number) {
   });
 }
 
+
 </script>
 
 <template>
@@ -79,6 +81,16 @@ function receiveCoupon(id: number) {
         <el-table-column prop="effectiveTime" label="生效日期"/>
         <el-table-column prop="expiredTime" label="截止日期"/>
         <el-table-column label="折扣明细" :formatter="couponContentFormatter"/>
+
+        <el-table-column label="领取状态">
+          <template #default="scope">
+            <el-progress :percentage="scope.row.currentCouponNum*100/scope.row.allCouponNum" :color="progressColors">
+              <el-text>{{ scope.row.currentCouponNum }} / {{ scope.row.allCouponNum }}</el-text>
+            </el-progress>
+
+          </template>
+        </el-table-column>
+
         <el-table-column label="状态">
           <template #default="scope">
             <el-text v-if="scope.row.effective==2" style="color: forestgreen">√生效中</el-text>
@@ -117,7 +129,7 @@ function receiveCoupon(id: number) {
 <style scoped>
 
 .coupon-table {
-  width: 60%;
+  width: 70%;
   margin: 20px;
 }
 

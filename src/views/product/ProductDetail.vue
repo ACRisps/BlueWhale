@@ -113,7 +113,8 @@ function handlePayLater() {
             totalAfterCoupon: String(parseFloat(productPrice.value) * buyNum.value),
             totalBeforeCoupon: String(parseFloat(productPrice.value) * buyNum.value),
             userPhone: phone,
-            address: address.value
+            address: address.value,
+            storeId: storeId
           }).then(res => {
             if (res.data.code == '000') {
               {
@@ -164,7 +165,7 @@ function handlePayImmediately() {
             orders: orders.value,
             method: getMethod(),
             state: state.value,
-            storeId:productDetail.value.storeId,
+            storeId: productDetail.value.storeId,
             totalAfterCoupon: String(parseFloat(productPrice.value) * buyNum.value),
             totalBeforeCoupon: String(parseFloat(productPrice.value) * buyNum.value),
             userPhone: phone,

@@ -50,6 +50,7 @@ function handleCancel() {
   paySuccess.value = false;
   {
     activeNames.value = ['0'];
+    currentRow.value = null;
   }
 
 }
