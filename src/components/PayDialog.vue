@@ -77,7 +77,7 @@ function handlePay() {
 }
 
 function loadPayCoupons() {
-  payCouponsInfo().then(res => {
+  payCouponsInfo(orderId.value).then(res => {
     couponData.value = res.data.result;
     badgeCnt.value = couponData.value.length;
   });

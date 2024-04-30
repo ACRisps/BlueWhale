@@ -85,8 +85,8 @@ export const storeCouponNumInfo = (storeId: number) => {
         });
 };
 
-export const payCouponsInfo = () => {
-    return axios.get(`${COUPON_MODULE}/pay`)
+export const payCouponsInfo = (multiOrderId:number) => {
+    return axios.get(`${COUPON_MODULE}/pay`,{params: {multiOrderId: multiOrderId}})
         .then(res => {
             return res;
         })
