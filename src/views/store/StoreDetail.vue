@@ -88,8 +88,6 @@ function handlePageChange(page: number) {
 function getCouponCnt() {
   storeCouponNumInfo(storeId.value).then(res => {
     badgeCnt.value = res.data.result;
-    console.log("hi");
-    console.log(res.data.result);
   });
 }
 </script>

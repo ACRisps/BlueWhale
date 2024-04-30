@@ -12,7 +12,7 @@ const emit = defineEmits(['payment-finish']);
 const activeNames = ref(['0']);
 const badgeCnt = ref(0);
 
-const couponData = ref([]);
+const couponData = ref([] as any);
 
 let showDialog = ref();
 
@@ -127,13 +127,12 @@ function loadBestPrice() {
         center: true,
       });
       bestCouponId.value = res.data.result;
-      console.log("best")
-      console.log(bestCouponId.value)
-      for(let coupon of couponData.value) {
-        // if(coupon.id == bestCouponId.value) {
-        //   setCurrent(coupon.id);
-        // }
-        console.log(coupon);
+      // console.log("best");
+      // console.log(bestCouponId.value);
+      for (let i in couponData.value) {
+        if (couponData.value[i].id == bestCouponId.value.id) {
+        }
+        setCurrent(couponData.value[i]);
       }
     }
 
