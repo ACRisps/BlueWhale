@@ -6,6 +6,8 @@ import {ArrowLeft} from "@element-plus/icons-vue";
 import {storeCouponNumInfo, uploadReceiveCouponsInfo, userStoreCouponsInfo} from "../../api/coupon.ts";
 import {progressColors} from "../../utils/style.ts";
 
+const role = sessionStorage.getItem("role");
+
 const storeDetail = ref({} as StoreInfoDetail);
 const grade = ref<number>();
 const storeId = ref();
@@ -127,7 +129,7 @@ function getCouponCnt() {
       </el-row>
       <el-row style="height: 20px">
       </el-row>
-      <el-row justify="center">
+      <el-row justify="center" v-if="role=='CUSTOMER'">
         <el-badge :value="badgeCnt" type="primary" :show-zero="false">
           <el-button @click="showCouponsDialog= true">本店优惠券</el-button>
         </el-badge>
