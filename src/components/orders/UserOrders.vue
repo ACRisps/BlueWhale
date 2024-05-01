@@ -166,6 +166,7 @@ function parseState(stateStr: string): string {
             <el-row>
               <el-col :span="21">
                 {{ order.productName }}
+                <el-text>&nbsp;*{{ order.productNumber }}</el-text>
               </el-col>
               <el-col :span="3" style="text-align: center">
                 <el-button type="primary" v-if="order.state=='UNCOMMENT'"
@@ -201,7 +202,8 @@ function parseState(stateStr: string): string {
                 <el-text>下单时间：{{ order.createTime }}</el-text>
               </el-row>
               <el-row>
-                <el-text>订单金额：{{ order.total }} ￥</el-text>
+                <el-text>订单金额：{{ order.totalAfter }}￥</el-text>&nbsp;&nbsp;
+                <el-text tag="del" size="small" v-if="order.totalAfter!=order.total">{{ order.total }}￥</el-text>
               </el-row>
             </el-col>
           </el-row>
@@ -249,7 +251,7 @@ function parseState(stateStr: string): string {
 
 
 <style scoped>
-.main{
+.main {
   position: absolute;
   right: 0;
   left: 0;

@@ -22,6 +22,7 @@ export type OrderItemInfo = {
     orderSerialNumber: string
     deliverSerialNumber: string
     total: string
+    totalAfter: string
     productId: number
     productName: string
     productNumber: number
