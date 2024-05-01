@@ -27,6 +27,8 @@ function loadStoreDetail(x: number) {
     storeId.value = res.data.result.storeId;
 
     loadStoreCoupons(currentPage.value);
+
+
   });
 }
 
@@ -75,11 +77,13 @@ function receiveCoupon(id: number) {
 }
 
 function loadStoreCoupons(page: number) {
-  userStoreCouponsInfo(page - 1, pageSize.value, storeId.value).then(res => {
-    couponData.value = res.data.result.content;
-    totalItems.value = res.data.result.totalElements;
-    getCouponCnt();
-  });
+  if (role == "CUSTOMER") {
+    userStoreCouponsInfo(page - 1, pageSize.value, storeId.value).then(res => {
+      couponData.value = res.data.result.content;
+      totalItems.value = res.data.result.totalElements;
+      getCouponCnt();
+    });
+  }
 }
 
 function handlePageChange(page: number) {
