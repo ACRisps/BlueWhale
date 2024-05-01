@@ -5,6 +5,7 @@ import {useRoute} from "vue-router";
 import {ArrowLeft} from "@element-plus/icons-vue";
 import {storeCouponNumInfo, uploadReceiveCouponsInfo, userStoreCouponsInfo} from "../../api/coupon.ts";
 import {progressColors} from "../../utils/style.ts";
+import {router} from "../../router";
 
 const role = sessionStorage.getItem("role");
 
@@ -19,6 +20,10 @@ const couponData = ref();
 const currentPage = ref(1);
 const totalItems = ref(0);
 const pageSize = ref(5);
+
+function navigate(path: string) {
+  router.push(path);
+}
 
 function loadStoreDetail(x: number) {
   storeInfoDetail(x).then(res => {
@@ -101,7 +106,6 @@ function getCouponCnt() {
 
 <template>
   <el-container>
-    <!--商店详情的一部分内容放在侧边栏里-->
     <el-aside width="25%" class="page-aside">
       <el-row justify="center" align="middle">
         <el-col :span="4">
@@ -142,23 +146,25 @@ function getCouponCnt() {
     </el-aside>
 
     <el-main class="page-main">
-      <div v-for="product in storeDetail.products">
-        <el-row justify="center">
-          <router-link :to="'/productDetail/'+product.productId" v-slot="{navigate}">
-            <el-card style="width: 600px" class="card" @click="navigate">
-              <template #header>
-                <el-row>
-                  <el-col :span="20">
-                    {{ product.productName }}
-                  </el-col>
-                </el-row>
-              </template>
-              <el-image v-for="URL in product.imgURLs" :src="URL" alt="" class="img" :fit="'cover'"/>
-            </el-card>
-          </router-link>
-        </el-row>
+      <el-row>
+        <el-card style="height: 320px;width: 360px" class="card" @click="navigate('/productDetail/'+product.productId)"
+                 v-for="product in storeDetail.products">
+          <template #header>
+            <el-row>
+              <el-col :span="20">
+                <el-text size="large" line-clamp="1">{{ product.productName }}</el-text>
+              </el-col>
+              <el-col :span="4">
+                <el-text line-clamp="1">{{ product.price }}￥</el-text>
+              </el-col>
+            </el-row>
+          </template>
+          <el-image :src="product.imgURLs[0]" alt="" class="img" :fit="'cover'"/>
+        </el-card>
 
-      </div>
+
+      </el-row>
+
     </el-main>
   </el-container>
 
@@ -262,6 +268,8 @@ function getCouponCnt() {
 }
 
 .storeImg {
+  width: 320px;
+  height: 300px;
   margin-left: 20px;
   margin-right: 20px;
   max-height: 360px;
@@ -279,7 +287,7 @@ function getCouponCnt() {
 }
 
 .card {
-  margin: 5px;
+  margin: 6px;
   height: 300px;
 }
 
@@ -288,8 +296,8 @@ a {
 }
 
 .img {
-  height: 200px;
-  width: 250px;
-  margin: 5px 15px;
+  width: 100%;
+  height: 210px;
+  margin-bottom: 10px;
 }
 </style>
