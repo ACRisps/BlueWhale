@@ -67,6 +67,7 @@ function handlePay() {
       });
       paySuccess.value = true;
       showDialog.value = false;
+      emit('payment-finish');
     } else {
       ElMessage({
         message: "支付失败（" + res.data.msg + "）",
@@ -75,7 +76,7 @@ function handlePay() {
       });
     }
   });
-  emit('payment-finish');
+
 }
 
 function loadPayCoupons() {

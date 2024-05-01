@@ -1,9 +1,9 @@
 <script setup lang="ts">
 
 
-import UserCoupons from "../../components/view-coupon/UserCoupons.vue";
-import StoreCoupons from "../../components/view-coupon/StoreCoupons.vue";
-import AllCoupons from "../../components/view-coupon/AllCoupons.vue";
+import UserCoupons from "../../components/coupon-view/UserCoupons.vue";
+import StoreCoupons from "../../components/coupon-view/StoreCoupons.vue";
+import AllCoupons from "../../components/coupon-view/AllCoupons.vue";
 
 
 const role = sessionStorage.getItem("role");

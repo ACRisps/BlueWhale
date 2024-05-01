@@ -1,7 +1,7 @@
 <script setup lang="ts">
 
-import PublishGlobalCoupon from "../../components/create-coupon/PublishGlobalCoupon.vue";
-import PublishStoreCoupon from "../../components/create-coupon/PublishStoreCoupon.vue";
+import PublishGlobalCoupon from "../../components/coupon-create/PublishGlobalCoupon.vue";
+import PublishStoreCoupon from "../../components/coupon-create/PublishStoreCoupon.vue";
 
 
 const role = sessionStorage.getItem("role");

@@ -7,7 +7,7 @@ export {}
 
 declare module 'vue' {
   export interface GlobalComponents {
-    AllCoupons: typeof import('./src/components/view-coupon/AllCoupons.vue')['default']
+    AllCoupons: typeof import('./src/components/coupon-view/AllCoupons.vue')['default']
     AllOrders: typeof import('./src/components/orders/AllOrders.vue')['default']
     ElAside: typeof import('element-plus/es')['ElAside']
     ElAvatar: typeof import('element-plus/es')['ElAvatar']
@@ -55,14 +55,14 @@ declare module 'vue' {
     Pagination: typeof import('./src/components/Pagination.vue')['default']
     PayDialog: typeof import('./src/components/PayDialog.vue')['default']
     ProductItem: typeof import('./src/components/ProductItem.vue')['default']
-    PublishGlobalCoupon: typeof import('./src/components/create-coupon/PublishGlobalCoupon.vue')['default']
-    PublishStoreCoupon: typeof import('./src/components/create-coupon/PublishStoreCoupon.vue')['default']
+    PublishGlobalCoupon: typeof import('./src/components/coupon-create/PublishGlobalCoupon.vue')['default']
+    PublishStoreCoupon: typeof import('./src/components/coupon-create/PublishStoreCoupon.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
-    StoreCoupons: typeof import('./src/components/view-coupon/StoreCoupons.vue')['default']
+    StoreCoupons: typeof import('./src/components/coupon-view/StoreCoupons.vue')['default']
     StoreItem: typeof import('./src/components/StoreItem.vue')['default']
     StoreOrders: typeof import('./src/components/orders/StoreOrders.vue')['default']
-    UserCoupons: typeof import('./src/components/view-coupon/UserCoupons.vue')['default']
+    UserCoupons: typeof import('./src/components/coupon-view/UserCoupons.vue')['default']
     UserOrders: typeof import('./src/components/orders/UserOrders.vue')['default']
   }
 }
