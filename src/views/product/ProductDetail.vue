@@ -7,7 +7,7 @@ import {uploadOrderItem} from "../../api/orderItem.ts";
 
 import {uploadOrderContainer} from "../../api/orderContainer.ts";
 import {useRoute} from "vue-router";
-import {ArrowLeft} from "@element-plus/icons-vue";
+import {ArrowLeft, ChatLineSquare} from "@element-plus/icons-vue";
 import {parseTime} from "../../utils";
 
 import PayDialog from "../../components/PayDialog.vue";
@@ -291,7 +291,14 @@ function handlePaymentFinish() {
         </el-col>
       </el-row>
       <el-row justify="center">
-        <div class="comment-title">--- 评论 ---</div>
+        <el-divider style="margin-top: 90px;margin-bottom: 30px">
+          <el-text class="comment-title-text">
+            <el-icon>
+              <ChatLineSquare/>
+            </el-icon>
+            评论
+          </el-text>
+        </el-divider>
       </el-row>
       <el-row>
         <el-col :span="24" v-for="comment in productDetail.productComments" class="comment-box">
@@ -371,9 +378,7 @@ function handlePaymentFinish() {
   margin: 10px;
 }
 
-.comment-title {
-  margin-top: 100px;
-  margin-bottom: 30px;
+.comment-title-text {
   font-size: large;
   color: dodgerblue;
 }

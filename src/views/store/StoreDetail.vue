@@ -187,7 +187,7 @@ function getCouponCnt() {
           <template #default="scope">
             <el-progress :percentage="scope.row.allCouponNum==0?0:scope.row.currentCouponNum*100/scope.row.allCouponNum"
                          :color="progressColors">
-              <el-text>{{ scope.row.currentCouponNum }} / {{ scope.row.allCouponNum }}</el-text>
+              <el-text size="small">{{ scope.row.currentCouponNum }} / {{ scope.row.allCouponNum }}</el-text>
             </el-progress>
 
           </template>
