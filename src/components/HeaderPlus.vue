@@ -1,9 +1,10 @@
 <script setup lang="ts">
 import {router} from '../router';
 // import {parseRole} from "../utils";
-import {User, SwitchButton, Edit, Tickets, Menu, Present, Wallet} from "@element-plus/icons-vue";
+import {User, SwitchButton, Edit, Tickets, Menu, Present, Wallet, Search} from "@element-plus/icons-vue";
 
 const role = sessionStorage.getItem('role');    //登录的时候插入的
+
 
 //退出登录
 function logout() {
@@ -42,7 +43,14 @@ function logout() {
           style="width: 30px"
           src="/src/assets/blueWhale.svg"
           alt="Element logo"
-      />&nbsp;&nbsp;BlueWhale首页
+      />&nbsp;&nbsp; BlueWhale首页
+      </el-menu-item>
+
+      <el-menu-item index="/search">
+        <el-icon :size="20">
+          <Search/>
+        </el-icon>
+        搜索
       </el-menu-item>
 
       <div class="flex-grow"/>
@@ -88,20 +96,20 @@ function logout() {
         个人
       </el-menu-item>
 
-<!--      <el-sub-menu index="">-->
-<!--        <template #title>-->
-<!--          <el-icon :size="20">-->
-<!--            <User/>-->
-<!--          </el-icon>-->
-<!--          我的-->
-<!--        </template>-->
-<!--        <el-menu-item index="/dashboard">-->
-<!--          <el-icon>-->
-<!--            <UserFilled/>-->
-<!--          </el-icon>-->
-<!--          个人-->
-<!--        </el-menu-item>-->
-<!--      </el-sub-menu>-->
+      <!--      <el-sub-menu index="">-->
+      <!--        <template #title>-->
+      <!--          <el-icon :size="20">-->
+      <!--            <User/>-->
+      <!--          </el-icon>-->
+      <!--          我的-->
+      <!--        </template>-->
+      <!--        <el-menu-item index="/dashboard">-->
+      <!--          <el-icon>-->
+      <!--            <UserFilled/>-->
+      <!--          </el-icon>-->
+      <!--          个人-->
+      <!--        </el-menu-item>-->
+      <!--      </el-sub-menu>-->
 
       <el-menu-item index="" @click="logout">
         <el-icon :size="20">

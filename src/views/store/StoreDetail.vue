@@ -148,14 +148,14 @@ function getCouponCnt() {
     <el-main class="page-main">
       <el-row>
         <el-card style="height: 320px;width: 360px" class="card" @click="navigate('/productDetail/'+product.productId)"
-                 v-for="product in storeDetail.products">
+                 v-for="product in storeDetail.products" shadow="hover">
           <template #header>
             <el-row>
               <el-col :span="20">
                 <el-text size="large" line-clamp="1">{{ product.productName }}</el-text>
               </el-col>
-              <el-col :span="4">
-                <el-text line-clamp="1">{{ product.price }}￥</el-text>
+              <el-col :span="4" style="text-align: center">
+                <el-text line-clamp="1" style="margin-top: 2px">{{ product.price }}￥</el-text>
               </el-col>
             </el-row>
           </template>
@@ -288,7 +288,6 @@ function getCouponCnt() {
 
 .card {
   margin: 6px;
-  height: 300px;
 }
 
 a {
@@ -298,6 +297,5 @@ a {
 .img {
   width: 100%;
   height: 210px;
-  margin-bottom: 10px;
 }
 </style>

@@ -41,6 +41,15 @@ export type Comment = {
     content: string
 }
 
+export type ProductSearchInfo = {
+    upperBound?: number;
+    lowerBound?: number;
+    name: string;
+    storeId?: number;
+    type?: string;
+    [property: string]: any;
+}
+
 export const uploadProductInfo = (payload: ProductUploadInfo) => {
     return axios.post(`${PRODUCT_MODULE}/create`, payload,)
         .then(res => {
@@ -71,4 +80,24 @@ export const uploadProductNumUpdate = (payload: ProductNumUpdateInfo) => {
                 return err.response;
             }
         );
+};
+
+export const searchProduct = (payload: ProductSearchInfo, page: number, size: number) => {
+    return axios.get(`${PRODUCT_MODULE}/select`, {
+        params: {
+            name: payload.name,
+            upperBound: null,
+            lowerBound: null,
+            storeId: null,
+            type: null,
+            page: page,
+            size: size
+        }
+    })
+        .then(res => {
+            return res;
+        })
+        .catch(err => {
+            return err.response;
+        });
 };

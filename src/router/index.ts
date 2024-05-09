@@ -97,6 +97,23 @@ const router = createRouter({
                     permission: ['CUSTOMER']
                 }
             },
+            {
+                path: '/search',
+                name: 'search',
+                component: () => import('../views/search/Search.vue'),
+                meta: {
+                    title: '搜索'
+                }
+            },
+            // {
+            //     path: '/search',
+            //     name: 'search',
+            //     component: () => import('../views/search/Search.vue'),
+            //     meta: {
+            //         title: '搜索'
+            //     }
+            // },
+
 
         ]
     }, {

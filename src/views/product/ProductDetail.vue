@@ -315,10 +315,9 @@ function handlePaymentFinish() {
           </el-row>
         </el-col>
       </el-row>
-
+      <el-backtop style="position: fixed; right: 30px;bottom: 160px" :visibility-height="100" target=".page-main"/>
     </el-main>
   </el-container>
-
   <el-dialog
       v-model="showNumUpdateInput"
       title="修改商品库存数"
