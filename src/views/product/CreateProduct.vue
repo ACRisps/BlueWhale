@@ -20,10 +20,12 @@ let productType = ref('');
 let number = ref();
 let price = ref();
 
+const loading = ref(false);
+
 // 异步上传
 async function handleChangeUltimate() {
+  loading.value = true;
   await loopUpload();
-  console.log(imgURLs);
   handleProductInfo();
 }
 
@@ -85,6 +87,7 @@ function handleProductInfo() {
         center: true,
       });
     }
+    loading.value = false;
   });
 }
 </script>
@@ -139,7 +142,7 @@ function handleProductInfo() {
         <el-row justify="center">
           <el-col :span="3"/>
           <el-col :span="5">
-            <el-button type="primary" @click="handleChangeUltimate"
+            <el-button type="primary" @click="handleChangeUltimate" :loading="loading"
             >点击创建
             </el-button>
           </el-col>

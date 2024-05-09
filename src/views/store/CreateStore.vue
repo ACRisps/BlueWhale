@@ -16,11 +16,12 @@ let storeName = ref('');
 let storeIntro = ref('');
 let storeAddress = ref('');
 
+const loading = ref(false);
+
 // 异步上传
 async function handleChangeUltimate() {
-  console.log(imgURLs);
+  loading.value = true;
   await loopUpload();
-  console.log(imgURLs);
   handleStoreInfo();
 }
 
@@ -57,7 +58,6 @@ function uploadHttpRequest() {
 
 
 function handleStoreInfo() {
-  console.log(imgURLs.value);
   uploadStoreInfo({
     address: storeAddress.value,
     storeName: storeName.value,
@@ -79,6 +79,7 @@ function handleStoreInfo() {
         center: true,
       });
     }
+    loading.value = false;
   });
 }
 
@@ -126,7 +127,7 @@ function handleStoreInfo() {
         <el-row justify="center">
           <el-col :span="3"/>
           <el-col :span="5">
-            <el-button type="primary" @click="handleChangeUltimate"
+            <el-button type="primary" @click="handleChangeUltimate" :loading="loading"
             >点击创建
             </el-button>
           </el-col>

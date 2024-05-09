@@ -2,7 +2,7 @@
 
 import {Search} from "@element-plus/icons-vue";
 import {ref} from "vue";
-import {router} from "../../router";
+// import {router} from "../../router";
 
 const searchCtx = ref();
 const searchSelect = ref('product');

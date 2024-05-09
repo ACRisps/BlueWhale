@@ -12,6 +12,7 @@ let full = ref();
 let reduction = ref();
 let couponNum = ref();
 
+const loading = ref(false);
 
 // 清空缓存
 function clearCache() {
@@ -22,11 +23,12 @@ function clearCache() {
 }
 
 function handlePublish() {
+  loading.value = true;
   handleCouponInfo();
 }
 
 function handleCouponInfo() {
-  console.log(timeArray.value[0]);
+
   uploadCouponInfo({
     couponType: couponType.value,
     effectiveTime: timeArray.value[0],
@@ -49,6 +51,7 @@ function handleCouponInfo() {
         center: true,
       });
     }
+    loading.value = false;
   });
 }
 
@@ -98,7 +101,7 @@ function handleCouponInfo() {
         <el-row justify="center">
           <el-col :span="3"/>
           <el-col :span="5">
-            <el-button type="primary" @click="handlePublish"
+            <el-button type="primary" @click="handlePublish" :loading="loading"
             >点击创建
             </el-button>
           </el-col>

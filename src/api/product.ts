@@ -86,10 +86,10 @@ export const searchProduct = (payload: ProductSearchInfo, page: number, size: nu
     return axios.get(`${PRODUCT_MODULE}/select`, {
         params: {
             name: payload.name,
-            upperBound: null,
-            lowerBound: null,
+            upperBound: payload.upperBound,
+            lowerBound: payload.lowerBound,
             storeId: null,
-            type: null,
+            type: payload.type,
             page: page,
             size: size
         }

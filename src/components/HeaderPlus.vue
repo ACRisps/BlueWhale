@@ -96,20 +96,6 @@ function logout() {
         个人
       </el-menu-item>
 
-      <!--      <el-sub-menu index="">-->
-      <!--        <template #title>-->
-      <!--          <el-icon :size="20">-->
-      <!--            <User/>-->
-      <!--          </el-icon>-->
-      <!--          我的-->
-      <!--        </template>-->
-      <!--        <el-menu-item index="/dashboard">-->
-      <!--          <el-icon>-->
-      <!--            <UserFilled/>-->
-      <!--          </el-icon>-->
-      <!--          个人-->
-      <!--        </el-menu-item>-->
-      <!--      </el-sub-menu>-->
 
       <el-menu-item index="" @click="logout">
         <el-icon :size="20">

@@ -4,13 +4,11 @@ import {Search, Filter, ArrowRight} from "@element-plus/icons-vue";
 import {onMounted, ref} from "vue";
 import {router} from "../../router";
 import {useRoute} from "vue-router";
-import {searchProduct} from "../../api/product.ts";
+import {ProductSearchInfo, searchProduct} from "../../api/product.ts";
 
 const searchCtx = ref("");
 const searchTypeSelect = ref('product');
 
-
-// const routeParamSearchType = ref(null);
 
 const showDetail = ref(false);
 const showFilterDrawer = ref(false);
@@ -25,6 +23,10 @@ const totalItems = ref(0);
 const pageSize = ref(12);
 
 let navigateBlock = false;
+
+const filterType = ref("");
+const filterLowerBound = ref<number>();
+const filterUpperBound = ref<number>();
 
 function navigate(path: string) {
   if (!navigateBlock) {
@@ -82,10 +84,38 @@ function toSearch() {
     showDetail.value = false;
   }
   loadResult();
-
-  underFilter.value = false;
+  handleClearFilter();
 }
 
+function handleToFilter() {
+  if (filterType.value == "" && filterUpperBound.value == undefined && filterLowerBound.value == undefined) {
+    return;
+  }
+  let info: ProductSearchInfo = {name: route.query.ctx as string};
+  if (filterType.value != "") {
+    info.type = filterType.value;
+  }
+  if (filterLowerBound.value != undefined) {
+    info.lowerBound = filterLowerBound.value;
+  }
+  if (filterUpperBound.value != undefined) {
+    info.upperBound = filterUpperBound.value;
+  }
+  searchProduct(info, currentPage.value - 1, pageSize.value).then(res => {
+    totalItems.value = res.data.result.totalElements;
+    searchResult.value = res.data.result.content;
+    console.log(res.data.result.content);
+  });
+  underFilter.value = true;
+  showFilterDrawer.value = false;
+}
+
+function handleClearFilter() {
+  filterType.value = "";
+  filterUpperBound.value = undefined;
+  filterLowerBound.value = undefined;
+  underFilter.value = false;
+}
 
 </script>
 
@@ -187,19 +217,87 @@ function toSearch() {
       <el-text size="large">筛选</el-text>
     </template>
 
-    <span>Hi there!</span>
+    <el-row>
+      <el-text>商品类型</el-text>
+      <el-select
+          v-model="filterType"
+          placeholder="选择商品类型"
+          size="default"
+          style="width: 160px;margin-left: 5px"
+      >
+        <el-option
+            label="食品"
+            value="FOOD"
+        />
+        <el-option
+            label="服装"
+            value="CLOTHES"
+        />
+        <el-option
+            label="家具"
+            value="FURNITURE"
+        />
+        <el-option
+            label="电子产品"
+            value="ELECTRONICS"
+        />
+        <el-option
+            label="娱乐用品"
+            value="ENTERTAINMENT"
+        />
+        <el-option
+            label="体育用品"
+            value="SPORTS"
+        />
+        <el-option
+            label="奢侈品"
+            value="LUXURY"
+        />
+
+      </el-select>
+    </el-row>
+    <el-divider></el-divider>
+    <el-row>
+      <el-text>最低价格</el-text>
+      <el-input-number
+          v-model="filterLowerBound"
+          :min="0"
+          controls-position="right"
+          style="width: 160px;margin-left: 5px"
+          size="small"
+      />
+    </el-row>
+    <el-row>
+      <el-text>最高价格</el-text>
+      <el-input-number
+          v-model="filterUpperBound"
+          :min="filterLowerBound"
+          controls-position="right"
+          style="width: 160px;margin-left: 5px; margin-top: 5px"
+          size="small"
+      />
+    </el-row>
+    <el-divider></el-divider>
+
+
+    <template #footer>
+      <el-button @click="showFilterDrawer=false">取消</el-button>
+      <el-button type="danger" plain @click="handleClearFilter">清空筛选</el-button>
+      <el-button type="primary" @click="handleToFilter">应用筛选</el-button>
+    </template>
+
   </el-drawer>
 
 
   <el-backtop style="position: fixed; right: 30px;bottom: 160px" :visibility-height="100"/>
   <el-button style="position: fixed; right: 30px;bottom: 100px" circle size="large"
-             @click="showFilterDrawer=true;underFilter=true" v-if="!underFilter">
+             @click="showFilterDrawer=true;" v-if="!underFilter&&showDetail">
     <el-icon size="large">
       <Filter style="color: #409eff"/>
     </el-icon>
   </el-button>
-  <el-button style="position: fixed; right: 30px;bottom: 120px" circle type="primary" size="large"
-             @click="showFilterDrawer=true;" v-else>
+  <el-button style="position: fixed; right: 30px;bottom: 100px" circle type="primary" size="large"
+             @click="showFilterDrawer=true;" v-else-if="showDetail">
     <el-icon size="large">
       <Filter/>
     </el-icon>
