@@ -91,9 +91,20 @@ const loading = ref(false);
               <el-statistic :value="turnoverCntOutput">
                 <template #title>
                   <div style="display: inline-flex; align-items: center">
-                    累计平台流水
+                    <span v-if="role=='CEO'">累计平台流水</span>
+                    <span v-if="role=='STAFF'">累计商店流水</span>
                     <el-tooltip
+                        v-if="role=='CEO'"
                         content="平台内所有商店流水之和"
+                        placement="top"
+                    >
+                      <el-icon style="margin-left: 4px" :size="12">
+                        <Warning/>
+                      </el-icon>
+                    </el-tooltip>
+                    <el-tooltip
+                        v-if="role=='STAFF'"
+                        content="您的商店的累计流水"
                         placement="top"
                     >
                       <el-icon style="margin-left: 4px" :size="12">
@@ -110,9 +121,20 @@ const loading = ref(false);
               <el-statistic :value="monthTurnoverCntOutput">
                 <template #title>
                   <div style="display: inline-flex; align-items: center">
-                    上月平台流水
+                    <span v-if="role=='CEO'">上月平台流水</span>
+                    <span v-if="role=='STAFF'">上月商店流水</span>
                     <el-tooltip
+                        v-if="role=='CEO'"
                         content="平台内上一个月所有商店流水之和"
+                        placement="top"
+                    >
+                      <el-icon style="margin-left: 4px" :size="12">
+                        <Warning/>
+                      </el-icon>
+                    </el-tooltip>
+                    <el-tooltip
+                        v-if="role=='STAFF'"
+                        content="您的商店上一个月的总流水"
                         placement="top"
                     >
                       <el-icon style="margin-left: 4px" :size="12">
@@ -149,7 +171,17 @@ const loading = ref(false);
                   <div style="display: inline-flex; align-items: center">
                     累计订单数
                     <el-tooltip
-                        content="平台内所有交易成功的订单数"
+                        v-if="role=='CEO'"
+                        content="平台内累计交易成功的订单数"
+                        placement="top"
+                    >
+                      <el-icon style="margin-left: 4px" :size="12">
+                        <Warning/>
+                      </el-icon>
+                    </el-tooltip>
+                    <el-tooltip
+                        v-if="role=='STAFF'"
+                        content="您的商店累计交易成功的订单数"
                         placement="top"
                     >
                       <el-icon style="margin-left: 4px" :size="12">
@@ -168,7 +200,17 @@ const loading = ref(false);
                   <div style="display: inline-flex; align-items: center">
                     上月订单数
                     <el-tooltip
-                        content="上月所有交易成功的订单数"
+                        v-if="role=='CEO'"
+                        content="平台内上月交易成功的订单数"
+                        placement="top"
+                    >
+                      <el-icon style="margin-left: 4px" :size="12">
+                        <Warning/>
+                      </el-icon>
+                    </el-tooltip>
+                    <el-tooltip
+                        v-if="role=='STAFF'"
+                        content="您的商店上月交易成功的订单数"
                         placement="top"
                     >
                       <el-icon style="margin-left: 4px" :size="12">
@@ -205,7 +247,17 @@ const loading = ref(false);
                   <div style="display: inline-flex; align-items: center">
                     累计顾客数
                     <el-tooltip
-                        content="平台内所有下过单的顾客数"
+                        v-if="role=='CEO'"
+                        content="平台内累计完成过交易的顾客数"
+                        placement="top"
+                    >
+                      <el-icon style="margin-left: 4px" :size="12">
+                        <Warning/>
+                      </el-icon>
+                    </el-tooltip>
+                    <el-tooltip
+                        v-if="role=='STAFF'"
+                        content="您的商店累计完成过交易的顾客数"
                         placement="top"
                     >
                       <el-icon style="margin-left: 4px" :size="12">
@@ -224,7 +276,17 @@ const loading = ref(false);
                   <div style="display: inline-flex; align-items: center">
                     上月顾客数
                     <el-tooltip
-                        content="上个月所有下过单的顾客数"
+                        v-if="role=='CEO'"
+                        content="平台内上个月完成过交易的顾客数"
+                        placement="top"
+                    >
+                      <el-icon style="margin-left: 4px" :size="12">
+                        <Warning/>
+                      </el-icon>
+                    </el-tooltip>
+                    <el-tooltip
+                        v-if="role=='STAFF'"
+                        content="您的商店上个月完成过交易的顾客数"
                         placement="top"
                     >
                       <el-icon style="margin-left: 4px" :size="12">
@@ -296,6 +358,7 @@ const loading = ref(false);
   margin: 6px;
   border-radius: 10px;
   background-color: aliceblue;
+  min-width: 130px;
 }
 
 .statistic-footer {
