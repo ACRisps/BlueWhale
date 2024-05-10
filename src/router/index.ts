@@ -105,16 +105,15 @@ const router = createRouter({
                     title: '搜索'
                 }
             },
-            // {
-            //     path: '/search',
-            //     name: 'search',
-            //     component: () => import('../views/search/Search.vue'),
-            //     meta: {
-            //         title: '搜索'
-            //     }
-            // },
-
-
+            {
+                path: '/statistic',
+                name: 'statistic',
+                component: () => import('../views/Statistic.vue'),
+                meta: {
+                    title: '报表',
+                    permission: ['STAFF', 'CEO']
+                }
+            },
         ]
     }, {
         path: '/404',

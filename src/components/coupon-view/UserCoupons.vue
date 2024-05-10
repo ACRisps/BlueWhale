@@ -2,6 +2,7 @@
 import {onMounted, ref} from "vue";
 import {couponsInfo, uploadReceiveCouponsInfo} from "../../api/coupon.ts";
 import {progressColors} from "../../utils/style.ts";
+import "../../style/base.css"
 
 const couponData = ref();
 
@@ -71,7 +72,7 @@ function receiveCoupon(id: number) {
 <template>
   <el-main>
     <el-row justify="center">
-      <div class="title">在这里领取商场优惠券</div>
+      <div class="customer-title">在这里领取商场优惠券</div>
     </el-row>
     <el-row justify="center">
       <el-table :data="couponData" class="coupon-table" :cell-style="{'text-align':'center'}"
@@ -140,10 +141,4 @@ function receiveCoupon(id: number) {
   margin: 20px;
 }
 
-.title {
-  margin-top: 10px;
-  margin-bottom: 40px;
-  font-size: large;
-  color: cornflowerblue;
-}
 </style>

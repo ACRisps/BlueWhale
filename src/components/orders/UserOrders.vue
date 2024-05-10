@@ -3,6 +3,8 @@ import {onMounted, ref} from 'vue';
 import {type OrderItemsInfo, orderItemPageInfo, orderItemGet} from '../../api/orderItem.ts';
 import {uploadCommemt} from "../../api/comment.ts";
 import {uploadPayItem} from "../../api/pay.ts";
+import "../../style/base.css"
+
 
 const orderList = ref([] as OrderItemsInfo);
 const currentPage = ref(1 as number);
@@ -157,7 +159,7 @@ function parseState(stateStr: string): string {
 <template>
   <el-main class="main">
     <el-row justify="center">
-      <div class="title">在这里查看您下的订单</div>
+      <div class="customer-title">在这里查看您下的订单</div>
     </el-row>
     <div v-for="order in orderList">
       <el-row justify="center">
@@ -264,11 +266,5 @@ function parseState(stateStr: string): string {
   margin: 5px;
 }
 
-.title {
-  margin-top: 10px;
-  margin-bottom: 40px;
-  font-size: large;
-  color: cornflowerblue;
-}
 
 </style>

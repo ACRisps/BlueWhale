@@ -2,6 +2,8 @@
 import {ref} from 'vue';
 
 import {uploadCouponInfo} from "../../api/coupon.ts";
+import "../../style/base.css"
+
 
 const storeId = 0;
 
@@ -61,7 +63,7 @@ function handleCouponInfo() {
 <template>
   <el-main>
     <el-row justify="center">
-      <div class="title">在这里发布全局优惠券</div>
+      <div class="admin-title">在这里发布全局优惠券</div>
     </el-row>
     <el-row justify="center">
       <el-form style="width: 540px">
@@ -118,10 +120,4 @@ function handleCouponInfo() {
   width: 500px;
 }
 
-.title {
-  margin-top: 10px;
-  margin-bottom: 40px;
-  font-size: large;
-  color: mediumpurple;
-}
 </style>

@@ -4,6 +4,7 @@ import {ref} from 'vue';
 import {uploadCouponInfo} from "../../api/coupon.ts";
 
 const storeId = sessionStorage.getItem('userStoreId');
+import "../../style/base.css"
 
 
 let couponType = ref('FULL_REDUCTION');
@@ -61,7 +62,7 @@ function handleCouponInfo() {
 <template>
   <el-main>
     <el-row justify="center">
-      <div class="title">在这里为您的商店发布优惠券</div>
+      <div class="staff-title">在这里为您的商店发布优惠券</div>
     </el-row>
     <el-row justify="center">
       <el-form style="width: 540px">
@@ -118,10 +119,4 @@ function handleCouponInfo() {
   width: 500px;
 }
 
-.title {
-  margin-top: 10px;
-  margin-bottom: 40px;
-  font-size: large;
-  color: darkgreen;
-}
 </style>

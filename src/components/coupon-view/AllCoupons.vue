@@ -2,6 +2,7 @@
 import {onMounted, ref} from "vue";
 import {couponsInfo} from "../../api/coupon.ts";
 import {progressColors} from "../../utils/style.ts";
+import "../../style/base.css"
 
 const couponData = ref();
 
@@ -13,7 +14,6 @@ function loadCoupons(page: number) {
   couponsInfo(page - 1).then(res => {
     couponData.value = res.data.result.content;
     totalItems.value = res.data.result.totalElements;
-    console.log(couponData.value);
   });
 }
 
@@ -52,7 +52,7 @@ function couponContentFormatter(row: any) {
 <template>
   <el-main>
     <el-row justify="center">
-      <div class="title">在这里查看商场全部优惠券组</div>
+      <div class="admin-title">在这里查看商场全部优惠券组</div>
     </el-row>
     <el-row justify="center">
       <el-table :data="couponData" class="coupon-table" :cell-style="{'text-align':'center'}"
@@ -105,10 +105,4 @@ function couponContentFormatter(row: any) {
   margin: 20px;
 }
 
-.title {
-  margin-top: 10px;
-  margin-bottom: 40px;
-  font-size: large;
-  color: mediumpurple;
-}
 </style>

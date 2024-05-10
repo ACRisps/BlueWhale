@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import {onMounted, ref} from 'vue';
 import {type OrderItemsInfo, orderItemPageInfo} from '../../api/orderItem.ts';
+import "../../style/base.css"
+
 
 
 const orderList = ref([] as OrderItemsInfo);
@@ -54,7 +56,7 @@ onMounted(() => {
 <template>
   <el-main class="main">
     <el-row justify="center">
-      <div class="title">在这里查看商场全部订单</div>
+      <div class="admin-title">在这里查看商场全部订单</div>
     </el-row>
     <div v-for="order in orderList">
       <el-row justify="center">
@@ -124,10 +126,4 @@ onMounted(() => {
   margin: 5px;
 }
 
-.title {
-  margin-top: 10px;
-  margin-bottom: 40px;
-  font-size: large;
-  color: mediumpurple;
-}
 </style>

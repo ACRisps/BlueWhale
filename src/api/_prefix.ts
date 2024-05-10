@@ -14,3 +14,5 @@ export const ORDER_MODULE = `${API_MODULE}/orders`;
 export const PAY_MODULE = `${API_MODULE}/pay`;
 
 export const COUPON_MODULE = `${API_MODULE}/coupons`;
+
+export const STATISTIC_MODULE = `${API_MODULE}/statistic`;

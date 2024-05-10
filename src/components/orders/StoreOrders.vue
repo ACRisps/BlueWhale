@@ -72,7 +72,7 @@ function parseState(stateStr: string): string {
 <template>
   <el-main class="main">
     <el-row justify="center">
-      <div class="title">在这里查看您的商店收到的订单</div>
+      <div class="staff-title">在这里查看您的商店收到的订单</div>
     </el-row>
     <div v-for="order in orderList">
       <el-row justify="center">
@@ -150,10 +150,4 @@ function parseState(stateStr: string): string {
   margin: 5px;
 }
 
-.title {
-  margin-top: 10px;
-  margin-bottom: 40px;
-  font-size: large;
-  color: darkgreen;
-}
 </style>
