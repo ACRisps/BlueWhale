@@ -283,7 +283,7 @@ function getCouponCnt() {
 }
 
 .description {
-  margin: 20px;
+  margin: 30px;
 }
 
 .card {

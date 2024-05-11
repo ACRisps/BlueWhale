@@ -32,7 +32,6 @@ function navigate(path: string) {
   if (!navigateBlock) {
     router.push(path);
   }
-
 }
 
 function loadResult() {
@@ -212,18 +211,19 @@ function handleClearFilter() {
 
   </el-main>
 
-  <el-drawer v-model="showFilterDrawer">
+  <el-drawer v-model="showFilterDrawer" size="25%">
     <template #header>
       <el-text size="large">筛选</el-text>
     </template>
 
     <el-row>
       <el-text>商品类型</el-text>
+    </el-row>
+    <el-row>
       <el-select
           v-model="filterType"
-          placeholder="选择商品类型"
-          size="default"
-          style="width: 160px;margin-left: 5px"
+          placeholder="选择"
+          style="width: 180px;margin: 3px"
       >
         <el-option
             label="食品"
@@ -259,26 +259,28 @@ function handleClearFilter() {
     <el-divider></el-divider>
     <el-row>
       <el-text>最低价格</el-text>
+    </el-row>
+    <el-row>
       <el-input-number
           v-model="filterLowerBound"
           :min="0"
           controls-position="right"
-          style="width: 160px;margin-left: 5px"
+          style="width: 180px;margin: 3px"
           size="small"
       />
     </el-row>
     <el-row>
       <el-text>最高价格</el-text>
+    </el-row>
+    <el-row>
       <el-input-number
           v-model="filterUpperBound"
           :min="filterLowerBound"
           controls-position="right"
-          style="width: 160px;margin-left: 5px; margin-top: 5px"
+          style="width: 180px;margin: 3px"
           size="small"
       />
     </el-row>
-    <el-divider></el-divider>
-
 
     <template #footer>
       <el-button @click="showFilterDrawer=false">取消</el-button>
