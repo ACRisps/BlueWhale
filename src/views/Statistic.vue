@@ -39,15 +39,15 @@ const monthOrderRate = ref<number>(0);
 const monthCustomerRate = ref<number>(0);
 
 
-const formUrl = ref("");
+const tableUrl = ref("");
 
 function handleTableExport() {
   loading.value = true;
   getTableUrl().then(res => {
     console.log(res.data.result);
-    formUrl.value = res.data.result;
+    tableUrl.value = res.data.result;
     loading.value = false;
-    window.open(formUrl.value);
+    window.open(tableUrl.value);
   });
 }
 

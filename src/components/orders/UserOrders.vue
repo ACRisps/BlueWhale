@@ -1,9 +1,10 @@
 <script setup lang="ts">
 import {onMounted, ref} from 'vue';
 import {type OrderItemsInfo, orderItemPageInfo, orderItemGet} from '../../api/orderItem.ts';
+import {Wallet, Clock} from "@element-plus/icons-vue";
 import {uploadCommemt} from "../../api/comment.ts";
 import {uploadPayItem} from "../../api/pay.ts";
-import "../../style/base.css"
+import "../../style/base.css";
 
 
 const orderList = ref([] as OrderItemsInfo);
@@ -18,8 +19,10 @@ let selectedProductId = ref();
 const comment = ref("");
 const rate = ref(0);
 
-function loadOrders(page: number) {
-  orderItemPageInfo(page - 1, pageSize.value).then(res => {
+const showDuringPay = ref(false);
+
+function loadOrders() {
+  orderItemPageInfo(currentPage.value - 1, pageSize.value).then(res => {
     totalItems.value = res.data.result.totalElements;
     orderList.value = res.data.result.content;
   });
@@ -27,17 +30,17 @@ function loadOrders(page: number) {
 
 function handlePageChange(page: number) {
   currentPage.value = page;
-  loadOrders(page);
+  loadOrders();
 }
 
 function handleSizeChange(newSize: number) {
   pageSize.value = newSize;
   currentPage.value = 1; // Reset to the first page
-  loadOrders(currentPage.value);
+  loadOrders();
 }
 
 onMounted(() => {
-  loadOrders(currentPage.value);
+  loadOrders();
 });
 
 function handleToGet(orderSerialNumber: string) {
@@ -48,7 +51,7 @@ function handleToGet(orderSerialNumber: string) {
         type: 'success',
         center: true,
       });
-      loadOrders(currentPage.value);
+      loadOrders();
     } else {
       ElMessage({
         message: "确认收货失败（" + res.data.msg + "）",
@@ -61,22 +64,30 @@ function handleToGet(orderSerialNumber: string) {
 
 function handleToPay(orderSerialNumber: string) {
   uploadPayItem(orderSerialNumber).then(res => {
-    if (res.data.code == '000') {
-      ElMessage({
-        message: "支付成功",
-        type: 'success',
-        center: true,
-      });
-      loadOrders(currentPage.value);
-    } else {
-      ElMessage({
-        message: "支付失败（" + res.data.msg + "）",
-        type: 'warning',
-        center: true,
-      });
-    }
+    console.log(res.data);
+    // if (res.data.code == '000') {
+    //   ElMessage({
+    //     message: "支付成功",
+    //     type: 'success',
+    //     center: true,
+    //   });
+    //   loadOrders(currentPage.value);
+    // } else {
+    //   ElMessage({
+    //     message: "支付失败（" + res.data.msg + "）",
+    //     type: 'warning',
+    //     center: true,
+    //   });
+    // }
   });
+  showDuringPay.value = true;
+  window.open(`http://localhost:8080/api/pay/payOrderItem?orderSerialNumber=` + orderSerialNumber, "_blank");
 
+}
+
+function handlePayComplete() {
+  loadOrders();
+  showDuringPay.value = false;
 }
 
 function handleToCommentButton(orderSerialNumber: string, productId: number) {
@@ -249,6 +260,40 @@ function parseState(stateStr: string): string {
       </div>
     </template>
   </el-dialog>
+
+  <el-dialog
+      v-model="showDuringPay"
+      title="等待完成支付"
+      width=40%
+      :before-close="handleDialogClose"
+      :close-on-click-modal="false"
+  >
+    <el-row justify="center">
+      <div style="margin: 5px">
+        <el-icon :size="20">
+          <Wallet/>
+        </el-icon>
+        ` ` `
+        <el-icon :size="20">
+          <Clock/>
+        </el-icon>
+      </div>
+
+    </el-row>
+    <el-row justify="center">
+      <el-text>请在外部页面完成支付，支付完成后请点击“我已完成支付”</el-text>
+    </el-row>
+    <el-row justify="center"></el-row>
+
+    <template #footer>
+      <div style="text-align: center">
+        <el-button type="primary" @click="handlePayComplete" plain>
+          我已完成支付
+        </el-button>
+      </div>
+    </template>
+  </el-dialog>
+
 </template>
 
 
