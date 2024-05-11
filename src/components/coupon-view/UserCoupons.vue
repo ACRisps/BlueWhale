@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import {onMounted, ref} from "vue";
 import {couponsInfo, uploadReceiveCouponsInfo} from "../../api/coupon.ts";
-import {progressColors} from "../../utils/style.ts";
+import {progressColors} from "../../style/style.ts";
 import "../../style/base.css"
 
 const couponData = ref();

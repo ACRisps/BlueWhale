@@ -116,6 +116,11 @@ const router = createRouter({
             },
         ]
     }, {
+        path: '/payCallback',
+        name: 'payCallback',
+        component: () => import('../views/PayCallback.vue'),
+        meta: {title: '支付成功'}
+    }, {
         path: '/404',
         name: '404',
         component: () => import('../views/NotFound.vue'),

@@ -4,7 +4,7 @@ import {onMounted, ref} from "vue";
 import {useRoute} from "vue-router";
 import {ArrowLeft} from "@element-plus/icons-vue";
 import {storeCouponNumInfo, uploadReceiveCouponsInfo, userStoreCouponsInfo} from "../../api/coupon.ts";
-import {progressColors} from "../../utils/style.ts";
+import {progressColors} from "../../style/style.ts";
 import {router} from "../../router";
 
 const role = sessionStorage.getItem("role");

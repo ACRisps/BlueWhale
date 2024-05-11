@@ -14,7 +14,7 @@ export const uploadPay = (orderContainerId: number, coupons: number[]) => {
 
 export const uploadPayItem = (orderItemSerial: string) => {
 
-    return axios.get(`${PAY_MODULE}/payOrderItem/${orderItemSerial}`)
+    return axios.get(`${PAY_MODULE}/payOrderItem`, {params: {orderSerialNumber: orderItemSerial.toString()}})
         .then(res => {
             return res;
         })
