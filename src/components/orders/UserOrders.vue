@@ -3,7 +3,6 @@ import {onMounted, ref} from 'vue';
 import {type OrderItemsInfo, orderItemPageInfo, orderItemGet} from '../../api/orderItem.ts';
 import {Wallet, Clock} from "@element-plus/icons-vue";
 import {uploadCommemt} from "../../api/comment.ts";
-import {uploadPayItem} from "../../api/pay.ts";
 import "../../style/base.css";
 
 
@@ -63,23 +62,23 @@ function handleToGet(orderSerialNumber: string) {
 }
 
 function handleToPay(orderSerialNumber: string) {
-  uploadPayItem(orderSerialNumber).then(res => {
-    console.log(res.data);
-    // if (res.data.code == '000') {
-    //   ElMessage({
-    //     message: "支付成功",
-    //     type: 'success',
-    //     center: true,
-    //   });
-    //   loadOrders(currentPage.value);
-    // } else {
-    //   ElMessage({
-    //     message: "支付失败（" + res.data.msg + "）",
-    //     type: 'warning',
-    //     center: true,
-    //   });
-    // }
-  });
+  // uploadPayItem(orderSerialNumber).then(res => {
+  //   console.log(res.data);
+  //   // if (res.data.code == '000') {
+  //   //   ElMessage({
+  //   //     message: "支付成功",
+  //   //     type: 'success',
+  //   //     center: true,
+  //   //   });
+  //   //   loadOrders(currentPage.value);
+  //   // } else {
+  //   //   ElMessage({
+  //   //     message: "支付失败（" + res.data.msg + "）",
+  //   //     type: 'warning',
+  //   //     center: true,
+  //   //   });
+  //   // }
+  // });
   showDuringPay.value = true;
   window.open(`http://localhost:8080/api/pay/payOrderItem?orderSerialNumber=` + orderSerialNumber, "_blank");
 

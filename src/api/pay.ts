@@ -3,8 +3,9 @@ import {PAY_MODULE} from "./_prefix.ts";
 
 export const uploadPay = (orderContainerId: number, coupons: number[]) => {
 
-    return axios.get(`${PAY_MODULE}/payMultiOrder/${orderContainerId}`, {params: {couponIdsString: coupons.toString()}})
+    return axios.get(`${PAY_MODULE}/payMultiOrder`, {params: {multiOrderId:orderContainerId, couponIdsString: coupons.toString()}})
         .then(res => {
+            console.log(res.data);
             return res;
         })
         .catch(err => {

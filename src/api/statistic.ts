@@ -5,7 +5,7 @@ import {STATISTIC_MODULE} from "./_prefix.ts";
 
 
 export const getTable = async () => {
-    return axios.post(`${STATISTIC_MODULE}/formtest`, {},
+    return axios.post(`${STATISTIC_MODULE}/table`, {},
         {responseType: 'blob'})
         .then(res => {
             return res;

@@ -4,7 +4,7 @@ import {payCouponsInfo} from "../api/coupon.ts";
 import {CirclePlus, CircleCheckFilled, Remove} from "@element-plus/icons-vue";
 import {ElTable} from "element-plus";
 import {getOrderItems} from "../api/orderContainer.ts";
-import {calculateBest, calculatePrice, uploadPay} from "../api/pay.ts";
+import {calculateBest, calculatePrice} from "../api/pay.ts";
 
 defineExpose({openDialog, getData});
 const emit = defineEmits(['payment-finish']);
@@ -58,24 +58,26 @@ function handleCancel() {
 }
 
 function handlePay() {
-  uploadPay(orderId.value, currentRow.value ? [currentRow.value.id] : []).then((res) => {
-    if (res.data.code == '000') {
-      ElMessage({
-        message: "购买成功",
-        type: "success",
-        center: true,
-      });
-      paySuccess.value = true;
-      showDialog.value = false;
-      emit('payment-finish');
-    } else {
-      ElMessage({
-        message: "支付失败（" + res.data.msg + "）",
-        type: 'warning',
-        center: true,
-      });
-    }
-  });
+  // uploadPay(orderId.value, currentRow.value ? [currentRow.value.id] : []).then((res) => {
+  //   if (res.data.code == '000') {
+  //     ElMessage({
+  //       message: "购买成功",
+  //       type: "success",
+  //       center: true,
+  //     });
+  //     paySuccess.value = true;
+  //     showDialog.value = false;
+  //     emit('payment-finish');
+  //   } else {
+  //     ElMessage({
+  //       message: "支付失败（" + res.data.msg + "）",
+  //       type: 'warning',
+  //       center: true,
+  //     });
+  //   }
+  // });
+  window.open(`http://localhost:8080/api/pay/payMultiOrder?multiOrderId=`
+      + orderId.value + '&couponIdsString=' + (currentRow.value ? [currentRow.value.id] : []).toString(), "_blank");
 
 }
 
