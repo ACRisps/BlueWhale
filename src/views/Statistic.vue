@@ -6,7 +6,7 @@ import {Warning, CaretTop, ArrowRight, CaretBottom} from "@element-plus/icons-vu
 import "../style/base.css";
 import {useTransition} from '@vueuse/core';
 import {router} from "../router";
-import {getTableUrl, statisticInfo} from "../api/statistic.ts";
+import {getTable, statisticInfo} from "../api/statistic.ts";
 
 const totalTurnoverCnt = ref(0);
 const totalOrderCnt = ref(0);
@@ -38,23 +38,40 @@ const monthTurnoverRate = ref<number>(0);
 const monthOrderRate = ref<number>(0);
 const monthCustomerRate = ref<number>(0);
 
-
-const tableUrl = ref("");
+function downloadHandler(data: any, fileName: string, type: string) {
+  const blob = new Blob([data], {type: type || 'application/octet-stream'});
+  const downloadElement = document.createElement('a');
+  const href = window.URL.createObjectURL(blob);
+  downloadElement.href = href;
+  downloadElement.download = fileName;
+  document.body.appendChild(downloadElement);
+  downloadElement.click();
+  document.body.removeChild(downloadElement);
+  window.URL.revokeObjectURL(href);
+}
 
 function handleTableExport() {
   loading.value = true;
-  getTableUrl().then(res => {
-    console.log(res.data.result);
-    tableUrl.value = res.data.result;
-    loading.value = false;
-    window.open(tableUrl.value);
+  let url: string;
+  getTable().then(res => {
+    url = URL.createObjectURL(new Blob([res.data], {type: "application/vnd.ms-excel"}));
+    fetch(url).then(res => {
+      return res.blob();
+    })
+        .then(blob => {
+          downloadHandler(blob, 'export.xlsx', 'application/vnd.ms-excel');
+          loading.value = false;
+        })
+        .catch(error => {
+          console.error('文件下载失败：', error);
+        });
   });
 }
 
 
 onMounted(() => {
   statisticInfo().then(res => {
-    console.log(res.data.result);
+    console.log(res);
     totalTurnoverCnt.value = res.data.result.allTurnover;
     totalOrderCnt.value = res.data.result.allOrderNum;
     totalCustomerCnt.value = res.data.result.allUserNum;

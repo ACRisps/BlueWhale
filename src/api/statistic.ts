@@ -4,12 +4,14 @@ import {axios} from "../utils/request.ts";
 import {STATISTIC_MODULE} from "./_prefix.ts";
 
 
-export const getTableUrl = () => {
-    return axios.get(`${STATISTIC_MODULE}/form`)
+export const getTable = async () => {
+    return axios.post(`${STATISTIC_MODULE}/formtest`, {},
+        {responseType: 'blob'})
         .then(res => {
             return res;
         })
         .catch(err => {
+
             return err.response;
         });
 };
