@@ -2,11 +2,11 @@
 import {onMounted, ref} from "vue";
 
 const role = sessionStorage.getItem("role");
-import {Warning, CaretTop, ArrowRight, CaretBottom} from "@element-plus/icons-vue";
+import {Warning, CaretTop, ArrowRight, CaretBottom, PieChart} from "@element-plus/icons-vue";
 import "../style/base.css";
 import {useTransition} from '@vueuse/core';
 import {router} from "../router";
-import {getTable, statisticInfo} from "../api/statistic.ts";
+import {getTable, statisticChartInfo, statisticInfo} from "../api/statistic.ts";
 
 const totalTurnoverCnt = ref(0);
 const totalOrderCnt = ref(0);
@@ -71,7 +71,6 @@ function handleTableExport() {
 
 onMounted(() => {
   statisticInfo().then(res => {
-    console.log(res);
     totalTurnoverCnt.value = res.data.result.allTurnover;
     totalOrderCnt.value = res.data.result.allOrderNum;
     totalCustomerCnt.value = res.data.result.allUserNum;
@@ -82,13 +81,125 @@ onMounted(() => {
     monthTurnoverRate.value = res.data.result.turnoverRate;
     monthOrderRate.value = res.data.result.orderRate;
     monthCustomerRate.value = res.data.result.userRate;
+  });
 
+  statisticChartInfo().then(res => {
+    turnOverDataArray.value = res.data.result.turnoverEveryMonth;
+    orderCntDataArray.value = res.data.result.orderNumEveryMonth;
+    customerCntDataArray.value = res.data.result.userNumEveryMonth;
+    monthDataArray.value = res.data.result.months;
+    option1 = ref(data1);
+    option2 = ref(data2);
+    option3 = ref(data3);
   });
 });
 
-
 const loading = ref(false);
 
+
+// table
+
+const turnOverDataArray = ref([0, 0, 0, 0, 0]);
+const orderCntDataArray = ref([0, 0, 0, 0, 0]);
+const customerCntDataArray = ref([0, 0, 0, 0, 0]);
+const monthDataArray = ref(['-', '-', '-', '-', '-']);
+
+const c1 = ref();
+const c2 = ref();
+const c3 = ref();
+
+import {use} from "echarts/core";
+import {GridComponent} from 'echarts/components';
+import {CanvasRenderer} from "echarts/renderers";
+import {LineChart} from 'echarts/charts';
+import {
+  TitleComponent,
+  TooltipComponent,
+  LegendComponent
+} from "echarts/components";
+import VChart, {THEME_KEY} from "vue-echarts";
+import {provide} from "vue";
+
+use([
+  GridComponent,
+  CanvasRenderer,
+  LineChart,
+  TitleComponent,
+  TooltipComponent,
+  LegendComponent
+]);
+
+provide(THEME_KEY, "light");
+
+const data1 = {
+  title: {
+    text: "流水趋势",
+    left: "center"
+  },
+  xAxis: {
+    name: '时间',
+    data: monthDataArray
+  },
+  yAxis: {
+    type: 'value',
+    name: '流水/元'
+  },
+  series: [
+    {
+      data: turnOverDataArray,
+      type: 'line',
+      smooth: true
+    }
+  ]
+};
+
+const data2 = {
+  title: {
+    text: "订单趋势",
+    left: "center"
+  },
+  xAxis: {
+    name: '时间',
+    data: monthDataArray
+  },
+  yAxis: {
+    type: 'value',
+    name: '订单数/单'
+  },
+  series: [
+    {
+      data: orderCntDataArray,
+      type: 'line',
+      smooth: true
+    }
+  ]
+};
+
+const data3 = {
+  title: {
+    text: "用户趋势",
+    left: "center"
+  },
+  xAxis: {
+    name: '时间',
+    data: monthDataArray
+  },
+  yAxis: {
+    type: 'value',
+    name: '用户数/人'
+  },
+  series: [
+    {
+      data: customerCntDataArray,
+      type: 'line',
+      smooth: true
+    }
+  ]
+};
+
+let option1 = ref(data1);
+let option2 = ref(data2);
+let option3 = ref(data3);
 </script>
 
 <template>
@@ -363,6 +474,31 @@ const loading = ref(false);
         </el-row>
       </el-card>
     </el-row>
+    <el-row justify="center">
+      <el-divider style="margin-top: 120px;margin-bottom: 30px;
+      width: 90%; ">
+        <el-text size="large" style="color: dodgerblue">
+          <el-icon>
+            <PieChart/>
+          </el-icon>
+          详细
+        </el-text>
+      </el-divider>
+    </el-row>
+
+    <el-row justify="center">
+      <div class="table-card">
+        <v-chart ref="c1" class="chart" autoresize :option="option1"/>
+      </div>
+      <div class="table-card">
+        <v-chart ref="c2" class="chart" autoresize :option="option2"/>
+      </div>
+      <div class="table-card">
+        <v-chart ref="c3" class="chart" autoresize :option="option3"/>
+      </div>
+
+
+    </el-row>
 
   </el-main>
 </template>
@@ -391,5 +527,18 @@ const loading = ref(false);
 .export-card {
   width: 60%;
   border-radius: 6px;
+  margin: 5px;
+}
+
+.table-card {
+  width: 60%;
+  border-radius: 6px;
+  margin: 30px;
+}
+
+.chart {
+  height: 400px;
+  width: 100%;
+  margin: 10px;
 }
 </style>

@@ -292,7 +292,7 @@ function handlePaymentFinish() {
       </el-row>
       <el-row justify="center">
         <el-divider style="margin-top: 90px;margin-bottom: 30px">
-          <el-text class="comment-title-text">
+          <el-text class="comment-title-text" size="large">
             <el-icon>
               <ChatLineSquare/>
             </el-icon>
@@ -378,7 +378,6 @@ function handlePaymentFinish() {
 }
 
 .comment-title-text {
-  font-size: large;
   color: dodgerblue;
 }
 

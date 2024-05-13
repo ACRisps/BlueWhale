@@ -17,8 +17,20 @@ export const getTable = async () => {
 };
 
 
-export const statisticInfo = () => {
-    return axios.post(`${STATISTIC_MODULE}/getInfo`, {start: null, end: null})
+export const statisticInfo = async () => {
+    return axios.get(`${STATISTIC_MODULE}/getInfo`)
+        .then(res => {
+            return res;
+        })
+        .catch(err => {
+                return err.response;
+            }
+        );
+};
+
+
+export const statisticChartInfo = async () => {
+    return axios.get(`${STATISTIC_MODULE}/lineChart`)
         .then(res => {
             return res;
         })
