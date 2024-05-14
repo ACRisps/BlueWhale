@@ -56,8 +56,6 @@ onMounted(() => {
         console.log(res.data.result.content);
       });
     }
-
-
   }
 });
 

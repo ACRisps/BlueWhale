@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import {onMounted, ref} from "vue";
-import {payCouponsInfo} from "../api/coupon.ts";
+import {payCouponsInfo, payCouponsInfo00} from "../api/coupon.ts";
 import {CirclePlus, CircleCheckFilled, Remove} from "@element-plus/icons-vue";
 import {ElTable} from "element-plus";
 import {getOrderItems} from "../api/orderContainer.ts";
@@ -210,6 +210,13 @@ function handleTest() {
 
 }
 
+function handleTest2() {
+  if (payBasicInfo.value != undefined) {
+    payCouponsInfo00(payBasicInfo.value);
+  }
+
+}
+
 </script>
 
 <template>
@@ -258,6 +265,7 @@ function handleTest() {
       <div class="dialog-footer">
         <el-button type="primary" @click="handlePay">付款</el-button>
         <el-button @click="handleTest">取消</el-button>
+        <el-button @click="handleTest2">suan'jia'ge</el-button>
       </div>
     </template>
   </el-dialog>

@@ -1,5 +1,6 @@
 import {axios} from "../utils/request.ts";
 import {COUPON_MODULE} from "./_prefix.ts";
+import {PayInfo} from "./pay.ts";
 
 
 export type CouponUploadInfo = {
@@ -85,8 +86,18 @@ export const storeCouponNumInfo = (storeId: number) => {
         });
 };
 
-export const payCouponsInfo = (multiOrderId:number) => {
-    return axios.get(`${COUPON_MODULE}/pay`,{params: {multiOrderId: multiOrderId}})
+export const payCouponsInfo = (multiOrderId: number) => {
+    return axios.get(`${COUPON_MODULE}/pay`, {params: {multiOrderId: multiOrderId}})
+        .then(res => {
+            return res;
+        })
+        .catch(err => {
+            return err.response;
+        });
+};
+
+export const payCouponsInfo00 = async (payload: PayInfo) => {
+    return axios.post(`${COUPON_MODULE}/pay`, payload)
         .then(res => {
             return res;
         })
