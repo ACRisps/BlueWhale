@@ -96,7 +96,7 @@ export const payCouponsInfo = (multiOrderId: number) => {
         });
 };
 
-export const payCouponsInfo00 = async (payload: PayInfo) => {
+export const payDisplayInfo = async (payload: PayInfo) => {
     return axios.post(`${COUPON_MODULE}/pay`, payload)
         .then(res => {
             return res;

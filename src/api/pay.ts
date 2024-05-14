@@ -27,6 +27,29 @@ export interface PayInfo {
     couponId: number;
 }
 
+// display
+export interface ProductDisplayInfo {
+    productId: number;
+    productName: string;
+    productNum: number;
+    before: number;
+    after: number;
+}
+
+export interface StoreDisplayInfo {
+    storeId: number;
+    storeName: string;
+    products: ProductDisplayInfo[];
+    coupons: any[];
+}
+
+export interface PayDisplayInfo {
+    stores: StoreDisplayInfo[];
+    coupons: any[];
+    totalBefore: number;
+    totalAfter: number;
+}
+
 
 export const uploadPay = (orderContainerId: number, coupons: number[]) => {
 

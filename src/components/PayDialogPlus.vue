@@ -1,79 +1,103 @@
 <script setup lang="ts">
 import {onMounted, ref} from "vue";
-import {payCouponsInfo, payCouponsInfo00} from "../api/coupon.ts";
-import {CirclePlus, CircleCheckFilled, Remove} from "@element-plus/icons-vue";
+import {payCouponsInfo, payDisplayInfo} from "../api/coupon.ts";
 import {ElTable} from "element-plus";
 import {getOrderItems} from "../api/orderContainer.ts";
-import {calculateBest, calculatePrice, PayInfo, ProductPayInfo, ProductsPassInfo} from "../api/pay.ts";
-import {searchProduct} from "../api/product.ts";
-import {storeInfoDetail} from "../api/store.ts";
+import {calculateBest, calculatePrice, PayDisplayInfo, PayInfo, ProductsPassInfo} from "../api/pay.ts";
 import {uploadOrderItem00} from "../api/orderItem.ts";
+import {CircleCheckFilled, CirclePlus, Remove} from "@element-plus/icons-vue";
 
 defineExpose({openDialog, getData});
 const emit = defineEmits(['payment-finish']);
 
-const payBasicInfo = ref<PayInfo>();
+const payBasicInfo = ref<PayInfo>({stores: [], couponId: 0});
+const payDetailedInfo = ref<PayDisplayInfo>();
 
 const activeNames = ref(['']);
-const badgeCnt = ref(0);
 
-const couponData = ref([] as any);
 
 let showDialog = ref();
 
-const orderId = ref();
-const orderDetail = ref();
-const oriPrice = ref<number>();
-const currentPrice = ref<number>();
-
-const bestCouponId = ref();
 
 const paySuccess = ref(false);
 
-const tableRef = ref<InstanceType<typeof ElTable>>();
-const currentRow = ref(null as any);
-const setCurrent = (row?: any) => {
-  tableRef.value!.setCurrentRow(row);
-};
+// const setCurrent = (row?: any) => {
+//   tableRef.value!.setCurrentRow(row);
+// };
+
+function refreshInfo(){
+  payDisplayInfo(payBasicInfo.value).then(res => {
+    payDetailedInfo.value = res.data.result;
+    console.log("这是后端返回的：");
+    console.log(payDetailedInfo.value);
+  });
+}
 
 const handleCurrentChange = (val: any) => {
-  currentRow.value = val;
-  loadCurrentPrice();
+  // couponType
+  // "FULL_REDUCTION"
+  // effective:2
+  // effectiveTime:"2024-04-12"
+  // expiredTime:"2024-05-22"
+  // full:52
+  // id:11
+  // reduction:2
+  // storeId:7
+  // storeName:"(* ￣3)(ε￣ *)咖啡店"
+  if (val == null) {
+    return;
+  }
+  if (val.selected) {
+    return;
+  }
+  console.log(val);
+  let storeIdx = searchStoreId(payBasicInfo.value, val.storeId);
+  if (storeIdx != -1) {
+    payBasicInfo.value.stores[storeIdx].couponId = val.id;
+  } else {
+    console.log("search error");
+  }
+
+  console.log("这是传给后端的：");
+  console.log(payBasicInfo.value);
+  refreshInfo();
 };
 
 function openDialog() {
   showDialog.value = true;
 }
 
-function handleCancel() {
-  if (!paySuccess.value) {
-    ElMessage({
-      message: "支付取消，可稍后支付",
-      type: 'warning',
-      center: true,
-    });
-  }
-  paySuccess.value = false;
-  {
-    activeNames.value = ['0'];
-    currentRow.value = null;
-  }
-}
+//
+// function handleCancel() {
+//   if (!paySuccess.value) {
+//     ElMessage({
+//       message: "支付取消，可稍后支付",
+//       type: 'warning',
+//       center: true,
+//     });
+//   }
+//   paySuccess.value = false;
+//   {
+//     activeNames.value = ['0'];
+//     currentRow.value = null;
+//   }
+// };
 
-function handlePay() {
-  window.open(`http://localhost:8080/api/pay/payMultiOrder?multiOrderId=`
-      + orderId.value + '&couponIdsString=' + (currentRow.value ? [currentRow.value.id] : []).toString(), "_blank");
-}
+// function handlePay() {
+//   window.open(`http://localhost:8080/api/pay/payMultiOrder?multiOrderId=`
+//       + orderId.value + '&couponIdsString=' + (currentRow.value ? [currentRow.value.id] : []).toString(), "_blank");
+// }
 
-function loadPayCoupons() {
-  payCouponsInfo(orderId.value).then(res => {
-    couponData.value = res.data.result;
-    badgeCnt.value = couponData.value.length;
-  });
-}
+// function loadPayCoupons() {
+//   payCouponsInfo(orderId.value).then(res => {
+//     couponData.value = res.data.result;
+//     badgeCnt.value = couponData.value.length;
+//   });
+// }
 
+//
 function getData(payProducts: ProductsPassInfo) {
-  payBasicInfo.value = {stores: [], couponId: 0};
+  payBasicInfo.value = {stores: [], couponId: 0};// ?
   for (let payProduct of payProducts.products) {
     let storeId = payProduct.storeId;
     let productId = payProduct.productId;
@@ -87,24 +111,19 @@ function getData(payProducts: ProductsPassInfo) {
     // 找到了
     payBasicInfo.value.stores[idx].products.push({productId: productId, num: num});
   }
-  for (let store of payBasicInfo.value.stores) {
-    loadStoreName(store.storeId);
-  }
+
   console.log(payBasicInfo.value);
-  // loadOrderDetail();
-  // loadOriginalPrice();
-  // loadCurrentPrice();
-  // loadPayCoupons();
-  // loadBestPrice();
+
+  refreshInfo();
 }
 
 onMounted(() => {
 
   getData({
     products: [
+      {productId: 1, num: 1, storeId: 7},
       {productId: 2, num: 1, storeId: 7},
-      {productId: 2, num: 1, storeId: 7},
-      {productId: 3, num: 1, storeId: 7}
+      {productId: 4, num: 1, storeId: 14}
     ]
   });
 });
@@ -120,50 +139,43 @@ function searchStoreId(payInfo: PayInfo, storeId: number) {
   return -1;
 }
 
-function loadOrderDetail() {
-  getOrderItems(orderId.value).then(res => {
-    orderDetail.value = res.data.result;
-  });
+function getCurrentStoreCouponId(storeId: number) {
+  let storeIdx = searchStoreId(payBasicInfo.value, storeId);
+  return payBasicInfo.value.stores[storeIdx].couponId;
 }
 
-function loadOriginalPrice() {
-  calculatePrice(orderId.value, []).then(res => {
-    oriPrice.value = res.data.result;
-  });
-}
+// function loadCurrentPrice() {
+//   if (currentRow.value == null) {
+//     calculatePrice(orderId.value, []).then(res => {
+//       currentPrice.value = res.data.result;
+//     });
+//   } else {
+//     calculatePrice(orderId.value, [currentRow.value.id]).then(res => {
+//       currentPrice.value = res.data.result;
+//     });
+//   }
+// }
 
-function loadCurrentPrice() {
-  if (currentRow.value == null) {
-    calculatePrice(orderId.value, []).then(res => {
-      currentPrice.value = res.data.result;
-    });
-  } else {
-    calculatePrice(orderId.value, [currentRow.value.id]).then(res => {
-      currentPrice.value = res.data.result;
-    });
-  }
-}
-
-function loadBestPrice() {
-  calculateBest(orderId.value).then(res => {
-    if (res.data.code == '000') {
-      ElMessage({
-        message: "已自动选择最优优惠",
-        type: "success",
-        center: true,
-      });
-      bestCouponId.value = res.data.result;
-      // console.log("best");
-      // console.log(bestCouponId.value);
-      for (let i in couponData.value) {
-        if (couponData.value[i].id == bestCouponId.value.id) {
-        }
-        setCurrent(couponData.value[i]);
-      }
-    }
-
-  });
-}
+// function loadBestPrice() {
+//   calculateBest(orderId.value).then(res => {
+//     if (res.data.code == '000') {
+//       ElMessage({
+//         message: "已自动选择最优优惠",
+//         type: "success",
+//         center: true,
+//       });
+//       bestCouponId.value = res.data.result;
+//       // console.log("best");
+//       // console.log(bestCouponId.value);
+//       for (let i in couponData.value) {
+//         if (couponData.value[i].id == bestCouponId.value.id) {
+//         }
+//         setCurrent(couponData.value[i]);
+//       }
+//     }
+//
+//   });
+// }
 
 
 function couponTypeFormatter(row: any) {
@@ -186,35 +198,33 @@ function couponContentFormatter(row: any) {
   }
 }
 
-const storeNameData = ['bobo cafe', 'logitech旗舰店', 'apple中国'];
-const boboCafeItem = ['bobo至臻卡布奇诺 *1', '豹2A5 *1', '大师抽象画 *5'];
-
-activeNames.value = [storeNameData[0]];
-
-const storeNames = ref<Map<number, string>>(new Map());
-
-function loadStoreName(id: number) {
-  storeInfoDetail(id).then(res => {
-    console.log(res.data);
-    storeNames.value.set(id, res.data.result.storeName);
-
-    console.log(storeNames.value);
-  });
-
-}
 
 function handleTest() {
-  if (payBasicInfo.value != undefined) {
-    uploadOrderItem00(payBasicInfo.value);
-  }
+  uploadOrderItem00(payBasicInfo.value);
 
 }
 
 function handleTest2() {
-  if (payBasicInfo.value != undefined) {
-    payCouponsInfo00(payBasicInfo.value);
-  }
+  payDisplayInfo(payBasicInfo.value);
 
+}
+
+function calculateShowClear(storeId: number) {
+  let storeIdx = searchStoreId(payBasicInfo.value, storeId);
+  if (storeIdx < 0) {
+    return false;
+  }
+  return payBasicInfo.value.stores[storeIdx].couponId != 0;
+}
+
+function handleCouponSelectClear(storeId: number) {
+  console.log("clear");
+  let storeIdx = searchStoreId(payBasicInfo.value, storeId);
+  if (storeIdx < 0) {
+    return;
+  }
+  payBasicInfo.value.stores[storeIdx].couponId = 0;
+  refreshInfo();
 }
 
 </script>
@@ -224,46 +234,130 @@ function handleTest2() {
       v-model="showDialog"
       title="支付订单"
       width=60%
-      @close="handleCancel"
+      @close=""
       :close-on-click-modal="false"
       top="10vh"
   >
     <el-row justify="center">
       <el-col style="text-align: center">
         <div class="price">
-          <el-text v-if="currentRow" size="small">原价：{{ oriPrice }}</el-text>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;价格：
-          <el-text size="large">{{ currentPrice }}</el-text>&nbsp;￥
+          <el-text v-if="payDetailedInfo?.totalBefore!=payDetailedInfo?.totalAfter" size="small">
+            原价：{{ payDetailedInfo?.totalBefore }}
+          </el-text>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;价格：
+          <el-text size="large">{{ payDetailedInfo?.totalAfter }}</el-text>&nbsp;￥
         </div>
       </el-col>
     </el-row>
-    <div style="max-height: 500px; overflow-y: scroll;">
+    <el-scrollbar height="500px">
       <el-row justify="center">
         <el-collapse v-model="activeNames" style="width: 90%">
-          <el-collapse-item v-for="store in payBasicInfo?.stores" :title="storeNames?.get(store.storeId)">
+          <el-collapse-item v-for="store in payDetailedInfo?.stores" :title="store.storeName">
             <el-row v-for="item in store.products">
-              <el-text> {{ item }}</el-text>
+              <el-col :span="1"></el-col>
+              <el-col :span="17">
+                <el-text>
+                  {{ item.productName }}&nbsp;*{{ item.productNum }}
+                </el-text>
+              </el-col>
+              <el-col :span="5" style="text-align: right">
+                <el-text v-if="item.before==item.after">
+                  {{ item.after }}￥
+                </el-text>
+                <el-text v-else>
+                  <el-text tag="del" size="small" style="margin-right: 3px">{{ item.before }}￥</el-text>
+                  {{ item.after }}￥
+                </el-text>
+              </el-col>
+              <el-col :span="1"></el-col>
+
             </el-row>
 
             <el-row justify="center">
-              <div style="height: 100px;width: 90%;background-color: dodgerblue;text-align: center;margin: 10px;">
-                优惠选择优惠选择优惠选择优惠选择优惠选择优惠选择优惠选择优惠选择优惠选择优惠选择优惠选择优惠选择
-              </div>
+              <el-table :data="store.coupons" style="width: 80%" :cell-style="{'text-align':'center'}"
+                        :header-cell-style="{'text-align':'center',height:'50px'}" @selection-change=""
+                        empty-text="无可用优惠" :ref="'TableRef'+store.storeId"
+                        highlight-current-row @current-change="row=>handleCurrentChange(row)"
+                        max-height="250">
+                <el-table-column prop="couponType" label="优惠类型" :formatter="couponTypeFormatter"/>
+                <el-table-column prop="expiredTime" label="截止日期"/>
+                <el-table-column label="折扣明细" :formatter="couponContentFormatter"/>
+                <el-table-column label="状态">
+                  <template #default="scope">
+                    <el-text v-if="scope.row.effective==2" style="color: forestgreen">√可使用</el-text>
+                    <el-text v-if="scope.row.effective==1" style="color: deepskyblue">+未生效</el-text>
+                    <el-text v-if="scope.row.effective==0" style="color: indianred">×已过期</el-text>
+                  </template>
+                </el-table-column>
+                <el-table-column>
+                  <template #header>
+                    <el-button v-if="calculateShowClear(store.storeId)" size="small" type="danger"
+                               @click="handleCouponSelectClear(store.storeId)" plain>
+                      <el-icon>
+                        <Remove/>
+                      </el-icon>
+                    </el-button>
+                  </template>
+                  <template #default="scope">
+                    <el-icon v-if="scope.row.selected" style="" :size="20">
+                      <CircleCheckFilled/>
+                    </el-icon>
+
+                    <el-icon v-else style="" :size="20">
+                      <CirclePlus/>
+                    </el-icon>
+                  </template>
+                </el-table-column>
+              </el-table>
             </el-row>
 
           </el-collapse-item>
         </el-collapse>
       </el-row>
-      <el-row justify="center">
-        <div style="height: 100px;width: 90%;background-color: indianred;text-align: center;margin: 10px;">
-          全局优惠选择全局优惠选择全局优惠选择全局优惠选择全局优惠选择全局优惠选择全局优惠选择全局优惠选择
-        </div>
+      <el-row>
+        <el-divider>全局优惠</el-divider>
       </el-row>
-    </div>
+      <el-row justify="center">
+        <el-table :data="payDetailedInfo?.coupons" style="width: 80%" :cell-style="{'text-align':'center'}"
+                  :header-cell-style="{'text-align':'center',height:'50px'}" @selection-change=""
+                  empty-text="无可用优惠"
+                  highlight-current-row @current-change="handleCurrentChange" ref="tableRef" max-height="250">
+          <el-table-column prop="couponType" label="优惠类型" :formatter="couponTypeFormatter"/>
+          <el-table-column prop="expiredTime" label="截止日期"/>
+          <el-table-column label="折扣明细" :formatter="couponContentFormatter"/>
+          <el-table-column label="状态">
+            <template #default="scope">
+              <el-text v-if="scope.row.effective==2" style="color: forestgreen">√可使用</el-text>
+              <el-text v-if="scope.row.effective==1" style="color: deepskyblue">+未生效</el-text>
+              <el-text v-if="scope.row.effective==0" style="color: indianred">×已过期</el-text>
+            </template>
+          </el-table-column>
+          <el-table-column label="">
+            <template #header>
+              <!--              <el-button v-if="currentRow" size="small" type="danger" @click="setCurrent()" plain>-->
+              <!--                <el-icon>-->
+              <!--                  <Remove/>-->
+              <!--                </el-icon>-->
+              <!--              </el-button>-->
+            </template>
+            <template #default="scope">
+              <!--              <el-icon v-if="scope.row==currentRow" style="" :size="20">-->
+              <!--                <CircleCheckFilled/>-->
+              <!--              </el-icon>-->
+
+              <!--              <el-icon v-else style="" :size="20">-->
+              <!--                <CirclePlus/>-->
+              <!--              </el-icon>-->
+            </template>
+          </el-table-column>
+          <!--              <el-table-column type="selection"/>-->
+        </el-table>
+      </el-row>
+    </el-scrollbar>
 
 
     <template #footer>
       <div class="dialog-footer">
-        <el-button type="primary" @click="handlePay">付款</el-button>
+        <el-button type="primary" @click="">付款</el-button>
         <el-button @click="handleTest">取消</el-button>
         <el-button @click="handleTest2">suan'jia'ge</el-button>
       </div>
