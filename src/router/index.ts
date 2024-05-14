@@ -114,6 +114,15 @@ const router = createRouter({
                     permission: ['STAFF', 'CEO']
                 }
             },
+            {
+                path: '/canary',
+                name: 'canary',
+                component: () => import('../views/Canary.vue'),
+                meta: {
+                    title: 'Canary',
+                    permission: ['MANAGER']
+                }
+            },
         ]
     }, {
         path: '/payCallback',

@@ -66,6 +66,7 @@ declare module 'vue' {
     HeaderTest: typeof import('./src/components/HeaderTest.vue')['default']
     Pagination: typeof import('./src/components/Pagination.vue')['default']
     PayDialog: typeof import('./src/components/PayDialog.vue')['default']
+    PayDialogPlus: typeof import('./src/components/PayDialogPlus.vue')['default']
     ProductItem: typeof import('./src/components/ProductItem.vue')['default']
     PublishGlobalCoupon: typeof import('./src/components/coupon-create/PublishGlobalCoupon.vue')['default']
     PublishStoreCoupon: typeof import('./src/components/coupon-create/PublishStoreCoupon.vue')['default']

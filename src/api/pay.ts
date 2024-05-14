@@ -1,9 +1,41 @@
 import {axios} from "../utils/request.ts";
 import {PAY_MODULE} from "./_prefix.ts";
 
+export interface ProductsPassInfo {
+    products: ProductPassInfo[];
+}
+
+export interface ProductPassInfo {
+    productId: number;
+    num: number;
+    storeId: number;
+}
+
+export interface ProductPayInfo {
+    productId: number;
+    num: number;
+}
+
+export interface StorePayInfo {
+    storeId: number;
+    products: ProductPayInfo[];
+    couponId: number;
+}
+
+export interface PayInfo {
+    stores: StorePayInfo[];
+    couponId: number;
+}
+
+
 export const uploadPay = (orderContainerId: number, coupons: number[]) => {
 
-    return axios.get(`${PAY_MODULE}/payMultiOrder`, {params: {multiOrderId:orderContainerId, couponIdsString: coupons.toString()}})
+    return axios.get(`${PAY_MODULE}/payMultiOrder`, {
+        params: {
+            multiOrderId: orderContainerId,
+            couponIdsString: coupons.toString()
+        }
+    })
         .then(res => {
             console.log(res.data);
             return res;

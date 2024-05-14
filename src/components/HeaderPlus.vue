@@ -1,7 +1,18 @@
 <script setup lang="ts">
 import {router} from '../router';
 // import {parseRole} from "../utils";
-import {User, SwitchButton, Edit, Tickets, Menu, Present, Wallet, Search, DataLine} from "@element-plus/icons-vue";
+import {
+  User,
+  SwitchButton,
+  Edit,
+  Tickets,
+  Menu,
+  Present,
+  Wallet,
+  Search,
+  DataLine,
+  Orange
+} from "@element-plus/icons-vue";
 
 const role = sessionStorage.getItem('role');    //登录的时候插入的
 
@@ -51,6 +62,12 @@ function logout() {
           <Search/>
         </el-icon>
         搜索
+      </el-menu-item>
+      <el-menu-item index="/canary" v-if="role=='MANAGER'">
+        <el-icon :size="20">
+          <Orange/>
+        </el-icon>
+        Canary
       </el-menu-item>
 
       <div class="flex-grow"/>

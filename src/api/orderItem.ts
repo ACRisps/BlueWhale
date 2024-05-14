@@ -1,5 +1,6 @@
 import {axios} from "../utils/request.ts";
 import {ORDER_MODULE} from "./_prefix.ts";
+import {PayInfo} from "./pay.ts";
 
 
 export type UploadOrderItemInfo = {
@@ -37,6 +38,16 @@ export type OrderItemInfo = {
 }
 
 export type OrderItemsInfo = OrderItemInfo[];
+
+export const uploadOrderItem00 = (payload: PayInfo) => {
+    return axios.post(`${ORDER_MODULE}/create`, payload)
+        .then(res => {
+            return res;
+        })
+        .catch(err => {
+            return err.response;
+        });
+};
 
 export const uploadOrderItem = (payload: UploadOrderItemInfo) => {
     return axios.post(`${ORDER_MODULE}/orderItems/create`, payload)
