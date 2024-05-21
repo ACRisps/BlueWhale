@@ -5,18 +5,22 @@ import {ElTable} from "element-plus";
 import {getOrderItems} from "../api/orderContainer.ts";
 import {calculateBest, calculatePrice, PayDisplayInfo, PayInfo, ProductsPassInfo} from "../api/pay.ts";
 import {uploadOrderItem00} from "../api/orderItem.ts";
-import {CircleCheckFilled, CirclePlus, Remove, Goods} from "@element-plus/icons-vue";
+import {CircleCheckFilled, CirclePlus, Remove, Goods, ArrowDown, Van, Location} from "@element-plus/icons-vue";
 
 defineExpose({openDialog, getData});
 const emit = defineEmits(['payment-finish']);
 
-const payBasicInfo = ref<PayInfo>({stores: [], couponId: 0});
+const payBasicInfo = ref<PayInfo>({stores: [], couponId: 0, method: "DELIVERY"});
 const payDetailedInfo = ref<PayDisplayInfo>();
 
 const activeNames = ref([0]);
 
+const method = ref('PICKUP');
 
-let showDialog = ref();
+const showDialog = ref(false);
+const showConfirm = ref(false);
+
+const orderId = ref<string>();
 
 
 const paySuccess = ref(false);
@@ -92,7 +96,7 @@ function openDialog() {
 // }
 
 function getData(payProducts: ProductsPassInfo) {
-  payBasicInfo.value = {stores: [], couponId: 0};// ?
+  payBasicInfo.value = {stores: [], couponId: 0, method: "DELIVERY"};// ?
   for (let payProduct of payProducts.products) {
     let storeId = payProduct.storeId;
     let productId = payProduct.productId;
@@ -167,6 +171,34 @@ function searchStoreId(payInfo: PayInfo, storeId: number) {
 //   });
 // }
 
+function submit() {
+  uploadOrderItem00(payBasicInfo.value).then(res => {
+    if (res.data.code == '000') {
+      ElMessage({
+        message: "已成功提交",
+        type: 'success',
+        center: true,
+      });
+      console.log(res.data);
+      showDialog.value = false;
+      showConfirm.value = true;
+      orderId.value = res.data.result;
+    } else {
+      console.log(res.data.msg);
+      ElMessage({
+        message: "提交失败，请稍后再试",
+        type: 'error',
+        center: true,
+      });
+    }
+  });
+}
+
+function toPay() {
+  window.open(`http://localhost:8080/api/pay/payMultiOrder?multiOrderId=`
+      + orderId.value, "_blank");
+}
+
 
 function couponTypeFormatter(row: any) {
   if (row.couponType == "FULL_REDUCTION") {
@@ -190,12 +222,9 @@ function couponContentFormatter(row: any) {
 
 
 function handleTest() {
-  uploadOrderItem00(payBasicInfo.value);
-
-}
-
-function handleTest2() {
-  payDisplayInfo(payBasicInfo.value);
+  uploadOrderItem00(payBasicInfo.value).then(res => {
+    console.log(res);
+  });
 
 }
 
@@ -232,6 +261,36 @@ const tableRowClassName = ({row}: { row: any }) => {
   return '';
 };
 
+const showTip = ref(true);
+const myScrollbar = ref();
+
+const handleScroll = () => {
+  console.log("hs");
+  // 防止Scrollbar实例为空
+  if (!myScrollbar.value) {
+    return;
+  }
+  // 判断是否滚动到底部附近
+  let isScrollToEnd = Number(myScrollbar.value.wrapRef.scrollTop.toFixed(0))
+      + Number(myScrollbar.value.wrapRef.clientHeight.toFixed(0))
+      >= Number(myScrollbar.value.wrapRef.scrollHeight.toFixed(0)) - 20;
+
+  showTip.value = !isScrollToEnd;
+};
+
+async function handleScrollDelay() {
+  await Sleep(300);
+  handleScroll();
+}
+
+const Sleep = (ms: number) => {
+  return new Promise(resolve => setTimeout(resolve, ms));
+};
+
+function handleClose() {
+
+}
+
 </script>
 
 <template>
@@ -241,7 +300,7 @@ const tableRowClassName = ({row}: { row: any }) => {
       v-model="showDialog"
       title="支付订单"
       width=60%
-      @close=""
+      @close="handleClose"
       :close-on-click-modal="false"
       top="10vh"
   >
@@ -258,12 +317,12 @@ const tableRowClassName = ({row}: { row: any }) => {
     <el-row>
 
     </el-row>
-    <el-scrollbar height="500px">
-      <el-divider>
+    <el-scrollbar height="500px" ref="myScrollbar" @scroll="handleScroll">
+      <el-divider class="div">
         <el-text class="div-text">商品明细</el-text>
       </el-divider>
       <el-row justify="center">
-        <el-collapse v-model="activeNames" style="width: 90%">
+        <el-collapse v-model="activeNames" style="width: 90%" @change="handleScrollDelay">
           <el-collapse-item v-for="(item,index) in payDetailedInfo?.stores" :name="index">
             <template #title>
               <el-icon size="16" style="margin-right: 6px;margin-left: 5px; color: goldenrod">
@@ -332,11 +391,11 @@ const tableRowClassName = ({row}: { row: any }) => {
           </el-collapse-item>
         </el-collapse>
       </el-row>
-      <el-row>
-        <el-divider>
-          <el-text class="div-text">全局优惠</el-text>
-        </el-divider>
-      </el-row>
+
+      <el-divider class="div">
+        <el-text class="div-text">全局优惠</el-text>
+      </el-divider>
+
       <el-row justify="center">
         <el-table :data="payDetailedInfo?.coupons" style="width: 72%" :cell-style="{'text-align':'center'}"
                   :header-cell-style="{'text-align':'center',height:'50px'}"
@@ -373,17 +432,78 @@ const tableRowClassName = ({row}: { row: any }) => {
           </el-table-column>
         </el-table>
       </el-row>
-      <el-row>
-        <div style="height: 30px"></div>
+      <el-divider class="div">
+        <el-text class="div-text">收货方式</el-text>
+      </el-divider>
+      <el-row justify="center">
+        <el-card shadow="never" style="width: 80%">
+          <el-row justify="center">
+            <el-radio-group v-model="method">
+              <el-radio value="PICKUP" style="margin-left: 50px;margin-right: 130px">
+                <div style="display: flex;align-items: center">到店自提
+                  <el-icon size="large" style="margin-left: 10px">
+                    <Location/>
+                  </el-icon>
+                </div>
+              </el-radio>
+              <el-text style="color: silver">|</el-text>
+              <el-radio value="DELIVERY" style="margin-left: 130px;margin-right: 50px">
+                <div style="display: flex;align-items: center">快递送达
+                  <el-icon size="large" style="margin-left: 10px">
+                    <Van/>
+                  </el-icon>
+                </div>
+              </el-radio>
+            </el-radio-group>
+
+            <!--            <el-col :span="16">-->
+            <!--              <el-input :disabled="method=='PICKUP'" style="height: 100%" placeholder="填写详细地址"></el-input>-->
+            <!--            </el-col>-->
+          </el-row>
+
+        </el-card>
+
       </el-row>
     </el-scrollbar>
+    <el-row justify="center">
 
+      <transition name="el-fade-in-linear">
+        <div v-if="showTip" style="height: 25px;">
+          <el-icon style="margin-top: 5px;" size="large">
+            <ArrowDown/>
+          </el-icon>
+        </div>
+      </transition>
+      <div v-if="!showTip" style="height: 25px;">
+      </div>
+    </el-row>
 
     <template #footer>
-      <div class="dialog-footer" style="margin-top: 10px">
-        <el-button type="primary" @click="">付款</el-button>
-        <el-button @click="handleTest">取消</el-button>
-        <el-button @click="handleTest2">suan'jia'ge</el-button>
+      <div class="dialog-footer" style="margin-top: 5px">
+        <el-button @click="showDialog = false">取消</el-button>
+        <el-button type="primary" @click="submit">提交订单</el-button>
+
+      </div>
+    </template>
+  </el-dialog>
+
+  <el-dialog
+      v-model="showConfirm"
+      title="确认订单"
+      width=40%
+      @close="handleClose"
+      :close-on-click-modal="false"
+      style="height: 400px"
+  >
+    <div style="height: 200px"></div>
+    <el-row justify="center">
+      {{ orderId }}
+    </el-row>
+    <template #footer>
+      <div class="dialog-footer" style="margin-top: 5px">
+        <!--        <el-button @click="showDialog = false">取消</el-button>-->
+        <el-button type="primary" @click="toPay">付款</el-button>
+
       </div>
     </template>
   </el-dialog>
@@ -396,7 +516,11 @@ const tableRowClassName = ({row}: { row: any }) => {
 }
 
 .div-text {
-  color: #409eff;
+  color: cornflowerblue;
+}
+
+.div {
+  margin-top: 30px;
 }
 </style>
 

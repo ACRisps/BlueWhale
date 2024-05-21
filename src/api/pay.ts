@@ -25,6 +25,7 @@ export interface StorePayInfo {
 export interface PayInfo {
     stores: StorePayInfo[];
     couponId: number;
+    method: "DELIVERY" | "PICKUP";
 }
 
 // display
@@ -45,6 +46,7 @@ export interface StoreDisplayInfo {
 
 export interface PayDisplayInfo {
     stores: StoreDisplayInfo[];
+    method: "DELIVERY" | "PICKUP";
     coupons: any[];
     totalBefore: number;
     totalAfter: number;

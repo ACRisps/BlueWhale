@@ -40,7 +40,7 @@ export type OrderItemInfo = {
 export type OrderItemsInfo = OrderItemInfo[];
 
 export const uploadOrderItem00 = (payload: PayInfo) => {
-    return axios.post(`${ORDER_MODULE}/create`, payload)
+    return axios.post(`${ORDER_MODULE}/orderItems/create`, payload)
         .then(res => {
             return res;
         })
