@@ -63,7 +63,7 @@ function logout() {
         </el-icon>
         搜索
       </el-menu-item>
-      <el-menu-item index="/canary" v-if="role=='MANAGER'">
+      <el-menu-item index="/canary" v-if="role=='CUSTOMER'">
         <el-icon :size="20">
           <Orange/>
         </el-icon>

@@ -1,11 +1,20 @@
 <script setup lang="ts">
 import {onMounted, ref} from "vue";
-import {payCouponsInfo, payDisplayInfo} from "../api/coupon.ts";
+import {payDisplayInfo} from "../api/coupon.ts";
 import {ElTable} from "element-plus";
-import {getOrderItems} from "../api/orderContainer.ts";
-import {calculateBest, calculatePrice, PayDisplayInfo, PayInfo, ProductsPassInfo} from "../api/pay.ts";
-import {uploadOrderItem00} from "../api/orderItem.ts";
-import {CircleCheckFilled, CirclePlus, Remove, Goods, ArrowDown, Van, Location} from "@element-plus/icons-vue";
+import {PayDisplayInfo, PayInfo, ProductsPassInfo} from "../api/pay.ts";
+import {uploadOrderItem00} from "../api/orderContainer.ts";
+import {
+  CircleCheckFilled,
+  CirclePlus,
+  Remove,
+  Goods,
+  ArrowDown,
+  Van,
+  Location,
+  Wallet,
+  Clock
+} from "@element-plus/icons-vue";
 
 defineExpose({openDialog, getData});
 const emit = defineEmits(['payment-finish']);
@@ -19,15 +28,11 @@ const method = ref('PICKUP');
 
 const showDialog = ref(false);
 const showConfirm = ref(false);
+const showDuringPay = ref(false);
 
 const orderId = ref<string>();
 
-
 const paySuccess = ref(false);
-
-// const setCurrent = (row?: any) => {
-//   tableRef.value!.setCurrentRow(row);
-// };
 
 function refreshInfo() {
   payDisplayInfo(payBasicInfo.value).then(res => {
@@ -124,7 +129,7 @@ onMounted(() => {
       {productId: 4, num: 1, storeId: 14}
     ]
   });
-
+  handleScrollDelay();
 });
 
 function searchStoreId(payInfo: PayInfo, storeId: number) {
@@ -137,39 +142,6 @@ function searchStoreId(payInfo: PayInfo, storeId: number) {
   // console.log("src: " + storeId + ", find nothing");
   return -1;
 }
-
-// function loadCurrentPrice() {
-//   if (currentRow.value == null) {
-//     calculatePrice(orderId.value, []).then(res => {
-//       currentPrice.value = res.data.result;
-//     });
-//   } else {
-//     calculatePrice(orderId.value, [currentRow.value.id]).then(res => {
-//       currentPrice.value = res.data.result;
-//     });
-//   }
-// }
-
-// function loadBestPrice() {
-//   calculateBest(orderId.value).then(res => {
-//     if (res.data.code == '000') {
-//       ElMessage({
-//         message: "已自动选择最优优惠",
-//         type: "success",
-//         center: true,
-//       });
-//       bestCouponId.value = res.data.result;
-//       // console.log("best");
-//       // console.log(bestCouponId.value);
-//       for (let i in couponData.value) {
-//         if (couponData.value[i].id == bestCouponId.value.id) {
-//         }
-//         setCurrent(couponData.value[i]);
-//       }
-//     }
-//
-//   });
-// }
 
 function submit() {
   uploadOrderItem00(payBasicInfo.value).then(res => {
@@ -195,8 +167,11 @@ function submit() {
 }
 
 function toPay() {
+  showConfirm.value = false;
   window.open(`http://localhost:8080/api/pay/payMultiOrder?multiOrderId=`
       + orderId.value, "_blank");
+
+  showDuringPay.value = true;
 }
 
 
@@ -220,13 +195,6 @@ function couponContentFormatter(row: any) {
   }
 }
 
-
-function handleTest() {
-  uploadOrderItem00(payBasicInfo.value).then(res => {
-    console.log(res);
-  });
-
-}
 
 function calculateShowClear(storeId: number) {
   if (storeId == 0) {
@@ -291,6 +259,11 @@ function handleClose() {
 
 }
 
+
+function handlePayComplete() {
+  showDuringPay.value = false;
+}
+
 </script>
 
 <template>
@@ -298,11 +271,12 @@ function handleClose() {
 
   <el-dialog
       v-model="showDialog"
-      title="支付订单"
+      title="订单"
       width=60%
       @close="handleClose"
       :close-on-click-modal="false"
       top="10vh"
+      style="border-radius: 10px;"
   >
     <el-row justify="center">
       <el-col style="text-align: center">
@@ -353,7 +327,7 @@ function handleClose() {
             <el-row justify="center">
               <el-table :data="item.coupons" style="width: 80%" :cell-style="{'text-align':'center'}"
                         :header-cell-style="{'text-align':'center',height:'50px'}"
-                        empty-text="无可用优惠"
+                        empty-text="暂无可用优惠 >_<"
                         @row-click="row=>handleRowSelect(row)" :row-class-name="tableRowClassName"
                         max-height="250">
                 <el-table-column prop="couponType" label="优惠类型" :formatter="couponTypeFormatter"/>
@@ -391,7 +365,6 @@ function handleClose() {
           </el-collapse-item>
         </el-collapse>
       </el-row>
-
       <el-divider class="div">
         <el-text class="div-text">全局优惠</el-text>
       </el-divider>
@@ -399,7 +372,7 @@ function handleClose() {
       <el-row justify="center">
         <el-table :data="payDetailedInfo?.coupons" style="width: 72%" :cell-style="{'text-align':'center'}"
                   :header-cell-style="{'text-align':'center',height:'50px'}"
-                  empty-text="无可用优惠" :row-class-name="tableRowClassName"
+                  empty-text="暂无可用优惠 >_<" :row-class-name="tableRowClassName"
                   @row-click="row=>handleRowSelect(row)" max-height="250">
           <el-table-column prop="couponType" label="优惠类型" :formatter="couponTypeFormatter"/>
           <el-table-column prop="expiredTime" label="截止日期"/>
@@ -493,7 +466,7 @@ function handleClose() {
       width=40%
       @close="handleClose"
       :close-on-click-modal="false"
-      style="height: 400px"
+      style="border-radius: 9px;"
   >
     <div style="height: 200px"></div>
     <el-row justify="center">
@@ -507,6 +480,41 @@ function handleClose() {
       </div>
     </template>
   </el-dialog>
+
+  <el-dialog
+      v-model="showDuringPay"
+      title="等待完成支付"
+      width=40%
+      :close-on-click-modal="false"
+      style="border-radius: 9px;"
+  >
+    <el-row justify="center">
+      <div style="margin-top: 20px;margin-bottom: 20px">
+        <el-icon :size="20">
+          <Wallet/>
+        </el-icon>
+        ` ` `
+        <el-icon :size="20">
+          <Clock/>
+        </el-icon>
+      </div>
+
+    </el-row>
+    <el-row justify="center">
+      <el-text style="margin-bottom: 20px">请在外部页面完成支付，支付完成后请点击“我已完成支付”</el-text>
+    </el-row>
+    <el-row justify="center"></el-row>
+
+    <template #footer>
+      <div style="text-align: center">
+        <el-button type="primary" @click="handlePayComplete" plain>
+          我已完成支付
+        </el-button>
+      </div>
+    </template>
+  </el-dialog>
+
+
 </template>
 
 <style scoped>
@@ -520,7 +528,9 @@ function handleClose() {
 }
 
 .div {
-  margin-top: 30px;
+  margin: 30px auto 30px;
+  width: 96%;
+
 }
 </style>
 

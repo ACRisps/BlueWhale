@@ -120,7 +120,7 @@ const router = createRouter({
                 component: () => import('../views/Canary.vue'),
                 meta: {
                     title: 'Canary',
-                    permission: ['MANAGER']
+                    permission: ['CUSTOMER']
                 }
             },
         ]

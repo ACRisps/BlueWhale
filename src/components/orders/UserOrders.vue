@@ -264,7 +264,6 @@ function parseState(stateStr: string): string {
       v-model="showDuringPay"
       title="等待完成支付"
       width=40%
-      :before-close="handleDialogClose"
       :close-on-click-modal="false"
   >
     <el-row justify="center">

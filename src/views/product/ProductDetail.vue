@@ -3,14 +3,12 @@
 
 import {onMounted, ref} from "vue";
 import {ProductInfo, productInfoDetail, uploadProductNumUpdate} from "../../api/product.ts";
-import {uploadOrderItem} from "../../api/orderItem.ts";
 
-import {uploadOrderContainer} from "../../api/orderContainer.ts";
 import {useRoute} from "vue-router";
 import {ArrowLeft, ChatLineSquare} from "@element-plus/icons-vue";
 import {parseTime} from "../../utils";
 
-import PayDialog from "../../components/PayDialog.vue";
+import PayDialog from "../../components/PayDialogPlus.vue";
 
 
 const productDetail = ref({} as ProductInfo);
@@ -22,15 +20,10 @@ const storeId = (Number)(sessionStorage.getItem('userStoreId'));
 let newNumber = ref();
 let showNumUpdateInput = ref(false);
 
-let showBuyOptions = ref(false);
-let useDelivery = ref(true);
+
 let buyNum = ref(1);
 
-
-let phone = String(sessionStorage.getItem("phone"));
 let productPrice = ref();
-let state = ref();
-let address = ref();
 
 const payDialog = ref();
 
@@ -76,145 +69,70 @@ function handleNumDialogConfirm() {
   });
 }
 
-function getMethod() {
-  if (useDelivery.value) {
-    return "DELIVERY";
-  } else {
-    return "PICKUP";
-  }
-}
-
-function handlePayLater() {
-  uploadOrderItem
-  ({
-        productName: productDetail.value.productName,
-        storeId: productDetail.value.storeId,
-        productPrice: productDetail.value.price,
-        productNumber: buyNum.value,
-        orderSerialNumber: "",
-        deliverSerialNumber: "",
-        total: String(parseFloat(productPrice.value) * buyNum.value),
-        productId: productDetail.value.productId,
-        imgURL: productDetail.value.imgURLs[0],
-        userPhone: phone,
-        method: getMethod(),
-        state: state.value,
-        address: address.value
-      }
-  ).then(res => {
-        if (res.data.code == '000') {
-          let orders = ref([] as String[]);
-          orders.value.push(res.data.result);
-          //应该再包装成大订单
-          uploadOrderContainer({
-            orders: orders.value,
-            method: getMethod(),
-            state: state.value,
-            totalAfterCoupon: String(parseFloat(productPrice.value) * buyNum.value),
-            totalBeforeCoupon: String(parseFloat(productPrice.value) * buyNum.value),
-            userPhone: phone,
-            address: address.value,
-            storeId: storeId
-          }).then(res => {
-            if (res.data.code == '000') {
-              {
-                showBuyOptions.value = false;
-                buyNum.value = 1;
-              }
-              ElMessage({
-                message: "订单提交成功，可稍后支付",
-                type: 'success',
-                center: true,
-              });
-            } else {
-              ElMessage({
-                message: "提交失败（" + res.data.msg + "）",
-                type: 'warning',
-                center: true,
-              });
-            }
-          });
-        }
-      }
-  );
-}
 
 function handlePayImmediately() {
-  uploadOrderItem
-  ({
-        productName: productDetail.value.productName,
-        storeId: productDetail.value.storeId,
-        productPrice: productDetail.value.price,
-        productNumber: buyNum.value,
-        orderSerialNumber: "",
-        deliverSerialNumber: "",
-        total: String(parseFloat(productPrice.value) * buyNum.value),
-        productId: productDetail.value.productId,
-        imgURL: productDetail.value.imgURLs[0],
-        userPhone: phone,
-        method: getMethod(),
-        state: state.value,
-        address: address.value
-      }
-  ).then(res => {
-        if (res.data.code == '000') {
-          let orders = ref([] as String[]);
-          orders.value.push(res.data.result);
-          //应该再包装成大订单
-          uploadOrderContainer({
-            orders: orders.value,
-            method: getMethod(),
-            state: state.value,
-            storeId: productDetail.value.storeId,
-            totalAfterCoupon: String(parseFloat(productPrice.value) * buyNum.value),
-            totalBeforeCoupon: String(parseFloat(productPrice.value) * buyNum.value),
-            userPhone: phone,
-            address: address.value
-          }).then(res => {
-            if (res.data.code == '000') {
-              {
-                showBuyOptions.value = false;
-                buyNum.value = 1;
-              }
-              ElMessage({
-                message: "订单已提交，等待支付",
-                type: 'success',
-                center: true,
-              });
-              callPayDialog();
-              payDialog.value.getData(res.data.result);
-              // uploadPay(res.data.result).then(res => {
-              //   if (res.data.code == '000') {
-              //     ElMessage({
-              //       message: "购买成功",
-              //       type: "success",
-              //       center: true,
-              //     });
-              //   } else {
-              //     ElMessage({
-              //       message: "支付失败（" + res.data.msg + "）",
-              //       type: 'warning',
-              //       center: true,
-              //     });
-              //   }
-              // });
-            } else {
-              ElMessage({
-                message: "产生订单失败（" + res.data.msg + "）",
-                type: 'warning',
-                center: true,
-              });
-            }
-          });
-        }
-      }
-  );
-}
-
-function callPayDialog() {
-  showBuyOptions.value = false;
+  payDialog.value.getData({
+    products: [
+      {productId: productDetail.value.productId, num: buyNum, storeId: productDetail.value.storeId},
+    ]
+  });
   payDialog.value.openDialog();
 
+  //
+  // uploadOrderItem
+  // ({
+  //       productName: productDetail.value.productName,
+  //       storeId: productDetail.value.storeId,
+  //       productPrice: productDetail.value.price,
+  //       productNumber: buyNum.value,
+  //       orderSerialNumber: "",
+  //       deliverSerialNumber: "",
+  //       total: String(parseFloat(productPrice.value) * buyNum.value),
+  //       productId: productDetail.value.productId,
+  //       imgURL: productDetail.value.imgURLs[0],
+  //       userPhone: phone,
+  //       method: getMethod(),
+  //       state: state.value,
+  //       address: address.value
+  //     }
+  // ).then(res => {
+  //       if (res.data.code == '000') {
+  //         let orders = ref([] as String[]);
+  //         orders.value.push(res.data.result);
+  //         //应该再包装成大订单
+  //         uploadOrderContainer({
+  //           orders: orders.value,
+  //           method: getMethod(),
+  //           state: state.value,
+  //           storeId: productDetail.value.storeId,
+  //           totalAfterCoupon: String(parseFloat(productPrice.value) * buyNum.value),
+  //           totalBeforeCoupon: String(parseFloat(productPrice.value) * buyNum.value),
+  //           userPhone: phone,
+  //           address: address.value
+  //         }).then(res => {
+  //           if (res.data.code == '000') {
+  //             {
+  //               showBuyOptions.value = false;
+  //               buyNum.value = 1;
+  //             }
+  //             ElMessage({
+  //               message: "订单已提交，等待支付",
+  //               type: 'success',
+  //               center: true,
+  //             });
+  //             callPayDialog();
+  //             payDialog.value.getData(res.data.result);
+  //           } else {
+  //             ElMessage({
+  //               message: "产生订单失败（" + res.data.msg + "）",
+  //               type: 'warning',
+  //               center: true,
+  //             });
+  //           }
+  //         });
+  //       }
+  //     }
+  // );
 }
 
 function handlePaymentFinish() {
@@ -273,14 +191,20 @@ function handlePaymentFinish() {
       <el-row style="height: 40%"></el-row>
 
       <el-row justify="center" style="margin: 10px">
-        <el-col :span="24" class="price">
-          <el-text size="large">ONLY {{ productDetail.price }} ¥!
-          </el-text>
-        </el-col>
-        <el-col :span="24" style="text-align: center">
-          <el-button type="primary" v-if="role=='CUSTOMER'" @click="showBuyOptions=true">立即购买</el-button>
-        </el-col>
+        <el-text size="large">ONLY {{ productDetail.price }} ¥&nbsp;!
+        </el-text>
       </el-row>
+      <el-row justify="center" style="margin-top: 20px">
+
+      </el-row>
+
+      <el-row justify="center" style="margin: 10px">
+        <el-input-number v-model="buyNum" :min="1" :max="100" size="small" style="width: 100px"/>
+        <div style="display: flex;width: 20px"></div>
+        <el-button type="primary" v-if="role=='CUSTOMER'" @click="handlePayImmediately" style="width: 100px">立即购买
+        </el-button>
+      </el-row>
+
 
     </el-aside>
 
@@ -335,37 +259,12 @@ function handlePaymentFinish() {
     </template>
   </el-dialog>
 
-  <el-dialog
-      v-model="showBuyOptions"
-      title="选择数量和提货方式"
-      width=40%
-  >
-    <el-row justify="center">
-      <el-switch v-model="useDelivery" active-text="快递送达" inactive-text="到店自提"
-                 style="--el-switch-off-color: #13ce66"/>
-    </el-row>
-    <br>
-    <el-row justify="center">
-      <el-input-number v-model="buyNum" :min="1" :max="100" size="small"/>
-    </el-row>
-    <template #footer>
-      <div class="dialog-footer">
-        <el-button type="primary" @click="handlePayLater">提交订单</el-button>
-        <el-button type="primary" @click="handlePayImmediately">立即支付</el-button>
-        <el-button @click="showBuyOptions=false">取消</el-button>
-      </div>
-    </template>
-  </el-dialog>
 
   <PayDialog ref="payDialog" @payment-finish="handlePaymentFinish"></PayDialog>
 </template>
 
 
 <style scoped>
-.price {
-  text-align: center;
-  margin: 20px;
-}
 
 .grade-stars {
   margin-top: 1px;
