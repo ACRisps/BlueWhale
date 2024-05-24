@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import {onMounted, ref} from "vue";
-import {payCouponsInfo} from "../api/coupon.ts";
+import {payCouponsInfo} from "../../api/coupon.ts";
 import {CirclePlus, CircleCheckFilled, Remove} from "@element-plus/icons-vue";
 import {ElTable} from "element-plus";
-import {getOrderItems} from "../api/orderContainer.ts";
-import {calculateBest, calculatePrice} from "../api/pay.ts";
+import {getOrderItems} from "../../api/orderContainer.ts";
+import {calculateBest, calculatePrice} from "../../api/pay.ts";
 
 defineExpose({openDialog, getData});
 const emit = defineEmits(['payment-finish']);

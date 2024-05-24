@@ -8,7 +8,7 @@ import {useRoute} from "vue-router";
 import {ArrowLeft, ChatLineSquare} from "@element-plus/icons-vue";
 import {parseTime} from "../../utils";
 
-import PayDialog from "../../components/PayDialogPlus.vue";
+import PayDialog from "../../components/pay/PayDialogPlus.vue";
 
 
 const productDetail = ref({} as ProductInfo);

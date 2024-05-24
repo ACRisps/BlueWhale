@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import {onMounted, ref} from 'vue';
 import {type OrderItemsInfo, orderItemPageInfo, orderItemGet} from '../../api/orderItem.ts';
-import {Wallet, Clock} from "@element-plus/icons-vue";
 import {uploadCommemt} from "../../api/comment.ts";
 import "../../style/base.css";
+import ConfirmDialog from "../pay/PayConfirmDialog.vue";
 
 
 const orderList = ref([] as OrderItemsInfo);
@@ -61,6 +61,8 @@ function handleToGet(orderSerialNumber: string) {
   });
 }
 
+const confirmDialog = ref();
+
 function handleToPay(orderSerialNumber: string) {
   // uploadPayItem(orderSerialNumber).then(res => {
   //   console.log(res.data);
@@ -79,9 +81,8 @@ function handleToPay(orderSerialNumber: string) {
   //   //   });
   //   // }
   // });
-  showDuringPay.value = true;
-  window.open(`http://localhost:8080/api/pay/payOrderItem?orderSerialNumber=` + orderSerialNumber, "_blank");
-
+  confirmDialog.value.getData(orderSerialNumber);
+  confirmDialog.value.openDialog();
 }
 
 function handlePayComplete() {
@@ -260,38 +261,8 @@ function parseState(stateStr: string): string {
     </template>
   </el-dialog>
 
-  <el-dialog
-      v-model="showDuringPay"
-      title="等待完成支付"
-      width=40%
-      :close-on-click-modal="false"
-      style="border-radius: 9px;"
-  >
-    <el-row justify="center">
-      <div style="margin-top: 20px;margin-bottom: 20px">
-        <el-icon :size="20">
-          <Wallet/>
-        </el-icon>
-        ` ` `
-        <el-icon :size="20">
-          <Clock/>
-        </el-icon>
-      </div>
 
-    </el-row>
-    <el-row justify="center">
-      <el-text style="margin-bottom: 20px">请在外部页面完成支付，支付完成后请点击“我已完成支付”</el-text>
-    </el-row>
-    <el-row justify="center"></el-row>
-
-    <template #footer>
-      <div style="text-align: center">
-        <el-button type="primary" @click="handlePayComplete" plain>
-          我已完成支付
-        </el-button>
-      </div>
-    </template>
-  </el-dialog>
+  <ConfirmDialog ref="confirmDialog" @complete="handlePayComplete"></ConfirmDialog>
 
 </template>
 

@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import {onMounted, ref} from "vue";
-import {payDisplayInfo} from "../api/coupon.ts";
+import {payDisplayInfo} from "../../api/coupon.ts";
 import {ElTable} from "element-plus";
-import {PayDisplayInfo, PayInfo, ProductsPassInfo} from "../api/pay.ts";
-import {uploadOrderItem00} from "../api/orderContainer.ts";
+import {PayDisplayInfo, PayInfo, ProductsPassInfo} from "../../api/pay.ts";
+import {uploadOrderItem00} from "../../api/orderContainer.ts";
 import {
   CircleCheckFilled,
   CirclePlus,
@@ -12,9 +12,11 @@ import {
   ArrowDown,
   Van,
   Location,
-  Wallet,
-  Clock
 } from "@element-plus/icons-vue";
+
+import ConfirmDialog from "../../components/pay/PayConfirmDialog.vue";
+
+const confirmDialog = ref();
 
 defineExpose({openDialog, getData});
 const emit = defineEmits(['payment-finish']);
@@ -27,12 +29,6 @@ const activeNames = ref([0]);
 const method = ref('PICKUP');
 
 const showDialog = ref(false);
-const showConfirm = ref(false);
-const showDuringPay = ref(false);
-
-const orderId = ref<string>();
-
-const paySuccess = ref(false);
 
 function refreshInfo() {
   payDisplayInfo(payBasicInfo.value).then(res => {
@@ -153,8 +149,8 @@ function submit() {
       });
       console.log(res.data);
       showDialog.value = false;
-      showConfirm.value = true;
-      orderId.value = res.data.result;
+      confirmDialog.value.getData(res.data.result);
+      confirmDialog.value.openDialog();
     } else {
       console.log(res.data.msg);
       ElMessage({
@@ -164,14 +160,6 @@ function submit() {
       });
     }
   });
-}
-
-function toPay() {
-  showConfirm.value = false;
-  window.open(`http://localhost:8080/api/pay/payMultiOrder?multiOrderId=`
-      + orderId.value, "_blank");
-
-  showDuringPay.value = true;
 }
 
 
@@ -259,10 +247,6 @@ function handleClose() {
 
 }
 
-
-function handlePayComplete() {
-  showDuringPay.value = false;
-}
 
 </script>
 
@@ -460,60 +444,7 @@ function handlePayComplete() {
     </template>
   </el-dialog>
 
-  <el-dialog
-      v-model="showConfirm"
-      title="确认订单"
-      width=40%
-      @close="handleClose"
-      :close-on-click-modal="false"
-      style="border-radius: 9px;"
-  >
-    <div style="height: 200px"></div>
-    <el-row justify="center">
-      {{ orderId }}
-    </el-row>
-    <template #footer>
-      <div class="dialog-footer" style="margin-top: 5px">
-        <!--        <el-button @click="showDialog = false">取消</el-button>-->
-        <el-button type="primary" @click="toPay">付款</el-button>
-
-      </div>
-    </template>
-  </el-dialog>
-
-  <el-dialog
-      v-model="showDuringPay"
-      title="等待完成支付"
-      width=40%
-      :close-on-click-modal="false"
-      style="border-radius: 9px;"
-  >
-    <el-row justify="center">
-      <div style="margin-top: 20px;margin-bottom: 20px">
-        <el-icon :size="20">
-          <Wallet/>
-        </el-icon>
-        ` ` `
-        <el-icon :size="20">
-          <Clock/>
-        </el-icon>
-      </div>
-
-    </el-row>
-    <el-row justify="center">
-      <el-text style="margin-bottom: 20px">请在外部页面完成支付，支付完成后请点击“我已完成支付”</el-text>
-    </el-row>
-    <el-row justify="center"></el-row>
-
-    <template #footer>
-      <div style="text-align: center">
-        <el-button type="primary" @click="handlePayComplete" plain>
-          我已完成支付
-        </el-button>
-      </div>
-    </template>
-  </el-dialog>
-
+  <ConfirmDialog ref="confirmDialog" @complete=""></ConfirmDialog>
 
 </template>
 
@@ -535,7 +466,7 @@ function handlePayComplete() {
 </style>
 
 <style>
-.el-table .success-row {
+.el-table.success-row {
   --el-table-tr-bg-color: var(--el-color-success-light-9);
 }
 </style>

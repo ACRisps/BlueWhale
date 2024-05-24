@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import PayDialogPlus from "../components/PayDialogPlus.vue";
+import PayDialogPlus from "../components/pay/PayDialogPlus.vue";
 import {onMounted, ref} from "vue";
 
 const payDialogPlus = ref();
