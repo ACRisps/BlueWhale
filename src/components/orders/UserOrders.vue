@@ -265,9 +265,10 @@ function parseState(stateStr: string): string {
       title="等待完成支付"
       width=40%
       :close-on-click-modal="false"
+      style="border-radius: 9px;"
   >
     <el-row justify="center">
-      <div style="margin: 5px">
+      <div style="margin-top: 20px;margin-bottom: 20px">
         <el-icon :size="20">
           <Wallet/>
         </el-icon>
@@ -279,7 +280,7 @@ function parseState(stateStr: string): string {
 
     </el-row>
     <el-row justify="center">
-      <el-text>请在外部页面完成支付，支付完成后请点击“我已完成支付”</el-text>
+      <el-text style="margin-bottom: 20px">请在外部页面完成支付，支付完成后请点击“我已完成支付”</el-text>
     </el-row>
     <el-row justify="center"></el-row>
 

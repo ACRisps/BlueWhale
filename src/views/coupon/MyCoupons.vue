@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import {onMounted, ref} from "vue";
 import {userCouponsInfo,} from "../../api/coupon.ts";
+import {ArrowRight} from "@element-plus/icons-vue";
+import {router} from "../../router";
 
 const couponData = ref();
 
@@ -47,7 +49,6 @@ function couponContentFormatter(row: any) {
 }
 
 
-
 </script>
 
 <template>
@@ -56,10 +57,21 @@ function couponContentFormatter(row: any) {
       <div class="title">在这里查看已领取的优惠券</div>
     </el-row>
     <el-row justify="center">
-      <el-table :data="couponData" class="coupon-table"  :cell-style="{'text-align':'center'}"
+      <el-table :data="couponData" class="coupon-table" :cell-style="{'text-align':'center'}"
                 :header-cell-style="{'text-align':'center'}">
         <el-table-column prop="couponType" label="优惠类型" :formatter="couponTypeFormatter"/>
-        <el-table-column prop="storeName" label="所属商店"/>
+        <el-table-column prop="storeName" label="所属商店" width="180px">
+          <template #default="scope">
+            <el-link @click="router.push('/storeDetail/'+scope.row.storeId)">
+              <el-text>{{ scope.row.storeName }}</el-text>
+              <el-text size="small">
+                <el-icon>
+                  <ArrowRight/>
+                </el-icon>
+              </el-text>
+            </el-link>
+          </template>
+        </el-table-column>
         <el-table-column prop="effectiveTime" label="生效日期"/>
         <el-table-column prop="expiredTime" label="截止日期"/>
         <el-table-column label="折扣明细" :formatter="couponContentFormatter"/>
