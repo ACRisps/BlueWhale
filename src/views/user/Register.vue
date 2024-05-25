@@ -241,6 +241,7 @@ function handleRegister() {
 .login-card {
   width: 60%;
   padding: 10px;
+  border-radius: 10px;
 }
 
 .error-warn {

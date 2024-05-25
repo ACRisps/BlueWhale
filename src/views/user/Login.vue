@@ -61,7 +61,7 @@ function handleLogin() {
   <el-main class="main-frame bg-image">
     <el-card class="login-card">
       <div>
-        <h1>登入您的账户</h1>
+        <h1>登入您的<span style="color: cornflowerblue">BlueWhale</span>账户&nbsp;.&nbsp;.&nbsp;.</h1>
         <el-form>
           <el-form-item>
             <label v-if="!hasTelInput" for="tel">注册手机号</label>
@@ -109,8 +109,9 @@ function handleLogin() {
 }
 
 .login-card {
-  width: 60%;
+  width: 40%;
   padding: 10px;
+  border-radius: 10px;
 }
 
 .error-warn {
