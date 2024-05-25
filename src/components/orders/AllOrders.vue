@@ -1,8 +1,7 @@
 <script setup lang="ts">
 import {onMounted, ref} from 'vue';
 import {type OrderItemsInfo, orderItemPageInfo} from '../../api/orderItem.ts';
-import "../../style/base.css"
-
+import "../../style/base.css";
 
 
 const orderList = ref([] as OrderItemsInfo);
@@ -64,7 +63,7 @@ onMounted(() => {
           <template #header>
             <el-row>
               <el-col :span="22">
-                {{ order.productName }}
+                <el-text size="large">{{ order.productName }}</el-text>
                 <el-text>&nbsp;*{{ order.productNumber }}</el-text>
               </el-col>
               <el-col :span="2">

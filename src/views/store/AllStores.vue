@@ -36,7 +36,7 @@ onMounted(() => {
   <el-main class="page-main">
     <div v-for="store in storeList">
       <el-row justify="center">
-        <el-card style="width: 800px" class="card">
+        <el-card style="width: 800px" class="card" shadow="never">
           <template #header>
             <el-row>
               <el-col :span="22">

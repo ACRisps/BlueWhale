@@ -3,7 +3,7 @@
 
 import {onMounted, ref} from "vue";
 import {ProductInfo, productInfoDetail, uploadProductNumUpdate} from "../../api/product.ts";
-
+import {router} from "../../router";
 import {useRoute} from "vue-router";
 import {ArrowLeft, ChatLineSquare} from "@element-plus/icons-vue";
 import {parseTime} from "../../utils";
@@ -149,19 +149,24 @@ function handlePaymentFinish() {
   <el-container>
     <!--商品详情的一部分内容放在侧边栏里-->
     <el-aside width="25%" class="page-aside">
-      <el-row justify="center" align="middle">
-        <el-col :span="4">
-          <router-link :to="'/storeDetail/'+productDetail.storeId" v-slot="{navigate}">
-            <el-icon class="arrow" @click="navigate">
+
+      <el-row justify="center" align="middle" style="margin-top: 10px;margin-bottom: 20px">
+        <el-col :span="1"></el-col>
+        <el-col :span="3" style="text-align: center">
+          <el-button circle>
+            <el-icon @click="router.push('/storeDetail/'+productDetail.storeId)" :size="20">
               <ArrowLeft/>
             </el-icon>
-          </router-link>
+          </el-button>
         </el-col>
-        <el-col :span="16">
-          <div class="productTitle">{{ productDetail.productName }}</div>
+
+        <el-col :span="17" style="text-align: center">
+          <el-text style="font-size: 17px;color: cornflowerblue;">{{ productDetail.productName }}</el-text>
         </el-col>
-        <el-col :span="4"></el-col>
+        <el-col :span="3"></el-col>
       </el-row>
+
+
       <el-row justify="center" class="grade-stars">
         <el-rate
             v-model="grade"
@@ -246,9 +251,13 @@ function handlePaymentFinish() {
       v-model="showNumUpdateInput"
       title="修改商品库存数"
       width="500"
+      style="border-radius: 9px"
   >
-    <el-input v-model="newNumber" class="input"
-              type="textarea" :rows="1" resize="none"/>
+    <el-row justify="center">
+      <el-input v-model="newNumber" style="width: 70%"
+                type="number"/>
+    </el-row>
+    <div style="height: 20px"></div>
     <template #footer>
       <div class="dialog-footer">
         <el-button @click="handleNumDialogCancel">取消</el-button>
@@ -280,12 +289,6 @@ function handlePaymentFinish() {
   color: dodgerblue;
 }
 
-.arrow {
-  font-size: 25px;
-  margin-top: 16px;
-  margin-left: 8px;
-  margin-bottom: 25px;
-}
 
 .page-aside {
   border-right: lightgrey solid 1px;
@@ -305,13 +308,6 @@ function handlePaymentFinish() {
 }
 
 
-.productTitle {
-  color: cornflowerblue;
-  font-size: 20px;
-  margin-top: 15px;
-  margin-bottom: 25px;
-  text-align: center;
-}
 
 .description {
   margin: 20px;

@@ -80,7 +80,7 @@ function parseState(stateStr: string): string {
           <template #header>
             <el-row>
               <el-col :span="21">
-                {{ order.productName }}
+                <el-text size="large">{{ order.productName }}</el-text>
                 <el-text>&nbsp;*{{ order.productNumber }}</el-text>
               </el-col>
               <el-col :span="3" style="text-align: center">

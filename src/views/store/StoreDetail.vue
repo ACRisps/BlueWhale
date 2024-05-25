@@ -107,19 +107,22 @@ function getCouponCnt() {
 <template>
   <el-container>
     <el-aside width="25%" class="page-aside">
-      <el-row justify="center" align="middle">
-        <el-col :span="4">
-          <router-link :to="'/allStore'" v-slot="{navigate}">
-            <el-icon class="arrow" @click="navigate">
+
+      <el-row justify="center" align="middle" style="margin-top: 10px;margin-bottom: 20px">
+        <el-col :span="1"></el-col>
+        <el-col :span="3" style="text-align: center">
+          <el-button circle>
+            <el-icon @click="router.push('/allStore')" :size="20">
               <ArrowLeft/>
             </el-icon>
-          </router-link>
+          </el-button>
         </el-col>
-        <el-col :span="16">
-          <div class="storeTitle">{{ storeDetail.storeName }}</div>
+        <el-col :span="17" style="text-align: center">
+          <el-text style="font-size: 17px;color: cornflowerblue;">{{ storeDetail.storeName }}</el-text>
         </el-col>
-        <el-col :span="4"></el-col>
+        <el-col :span="3"></el-col>
       </el-row>
+
       <el-row justify="center" class="grade-stars">
         <el-rate
             v-model="grade"
@@ -258,28 +261,12 @@ function getCouponCnt() {
   overflow-y: scroll;
 }
 
-
-.storeTitle {
-  color: cornflowerblue;
-  font-size: 20px;
-  margin-top: 15px;
-  margin-bottom: 25px;
-  text-align: center;
-}
-
 .storeImg {
   width: 320px;
   height: 300px;
   margin-left: 20px;
   margin-right: 20px;
   max-height: 360px;
-}
-
-.arrow {
-  font-size: 25px;
-  margin-top: 16px;
-  margin-left: 8px;
-  margin-bottom: 25px;
 }
 
 .description {
