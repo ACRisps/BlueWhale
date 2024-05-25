@@ -118,8 +118,14 @@ function handleClearFilter() {
 
 <template>
   <el-main>
-    <el-row justify="center" v-if="!showDetail">
-      <el-image style="height: 200px" src="../../../material/logo.png"></el-image>
+    <el-row justify="center" v-if="!showDetail" style="height: 240px">
+      <img
+          style="width: 100px"
+          src="/src/assets/blueWhale.svg"
+          alt="Element logo"
+      />
+      <el-text style="font-size: 50px;margin: 5px;font-family:fantasy">BlueWhale Search&nbsp;&nbsp;&nbsp;</el-text>
+
     </el-row>
     <el-row justify="center">
       <el-input

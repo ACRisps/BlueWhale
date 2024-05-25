@@ -15,9 +15,15 @@ const router = createRouter({
         meta: {title: '用户注册'}
     }, {
         path: '/home',
-        redirect: '/allStore',
+        redirect: '/homePage',
         component: () => import('../views/Home.vue'),
         children: [
+            {
+                path: '/homePage',
+                name: 'homePage',
+                component: () => import('../views/HomePage.vue'),
+                meta: {title: '首页'}
+            },
             {
                 path: '/dashboard',
                 name: 'Dashboard',
@@ -29,7 +35,7 @@ const router = createRouter({
                 path: '/allStore',
                 name: 'allStore',
                 component: () => import('../views/store/AllStores.vue'),
-                meta: {title: '商品列表界面/主页'}
+                meta: {title: '商品列表'}
             },
             //你也可以把创建商店界面改成一个弹窗
             {

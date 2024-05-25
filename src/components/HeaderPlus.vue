@@ -50,7 +50,7 @@ function logout() {
         :ellipsis-icon="Menu"
         :ellipsis="false"
     >
-      <el-menu-item index="/allStore"><img
+      <el-menu-item index="/homePage"><img
           style="width: 30px"
           src="/src/assets/blueWhale.svg"
           alt="Element logo"

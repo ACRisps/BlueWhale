@@ -85,7 +85,7 @@ function handleRegister() {
 
 
 <template>
-  <el-main class="main-frame bgimage">
+  <el-main class="main-frame bg-image">
     <el-card class="login-card">
       <div>
         <h1>创建一个新的账户</h1>
@@ -234,7 +234,7 @@ function handleRegister() {
   justify-content: center;
 }
 
-.bgimage {
+.bg-image {
   background-image: url("../../assets/shopping-1s-1084px.svg");
 }
 
