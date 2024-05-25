@@ -239,7 +239,7 @@ function handleRegister() {
 }
 
 .login-card {
-  width: 60%;
+  width: 55%;
   padding: 10px;
   border-radius: 10px;
 }
