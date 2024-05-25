@@ -81,4 +81,7 @@ declare module 'vue' {
     UserCoupons: typeof import('./src/components/coupon-view/UserCoupons.vue')['default']
     UserOrders: typeof import('./src/components/orders/UserOrders.vue')['default']
   }
+  export interface ComponentCustomProperties {
+    vLoading: typeof import('element-plus/es')['ElLoadingDirective']
+  }
 }

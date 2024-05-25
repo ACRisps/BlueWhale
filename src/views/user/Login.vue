@@ -42,7 +42,7 @@ function handleLogin() {
 
         sessionStorage.setItem('role', res.data.result.role);
         sessionStorage.setItem('userStoreId', res.data.result.storeId);
-        router.push({path: "/allStore"});
+        router.push({path: "/home"});
       });
     } else if (res.data.code === '400') {
       ElMessage({

@@ -198,10 +198,10 @@ function handlePaymentFinish() {
 
       </el-row>
 
-      <el-row justify="center" style="margin: 10px">
+      <el-row justify="center" style="margin: 10px" v-if="role=='CUSTOMER'">
         <el-input-number v-model="buyNum" :min="1" :max="100" size="small" style="width: 100px"/>
         <div style="display: flex;width: 20px"></div>
-        <el-button type="primary" v-if="role=='CUSTOMER'" @click="handlePayImmediately" style="width: 100px">立即购买
+        <el-button type="primary" @click="handlePayImmediately" style="width: 100px">立即购买
         </el-button>
       </el-row>
 
@@ -260,7 +260,7 @@ function handlePaymentFinish() {
   </el-dialog>
 
 
-  <PayDialog ref="payDialog" @payment-finish="handlePaymentFinish"></PayDialog>
+  <PayDialog v-if="role=='CUSTOMER'" ref="payDialog" @payment-finish="handlePaymentFinish"></PayDialog>
 </template>
 
 

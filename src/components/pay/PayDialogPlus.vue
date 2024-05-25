@@ -3,7 +3,7 @@ import {onMounted, ref} from "vue";
 import {payDisplayInfo} from "../../api/coupon.ts";
 import {ElTable} from "element-plus";
 import {PayDisplayInfo, PayInfo, ProductsPassInfo} from "../../api/pay.ts";
-import {uploadOrderItem00} from "../../api/orderContainer.ts";
+import {uploadOrder} from "../../api/order.ts";
 import {
   CircleCheckFilled,
   CirclePlus,
@@ -140,7 +140,7 @@ function searchStoreId(payInfo: PayInfo, storeId: number) {
 }
 
 function submit() {
-  uploadOrderItem00(payBasicInfo.value).then(res => {
+  uploadOrder(payBasicInfo.value).then(res => {
     if (res.data.code == '000') {
       ElMessage({
         message: "已成功提交",
@@ -466,7 +466,7 @@ function handleClose() {
 </style>
 
 <style>
-.el-table.success-row {
+.el-table .success-row {
   --el-table-tr-bg-color: var(--el-color-success-light-9);
 }
 </style>

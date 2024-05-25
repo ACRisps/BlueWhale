@@ -10,6 +10,8 @@ const orderId = ref();
 const showConfirm = ref(false);
 const showDuringPay = ref(false);
 
+const loading = ref(true);
+
 function toPay() {
   showConfirm.value = false;
   window.open(`http://localhost:8080/api/pay/payMultiOrder?multiOrderId=`
@@ -20,6 +22,7 @@ function toPay() {
 
 function getData(id: string) {
   orderId.value = id;
+  loading.value = false;
 }
 
 function openDialog() {
@@ -45,15 +48,13 @@ function handlePayComplete() {
       :close-on-click-modal="false"
       style="border-radius: 9px;"
   >
-    <div style="height: 200px"></div>
+    <div style="height: 200px" v-loading="loading"></div>
     <el-row justify="center">
       {{ orderId }}
     </el-row>
     <template #footer>
       <div class="dialog-footer" style="margin-top: 5px">
-        <!--        <el-button @click="showDialog = false">取消</el-button>-->
-        <el-button type="primary" @click="toPay">付款</el-button>
-
+        <el-button type="primary" @click="toPay" :disabled="loading">付款</el-button>
       </div>
     </template>
   </el-dialog>

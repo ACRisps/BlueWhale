@@ -4,6 +4,7 @@ import {type OrderItemsInfo, orderItemPageInfo, orderItemGet} from '../../api/or
 import {uploadCommemt} from "../../api/comment.ts";
 import "../../style/base.css";
 import ConfirmDialog from "../pay/PayConfirmDialog.vue";
+import {getMultiOrder} from "../../api/order.ts";
 
 
 const orderList = ref([] as OrderItemsInfo);
@@ -63,6 +64,7 @@ function handleToGet(orderSerialNumber: string) {
 
 const confirmDialog = ref();
 
+
 function handleToPay(orderSerialNumber: string) {
   // uploadPayItem(orderSerialNumber).then(res => {
   //   console.log(res.data);
@@ -81,8 +83,11 @@ function handleToPay(orderSerialNumber: string) {
   //   //   });
   //   // }
   // });
-  confirmDialog.value.getData(orderSerialNumber);
-  confirmDialog.value.openDialog();
+  getMultiOrder(orderSerialNumber).then(res => {
+    confirmDialog.value.openDialog();
+    confirmDialog.value.getData(res.data.result);
+  });
+
 }
 
 function handlePayComplete() {
