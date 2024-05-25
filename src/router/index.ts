@@ -114,10 +114,19 @@ const router = createRouter({
             {
                 path: '/statistic',
                 name: 'statistic',
-                component: () => import('../views/Statistic.vue'),
+                component: () => import('../views/order/Statistic.vue'),
                 meta: {
                     title: '报表',
                     permission: ['STAFF', 'CEO']
+                }
+            },
+            {
+                path: '/shoppingCart',
+                name: 'shoppingCart',
+                component: () => import('../views/user/ShoppingCart.vue'),
+                meta: {
+                    title: '购物车',
+                    permission: ['CUSTOMER']
                 }
             },
             {

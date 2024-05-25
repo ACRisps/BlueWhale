@@ -30,7 +30,7 @@ function handleLogin() {
     if (res.data.code === '000') {
       console.log(res);
       ElMessage({
-        message: "登录成功！",
+        message: "登录成功",
         type: 'success',
         center: true,
       });

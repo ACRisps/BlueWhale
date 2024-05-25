@@ -124,7 +124,7 @@ function handleClearFilter() {
           src="/src/assets/blueWhale.svg"
           alt="Element logo"
       />
-      <el-text style="font-size: 40px;margin: 10px;font-family:fantasy">BlueWhale Search&nbsp;</el-text>
+      <el-text style="font-size: 40px;margin: 10px;font-family:fantasy">BlueWhale Search&nbsp;&nbsp;</el-text>
 
     </el-row>
     <el-row justify="center">
