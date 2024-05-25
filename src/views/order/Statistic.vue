@@ -3,10 +3,10 @@ import {onMounted, ref} from "vue";
 
 const role = sessionStorage.getItem("role");
 import {Warning, CaretTop, ArrowRight, CaretBottom, PieChart} from "@element-plus/icons-vue";
-import "../style/base.css";
+import "../../style/base.css";
 import {useTransition} from '@vueuse/core';
-import {router} from "../router";
-import {getTable, statisticChartInfo, statisticInfo} from "../api/statistic.ts";
+import {router} from "../../router";
+import {getTable, statisticChartInfo, statisticInfo} from "../../api/statistic.ts";
 
 const totalTurnoverCnt = ref(0);
 const totalOrderCnt = ref(0);
@@ -203,7 +203,7 @@ let option3 = ref(data3);
 </script>
 
 <template>
-  <el-main>
+  <el-main class="main" id="main">
     <el-row justify="center" v-if="role=='CEO'">
       <div class="admin-title">在这里查看商场报表</div>
     </el-row>
@@ -501,6 +501,8 @@ let option3 = ref(data3);
     </el-row>
 
   </el-main>
+
+  <el-backtop style="position: fixed; right: 50px;bottom: 160px" :visibility-height="100" target="#main"/>
 </template>
 
 <style scoped>
@@ -541,4 +543,12 @@ let option3 = ref(data3);
   width: 100%;
   margin: 10px;
 }
+
+.main{
+  overflow-y: scroll;
+  position: absolute;
+  left:0;right: 0;
+  top: 52px;bottom: 0;
+}
+
 </style>

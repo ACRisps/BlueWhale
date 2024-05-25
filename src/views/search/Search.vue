@@ -117,14 +117,14 @@ function handleClearFilter() {
 </script>
 
 <template>
-  <el-main>
+  <el-main class="main" id="main">
     <el-row justify="center" v-if="!showDetail" style="height: 240px">
       <img
-          style="width: 100px"
+          style="width: 80px"
           src="/src/assets/blueWhale.svg"
           alt="Element logo"
       />
-      <el-text style="font-size: 50px;margin: 5px;font-family:fantasy">BlueWhale Search&nbsp;&nbsp;&nbsp;</el-text>
+      <el-text style="font-size: 40px;margin: 10px;font-family:fantasy">BlueWhale Search&nbsp;</el-text>
 
     </el-row>
     <el-row justify="center">
@@ -294,8 +294,8 @@ function handleClearFilter() {
 
   </el-drawer>
 
+  <el-backtop style="position: fixed; right: 30px;bottom: 160px" :visibility-height="100" target="#main"/>
 
-  <el-backtop style="position: fixed; right: 30px;bottom: 160px" :visibility-height="100"/>
   <el-button style="position: fixed; right: 30px;bottom: 100px" circle size="large"
              @click="showFilterDrawer=true;" v-if="!underFilter&&showDetail">
     <el-icon size="large">
@@ -321,6 +321,15 @@ function handleClearFilter() {
 
 .card {
   margin: 6px;
+}
+
+.main {
+  overflow-y: scroll;
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 52px;
+  bottom: 0;
 }
 
 </style>
