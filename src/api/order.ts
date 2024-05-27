@@ -22,10 +22,24 @@ export const uploadOrder = (payload: PayInfo) => {
         });
 };
 
-export const getMultiOrder = (serial: string) => {
+export const getMultiOrder = async (serial: string) => {
     return axios.get(`${ORDER_MODULE}/multiOrders/getMultiOrder`, {
         params: {
-            orderSerialNumber:serial
+            orderSerialNumber: serial
+        }
+    })
+        .then(res => {
+            return res;
+        })
+        .catch(err => {
+            return err.response;
+        });
+};
+
+export const orderConfirm = async (serial: string) => {
+    return axios.get(`${ORDER_MODULE}/multiOrders/orderConfirm`, {
+        params: {
+            multiOrderSerialNumber: serial
         }
     })
         .then(res => {

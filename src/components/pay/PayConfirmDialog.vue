@@ -4,6 +4,7 @@
 
 import {Clock, Wallet} from "@element-plus/icons-vue";
 import {ref} from "vue";
+import {orderConfirm} from "../../api/order.ts";
 
 const orderId = ref();
 
@@ -11,6 +12,8 @@ const showConfirm = ref(false);
 const showDuringPay = ref(false);
 
 const loading = ref(true);
+
+const confirmInfo = ref({totalAfterCoupon: NaN, products: [] as any[]});
 
 function toPay() {
   showConfirm.value = false;
@@ -22,11 +25,15 @@ function toPay() {
 
 function getData(id: string) {
   orderId.value = id;
-  loading.value = false;
 }
 
 function openDialog() {
   showConfirm.value = true;
+  orderConfirm(orderId.value).then(res => {
+    // console.log(res.data);
+    confirmInfo.value = res.data.result;
+    loading.value = false;
+  });
 }
 
 defineExpose({openDialog, getData});
@@ -35,7 +42,8 @@ defineExpose({openDialog, getData});
 const emit = defineEmits(["complete"]);
 
 function handlePayComplete() {
-  emit("complete",);
+  showDuringPay.value = false;
+  emit("complete");
 }
 
 </script>
@@ -48,7 +56,14 @@ function handlePayComplete() {
       :close-on-click-modal="false"
       style="border-radius: 9px;"
   >
-    <div style="height: 200px" v-loading="loading"></div>
+    <el-scrollbar style="height: 200px" v-loading="loading">
+      <el-row justify="center">
+        <el-text style="margin: 10px" size="large">{{ confirmInfo.totalAfterCoupon }}&nbsp;￥</el-text>
+      </el-row>
+      <el-row justify="center" v-for="product in confirmInfo.products">
+        <el-text>{{ product.productName }}&nbsp;*{{product.num}}</el-text>
+      </el-row>
+    </el-scrollbar>
     <el-row justify="center">
       {{ orderId }}
     </el-row>

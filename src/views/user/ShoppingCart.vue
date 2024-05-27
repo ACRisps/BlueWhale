@@ -194,7 +194,7 @@ function handleRemove() {
         <el-tag type="primary" style="margin-top: 10px" v-if="priceAfter!=priceBefore">可使用优惠</el-tag>
       </el-row>
       <el-row justify="center">
-        <el-text style="margin-top: 10px" v-if="priceAfter!=priceBefore" line-clamp="1">预计到手价：{{ priceAfter }}&nbsp;￥</el-text>
+        <el-text style="margin-top: 10px" v-if="priceAfter!=priceBefore" line-clamp="1">预计到手：{{ priceAfter }}&nbsp;￥</el-text>
       </el-row>
       <div style="height: 120px"></div>
       <el-row justify="center">
