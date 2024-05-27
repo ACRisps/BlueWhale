@@ -1,16 +1,17 @@
 <script setup lang="ts">
 import {computed, onMounted, ref} from 'vue';
-import {ArrowRight, Goods,} from "@element-plus/icons-vue";
+import {ArrowRight, Goods, Minus} from "@element-plus/icons-vue";
 import "../../style/base.css";
-import ConfirmDialog from "../../components/pay/PayConfirmDialog.vue";
 
-import {getShoppingCart} from "../../api/shopping-cart.ts";
+import {getShoppingCart, removeCartItem} from "../../api/shopping-cart.ts";
 import {router} from "../../router";
 import {ProductsPassInfo} from "../../api/pay.ts";
+import PayDialog from "../../components/pay/PayDialogPlus.vue";
 
 const cartItems = ref([] as any);
 const checked = ref([] as number[]);
 
+const showRemoveConfirmDialog = ref(false);
 
 onMounted(() => {
   getShoppingCart().then(res => {
@@ -49,6 +50,37 @@ function getNumArrayIdx(id: number) {
 function handleChange() {
   console.log(resArray.value);
 }
+
+const payDialog = ref();
+
+function toPay() {
+  payDialog.value.getData(resArray.value);
+  payDialog.value.openDialog();
+}
+
+let toRemoveId = 0;
+let toRemoveName = ref('');
+
+function handleRemove() {
+  removeCartItem(toRemoveId).then((res) => {
+    if (res.data.code == "000") {
+      ElMessage({
+        message: "已成功移除",
+        type: 'success',
+        center: true,
+      });
+      showRemoveConfirmDialog.value = false;
+      cartItems.value = res.data.result;
+    } else {
+      console.log(res.data.msg);
+      ElMessage({
+        message: "移除失败，请稍后再试",
+        type: 'warning',
+        center: true,
+      });
+    }
+  });
+}
 </script>
 
 <template>
@@ -56,6 +88,11 @@ function handleChange() {
   <el-main class="main">
     <el-row justify="center">
       <div class="customer-title">在这里查看您的购物车</div>
+    </el-row>
+    <el-row justify="center" v-if="cartItems.length == 0">
+      <div>
+        <el-empty :image-size="200" description="什么都没有找到 ..."/>
+      </div>
     </el-row>
     <el-row justify="center">
 
@@ -104,18 +141,13 @@ function handleChange() {
                   </el-text>
                 </el-link>
               </el-row>
-              <div style="height: 20px"></div>
+              <div style="height: 55px"></div>
               <el-row>
-                <!--                <el-text>剩余库存：{{item.number}}</el-text>-->
               </el-row>
 
               <el-row>
-
-
               </el-row>
-              <el-row>
 
-              </el-row>
             </el-col>
             <el-col :span="4">
               <el-row>
@@ -123,7 +155,16 @@ function handleChange() {
                                  size="small"
                                  @change="handleChange"/>
               </el-row>
-
+              <div style="height: 55px"></div>
+              <el-row justify="end">
+                <el-button v-if="true" size="small" type="danger" style="margin-right: 10px"
+                           @click="showRemoveConfirmDialog=true;toRemoveId=item.productId;toRemoveName=item.productName"
+                           plain>
+                  <el-icon>
+                    <Minus/>
+                  </el-icon>
+                </el-button>
+              </el-row>
             </el-col>
           </el-row>
         </el-card>
@@ -136,8 +177,8 @@ function handleChange() {
     </el-row>
   </el-main>
 
+  <PayDialog ref="payDialog" @payment-finish=""></PayDialog>
 
-  <ConfirmDialog ref="confirmDialog" @complete=""></ConfirmDialog>
   <transition name="el-fade-in-linear">
     <el-card class="float-card" shadow="never" v-if="checked.length>0">
       <el-row>
@@ -148,7 +189,7 @@ function handleChange() {
       </el-row>
       <div style="height: 175px"></div>
       <el-row justify="center">
-        <el-button type="primary" color="#f78989" style="color: white">点我去支付</el-button>
+        <el-button type="primary" @click="toPay">点我去支付</el-button>
       </el-row>
       <el-row>
       </el-row>
@@ -156,6 +197,22 @@ function handleChange() {
 
     </el-card>
   </transition>
+
+  <el-dialog
+      v-model="showRemoveConfirmDialog"
+      width=30%
+      @close="toRemoveName='';toRemoveId=0"
+      style="border-radius: 6px"
+  >
+    <template #header>
+      <el-text size="large">移除：{{ toRemoveName }}</el-text>
+    </template>
+    <template #footer>
+      <el-button @click="showRemoveConfirmDialog=false">取消</el-button>
+      <el-button @click="handleRemove" type="danger">从购物车移除</el-button>
+    </template>
+
+  </el-dialog>
 
 
 </template>

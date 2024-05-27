@@ -7,11 +7,11 @@ import {uploadOrder} from "../../api/order.ts";
 import {
   CircleCheckFilled,
   CirclePlus,
-  Remove,
   Goods,
   ArrowDown,
   Van,
   Location,
+  Minus
 } from "@element-plus/icons-vue";
 
 import ConfirmDialog from "../../components/pay/PayConfirmDialog.vue";
@@ -33,8 +33,8 @@ const showDialog = ref(false);
 function refreshInfo() {
   payDisplayInfo(payBasicInfo.value).then(res => {
     payDetailedInfo.value = res.data.result;
-    console.log("这是后端返回的：");
-    console.log(payDetailedInfo.value);
+    // console.log("这是后端返回的：");
+    // console.log(payDetailedInfo.value);
   });
 }
 
@@ -60,41 +60,14 @@ const handleRowSelect = (row: any) => {
     }
   }
 
-  console.log("这是传给后端的：");
-  console.log(payBasicInfo.value);
+  // console.log("这是传给后端的：");
+  // console.log(payBasicInfo.value);
   refreshInfo();
 };
 
 function openDialog() {
   showDialog.value = true;
 }
-
-// function handleCancel() {
-//   if (!paySuccess.value) {
-//     ElMessage({
-//       message: "支付取消，可稍后支付",
-//       type: 'warning',
-//       center: true,
-//     });
-//   }
-//   paySuccess.value = false;
-//   {
-//     activeNames.value = ['0'];
-//     currentRow.value = null;
-//   }
-// };
-
-// function handlePay() {
-//   window.open(`http://localhost:8080/api/pay/payMultiOrder?multiOrderId=`
-//       + orderId.value + '&couponIdsString=' + (currentRow.value ? [currentRow.value.id] : []).toString(), "_blank");
-// }
-
-// function loadPayCoupons() {
-//   payCouponsInfo(orderId.value).then(res => {
-//     couponData.value = res.data.result;
-//     badgeCnt.value = couponData.value.length;
-//   });
-// }
 
 function getData(payProducts: ProductsPassInfo) {
   payBasicInfo.value = {stores: [], couponId: 0, method: "DELIVERY"};// ?
@@ -328,7 +301,7 @@ function handleClose() {
                     <el-button v-if="calculateShowClear(item.storeId)" size="small" type="danger"
                                @click="handleCouponSelectClear(item.storeId)" plain>
                       <el-icon>
-                        <Remove/>
+                        <Minus/>
                       </el-icon>
                     </el-button>
                   </template>
@@ -372,7 +345,7 @@ function handleClose() {
               <el-button v-if="calculateShowClear(0)" size="small" type="danger"
                          @click="handleCouponSelectClear(0)" plain>
                 <el-icon>
-                  <Remove/>
+                  <Minus/>
                 </el-icon>
               </el-button>
             </template>

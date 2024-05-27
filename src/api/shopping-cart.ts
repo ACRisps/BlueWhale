@@ -22,3 +22,13 @@ export const getShoppingCart = async () => {
         });
 };
 
+export const removeCartItem = async (id: number) => {
+    return axios.delete(`${CART_MODULE}`, {params: {productId: id}})
+        .then(res => {
+            return res;
+        })
+        .catch(err => {
+            return err.response;
+        });
+};
+
