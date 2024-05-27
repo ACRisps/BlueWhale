@@ -7,11 +7,15 @@ import {getShoppingCart, removeCartItem} from "../../api/shopping-cart.ts";
 import {router} from "../../router";
 import {ProductsPassInfo} from "../../api/pay.ts";
 import PayDialog from "../../components/pay/PayDialogPlus.vue";
+import {getBest} from "../../api/coupon.ts";
 
 const cartItems = ref([] as any);
 const checked = ref([] as number[]);
 
 const showRemoveConfirmDialog = ref(false);
+
+const priceBefore = ref(0);
+const priceAfter = ref(0);
 
 onMounted(() => {
   getShoppingCart().then(res => {
@@ -23,9 +27,7 @@ onMounted(() => {
   });
 });
 
-
 const numArray = ref<ProductsPassInfo>({products: []});
-
 
 const resArray = computed(() => {
   let array: ProductsPassInfo = {products: []};
@@ -48,7 +50,11 @@ function getNumArrayIdx(id: number) {
 }
 
 function handleChange() {
-  console.log(resArray.value);
+  getBest(resArray.value).then(res => {
+    console.log(res.data);
+    priceBefore.value = res.data.result.totalBefore;
+    priceAfter.value = res.data.result.totalAfter;
+  });
 }
 
 const payDialog = ref();
@@ -181,13 +187,16 @@ function handleRemove() {
 
   <transition name="el-fade-in-linear">
     <el-card class="float-card" shadow="never" v-if="checked.length>0">
-      <el-row>
-        <el-text>原价：99999&nbsp;￥</el-text>
+      <el-row justify="center">
+        <el-text style="margin-top: 5px" line-clamp="1">总金额：{{ priceBefore }}&nbsp;￥</el-text>
       </el-row>
-      <el-row>
-        <el-text size="large">现价：00000!&nbsp;￥</el-text>
+      <el-row justify="center">
+        <el-tag type="primary" style="margin-top: 10px" v-if="priceAfter!=priceBefore">可使用优惠</el-tag>
       </el-row>
-      <div style="height: 175px"></div>
+      <el-row justify="center">
+        <el-text style="margin-top: 10px" v-if="priceAfter!=priceBefore" line-clamp="1">预计到手价：{{ priceAfter }}&nbsp;￥</el-text>
+      </el-row>
+      <div style="height: 120px"></div>
       <el-row justify="center">
         <el-button type="primary" @click="toPay">点我去支付</el-button>
       </el-row>
@@ -237,7 +246,7 @@ function handleRemove() {
   right: 100px;
   bottom: 100px;
   height: 300px;
-  width: 200px;
+  width: 210px;
   border-radius: 6px
 }
 
