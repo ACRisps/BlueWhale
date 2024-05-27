@@ -91,13 +91,6 @@ function getData(payProducts: ProductsPassInfo) {
 }
 
 onMounted(() => {
-  getData({
-    products: [
-      {productId: 1, num: 1, storeId: 7},
-      {productId: 2, num: 1, storeId: 7},
-      {productId: 4, num: 1, storeId: 14}
-    ]
-  });
   handleScrollDelay();
 });
 

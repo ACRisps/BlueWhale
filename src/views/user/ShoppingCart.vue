@@ -27,6 +27,7 @@ onMounted(() => {
   });
 });
 
+
 const numArray = ref<ProductsPassInfo>({products: []});
 
 const resArray = computed(() => {
@@ -77,6 +78,11 @@ function handleRemove() {
       });
       showRemoveConfirmDialog.value = false;
       cartItems.value = res.data.result;
+      numArray.value = {products: []};
+      for (let item of cartItems.value) {
+        numArray.value.products.push({productId: item.productId, num: 1, storeId: item.storeId});
+      }
+      checked.value = [];
     } else {
       console.log(res.data.msg);
       ElMessage({
@@ -194,7 +200,10 @@ function handleRemove() {
         <el-tag type="primary" style="margin-top: 10px" v-if="priceAfter!=priceBefore">可使用优惠</el-tag>
       </el-row>
       <el-row justify="center">
-        <el-text style="margin-top: 10px" v-if="priceAfter!=priceBefore" line-clamp="1">预计到手价：{{ priceAfter }}&nbsp;￥</el-text>
+        <el-text style="margin-top: 10px" v-if="priceAfter!=priceBefore" line-clamp="1">预计到手：{{
+            priceAfter
+          }}&nbsp;￥
+        </el-text>
       </el-row>
       <div style="height: 120px"></div>
       <el-row justify="center">
@@ -245,7 +254,6 @@ function handleRemove() {
   position: fixed;
   right: 100px;
   bottom: 100px;
-  height: 300px;
   width: 210px;
   border-radius: 6px
 }
