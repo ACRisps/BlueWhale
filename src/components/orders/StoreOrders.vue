@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import {onMounted, ref} from 'vue';
-import {type OrderItemsInfo, orderItemPageInfo, orderItemSend} from '../../api/orderItem.ts';
+import {type OrderItemsInfo, orderItemPageInfo, orderItemSend} from '../../api/order-item.ts';
 
 
 const orderList = ref([] as OrderItemsInfo);
@@ -99,7 +99,7 @@ function parseState(stateStr: string): string {
           </template>
           <el-row>
             <el-col :span="6">
-              <el-image style="width: 100px; height: 100px" :src="order.imgURL" :fit="'cover'"/>
+              <el-image style="width: 100px; height: 100px;border-radius: 6px" :src="order.imgURL" :fit="'cover'"/>
             </el-col>
             <el-col :span="16">
               <el-row>

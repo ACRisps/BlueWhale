@@ -221,7 +221,6 @@ const showTip = ref(true);
 const myScrollbar = ref();
 
 const handleScroll = () => {
-  console.log("hs");
   // 防止Scrollbar实例为空
   if (!myScrollbar.value) {
     return;
@@ -412,7 +411,6 @@ function handleClose() {
                 </div>
               </el-radio>
             </el-radio-group>
-
             <!--            <el-col :span="16">-->
             <!--              <el-input :disabled="method=='PICKUP'" style="height: 100%" placeholder="填写详细地址"></el-input>-->
             <!--            </el-col>-->

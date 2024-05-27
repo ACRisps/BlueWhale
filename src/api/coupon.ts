@@ -25,7 +25,7 @@ export type CouponUploadInfo = {
 //     [property: string]: any;
 // }
 
-export const uploadCouponInfo = (payload: CouponUploadInfo, num: number) => {
+export const uploadCouponInfo = async (payload: CouponUploadInfo, num: number) => {
     return axios.post(`${COUPON_MODULE}/publish`, payload, {params: {couponNum: num}})
         .then(res => {
             return res;

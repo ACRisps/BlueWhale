@@ -5,10 +5,11 @@ import {onMounted, ref} from "vue";
 import {ProductInfo, productInfoDetail, uploadProductNumUpdate} from "../../api/product.ts";
 import {router} from "../../router";
 import {useRoute} from "vue-router";
-import {ArrowLeft, ChatLineSquare} from "@element-plus/icons-vue";
+import {ArrowLeft, ChatLineSquare, ShoppingCart} from "@element-plus/icons-vue";
 import {parseTime} from "../../utils";
 
 import PayDialog from "../../components/pay/PayDialogPlus.vue";
+import {add2ShoppingCart} from "../../api/shopping-cart.ts";
 
 
 const productDetail = ref({} as ProductInfo);
@@ -143,6 +144,24 @@ function handlePaymentFinish() {
   // });
 }
 
+function handleAdd2Cart() {
+  add2ShoppingCart(productDetail.value.productId).then((res) => {
+    if (res.data.code == '000') {
+      ElMessage({
+        message: "已成功添加",
+        type: 'success',
+        center: true,
+      });
+    } else if (res.data.code == '400') {
+      ElMessage({
+        message: res.data.msg,
+        type: 'warning',
+        center: true,
+      });
+    }
+  });
+}
+
 </script>
 
 <template>
@@ -204,9 +223,14 @@ function handlePaymentFinish() {
       </el-row>
 
       <el-row justify="center" style="margin: 10px" v-if="role=='CUSTOMER'">
-        <el-input-number v-model="buyNum" :min="1" :max="100" size="small" style="width: 100px"/>
-        <div style="display: flex;width: 20px"></div>
-        <el-button type="primary" @click="handlePayImmediately" style="width: 100px">立即购买
+        <el-input-number v-model="buyNum" :min="1" :max="100" size="small" style="width: 90px"/>
+        <div style="display: flex;width: 16px"></div>
+        <el-button type="primary" @click="handlePayImmediately" style="width: 90px">立即购买
+        </el-button>
+        <el-button type="primary" @click="handleAdd2Cart" color="#85ce61" style="color: white">+
+          <el-icon :size="16">
+            <ShoppingCart/>
+          </el-icon>
         </el-button>
       </el-row>
 
@@ -306,7 +330,6 @@ function handlePaymentFinish() {
   bottom: 0;
   overflow-y: scroll;
 }
-
 
 
 .description {
