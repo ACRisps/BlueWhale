@@ -1,6 +1,6 @@
 import {axios} from "../utils/request.ts";
 import {COUPON_MODULE} from "./_prefix.ts";
-import {PayInfo} from "./pay.ts";
+import {PayInfo, ProductsPassInfo} from "./pay.ts";
 
 
 export type CouponUploadInfo = {
@@ -13,19 +13,7 @@ export type CouponUploadInfo = {
     [property: string]: any;
 }
 
-// export type CouponInfo = {
-//     couponType: string;
-//     effective: number;
-//     effectiveTime: Date;
-//     expiredTime: Date;
-//     full: number;
-//     reduction: number;
-//     storeName: string;
-//     storeId: number;
-//     [property: string]: any;
-// }
-
-export const uploadCouponInfo = (payload: CouponUploadInfo, num: number) => {
+export const uploadCouponInfo = async (payload: CouponUploadInfo, num: number) => {
     return axios.post(`${COUPON_MODULE}/publish`, payload, {params: {couponNum: num}})
         .then(res => {
             return res;
@@ -104,4 +92,15 @@ export const payDisplayInfo = async (payload: PayInfo) => {
         .catch(err => {
             return err.response;
         });
+};
+
+export const getBest = async (payload: ProductsPassInfo) => {
+    return axios.post(`${COUPON_MODULE}/best`, payload)
+        .then(res => {
+            return res;
+        })
+        .catch(err => {
+                return err.response;
+            }
+        );
 };

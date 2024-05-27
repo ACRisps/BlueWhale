@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import {onMounted, ref} from 'vue';
-import {type OrderItemsInfo, orderItemPageInfo, orderItemGet} from '../../api/orderItem.ts';
+import {type OrderItemsInfo, orderItemPageInfo, orderItemGet} from '../../api/order-item.ts';
 import {uploadCommemt} from "../../api/comment.ts";
 import "../../style/base.css";
 import ConfirmDialog from "../pay/PayConfirmDialog.vue";
@@ -207,7 +207,7 @@ function parseState(stateStr: string): string {
           </template>
           <el-row>
             <el-col :span="6">
-              <el-image style="width: 100px; height: 100px" :src="order.imgURL" :fit="'cover'"/>
+              <el-image style="width: 100px; height: 100px;border-radius: 6px" :src="order.imgURL" :fit="'cover'"/>
             </el-col>
             <el-col :span="16">
               <el-row>

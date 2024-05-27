@@ -11,7 +11,7 @@ import {
   Wallet,
   Search,
   DataLine,
-  Orange
+  ShoppingCart
 } from "@element-plus/icons-vue";
 
 const role = sessionStorage.getItem('role');    //登录的时候插入的
@@ -54,7 +54,7 @@ function logout() {
           style="width: 30px"
           src="/src/assets/blueWhale.svg"
           alt="Element logo"
-      />&nbsp;&nbsp; BlueWhale首页
+      />&nbsp;&nbsp; 首页&nbsp;
       </el-menu-item>
 
       <el-menu-item index="/search">
@@ -62,6 +62,12 @@ function logout() {
           <Search/>
         </el-icon>
         搜索
+      </el-menu-item>
+      <el-menu-item v-if="role=='CUSTOMER'" index="/coupons">
+        <el-icon :size="20">
+          <Present/>
+        </el-icon>
+        优惠
       </el-menu-item>
 
       <div class="flex-grow"/>
@@ -86,11 +92,11 @@ function logout() {
         <el-menu-item v-if="role=='STAFF'||role=='CEO'" index="/coupons">管理优惠券</el-menu-item>
       </el-sub-menu>
 
-      <el-menu-item v-if="role=='CUSTOMER'" index="/coupons">
-        <el-icon :size="20">
-          <Present/>
+      <el-menu-item v-if="role=='CUSTOMER'" index="/shoppingCart">
+        <el-icon :size="21">
+          <ShoppingCart/>
         </el-icon>
-        优惠
+        购物车
       </el-menu-item>
       <el-menu-item v-if="role=='CUSTOMER'" index="/myCoupons">
         <el-icon :size="20">

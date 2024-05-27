@@ -1,257 +1,228 @@
 <script setup lang="ts">
-import {onMounted, ref} from 'vue';
-import {type OrderItemsInfo, orderItemPageInfo, orderItemGet} from '../../api/orderItem.ts';
-import {uploadCommemt} from "../../api/comment.ts";
+import {computed, onMounted, ref} from 'vue';
+import {ArrowRight, Goods, Minus} from "@element-plus/icons-vue";
 import "../../style/base.css";
-import ConfirmDialog from "../../components/pay/PayConfirmDialog.vue";
-import {getMultiOrder} from "../../api/order.ts";
 
+import {getShoppingCart, removeCartItem} from "../../api/shopping-cart.ts";
+import {router} from "../../router";
+import {ProductsPassInfo} from "../../api/pay.ts";
+import PayDialog from "../../components/pay/PayDialogPlus.vue";
+import {getBest} from "../../api/coupon.ts";
 
-const orderList = ref([] as OrderItemsInfo);
-const currentPage = ref(1 as number);
-const pageSize = ref(5 as number);
-const totalItems = ref(0 as number);
+const cartItems = ref([] as any);
+const checked = ref([] as number[]);
 
-let showCommentInput = ref(false);
-let selectedOrderSerial = ref("");
-let selectedProductId = ref();
+const showRemoveConfirmDialog = ref(false);
 
-const comment = ref("");
-const rate = ref(0);
-
-const showDuringPay = ref(false);
-
-function loadOrders() {
-  orderItemPageInfo(currentPage.value - 1, pageSize.value).then(res => {
-    totalItems.value = res.data.result.totalElements;
-    orderList.value = res.data.result.content;
-  });
-}
-
-function handlePageChange(page: number) {
-  currentPage.value = page;
-  loadOrders();
-}
-
-function handleSizeChange(newSize: number) {
-  pageSize.value = newSize;
-  currentPage.value = 1; // Reset to the first page
-  loadOrders();
-}
+const priceBefore = ref(0);
+const priceAfter = ref(0);
 
 onMounted(() => {
-  loadOrders();
+  getShoppingCart().then(res => {
+    console.log(res.data.result);
+    cartItems.value = res.data.result;
+    for (let item of cartItems.value) {
+      numArray.value.products.push({productId: item.productId, num: 1, storeId: item.storeId});
+    }
+  });
 });
 
-function handleToGet(orderSerialNumber: string) {
-  orderItemGet(orderSerialNumber).then(res => {
-    if (res.data.code == '000') {
+const numArray = ref<ProductsPassInfo>({products: []});
+
+const resArray = computed(() => {
+  let array: ProductsPassInfo = {products: []};
+  for (let temp of numArray.value.products) {
+    if (checked.value.includes(temp.productId)) {
+      array.products.push(temp);
+    }
+  }
+  return array;
+});
+
+
+function getNumArrayIdx(id: number) {
+  for (let i in numArray.value.products) {
+    if (numArray.value.products[i].productId == id) {
+      return Number(i);
+    }
+  }
+  return -1;
+}
+
+function handleChange() {
+  getBest(resArray.value).then(res => {
+    console.log(res.data);
+    priceBefore.value = res.data.result.totalBefore;
+    priceAfter.value = res.data.result.totalAfter;
+  });
+}
+
+const payDialog = ref();
+
+function toPay() {
+  payDialog.value.getData(resArray.value);
+  payDialog.value.openDialog();
+}
+
+let toRemoveId = 0;
+let toRemoveName = ref('');
+
+function handleRemove() {
+  removeCartItem(toRemoveId).then((res) => {
+    if (res.data.code == "000") {
       ElMessage({
-        message: "确认收货成功",
+        message: "已成功移除",
         type: 'success',
         center: true,
       });
-      loadOrders();
+      showRemoveConfirmDialog.value = false;
+      cartItems.value = res.data.result;
     } else {
+      console.log(res.data.msg);
       ElMessage({
-        message: "确认收货失败（" + res.data.msg + "）",
+        message: "移除失败，请稍后再试",
         type: 'warning',
         center: true,
       });
     }
   });
 }
-
-const confirmDialog = ref();
-
-
-function handleToPay(orderSerialNumber: string) {
-
-  getMultiOrder(orderSerialNumber).then(res => {
-    confirmDialog.value.openDialog();
-    confirmDialog.value.getData(res.data.result);
-  });
-
-}
-
-function handlePayComplete() {
-  loadOrders();
-  showDuringPay.value = false;
-}
-
-function handleToCommentButton(orderSerialNumber: string, productId: number) {
-  showCommentInput.value = true;
-  selectedOrderSerial.value = orderSerialNumber;
-  selectedProductId.value = productId;
-}
-
-function handleDialogClose() {
-  showCommentInput.value = false;
-  selectedOrderSerial.value = "";
-  clearCommentCache();
-}
-
-function clearCommentCache() {
-  comment.value = "";
-  rate.value = 0;
-}
-
-
-function handleDialogConfirm() {
-  if (rate.value < 1) {
-    ElMessage({
-      message: "请别忘记为商品打分",
-      type: 'warning',
-      center: true,
-    });
-    return;
-  } else if (comment.value === "") {
-    ElMessage({
-      message: "请别忘记留下评论",
-      type: 'warning',
-      center: true,
-    });
-    return;
-  }
-  // showCommentInput.value = false;
-  uploadCommemt({
-    productId: selectedProductId.value,
-    content: comment.value,
-    orderSerialNumber: selectedOrderSerial.value,
-    grade: rate.value
-  }).then(res => {
-    if (res.data.code == '000') {
-      handleDialogClose();
-      ElMessage({
-        message: "已提交，请勿重复提交",
-        type: 'success',
-        center: true,
-      });
-    } else {
-      ElMessage({
-        message: "提交失败（" + res.data.msg + "）",
-        type: 'warning',
-        center: true,
-      });
-    }
-  });
-}
-
-function parseState(stateStr: string): string {
-  if (stateStr == 'UNPAID') {
-    return '已下单&未支付';
-  } else if (stateStr == 'UNSEND') {
-    return '已支付&未发货';
-  } else if (stateStr == 'UNGET') {
-    return '已发货&未签收';
-  } else if (stateStr == 'UNCOMMENT') {
-    return '已签收&未评价';
-  } else if (stateStr == 'DONE') {
-    return '订单已完成';
-  } else if (stateStr == 'CANCEL') {
-    return '订单已取消';
-  }
-  return 'parse state failed:' + stateStr;
-}
-
 </script>
 
 <template>
+
   <el-main class="main">
     <el-row justify="center">
       <div class="customer-title">在这里查看您的购物车</div>
     </el-row>
-    <div v-for="order in orderList">
+    <el-row justify="center" v-if="cartItems.length == 0">
+      <div>
+        <el-empty :image-size="200" description="什么都没有找到 ..."/>
+      </div>
+    </el-row>
+    <el-row justify="center">
+
+    </el-row>
+    <div v-for="item in cartItems">
       <el-row justify="center">
         <el-card style="width: 800px" class="card" shadow="never">
           <template #header>
             <el-row>
-              <el-col :span="21">
-                <el-text size="large">{{ order.productName }}</el-text>
-                <el-text>&nbsp;*{{ order.productNumber }}</el-text>
+              <el-col :span="2" style="text-align: center">
+                <el-checkbox-group v-model="checked" @change="handleChange">
+                  <el-checkbox label="" :value="item.productId" size="large">
+                  </el-checkbox>
+                </el-checkbox-group>
               </el-col>
-              <el-col :span="3" style="text-align: center">
-                <el-button type="primary" v-if="order.state=='UNCOMMENT'"
-                           @click="handleToCommentButton(order.orderSerialNumber,order.productId)">评论
-                </el-button>
-                <el-button type="primary" v-else-if="order.state=='UNGET'"
-                           @click="handleToGet(order.orderSerialNumber)">签收
-                </el-button>
-                <el-button type="primary" v-else-if="order.state=='UNPAID'"
-                           @click="handleToPay(order.orderSerialNumber)">支付
-                </el-button>
-                <el-text v-else-if="order.state=='UNSEND'">待发货
+              <el-col :span="20">
+                <el-text size="large" style="display: flex;margin-top: 7px">
+                  {{ item.productName }}
                 </el-text>
-                <el-text style="color: #13ce66" v-else-if="order.state=='DONE'">已完成
-                </el-text>
-                <el-text style="color: indianred" v-else-if="order.state=='CANCEL'">已取消
+              </el-col>
+              <el-col :span="2" style="text-align: center">
+                <el-text size="large" style="display: flex;margin-top: 7px">
+                  {{ item.price }}￥
                 </el-text>
               </el-col>
             </el-row>
           </template>
           <el-row>
+            <el-col :span="2"></el-col>
             <el-col :span="6">
-              <el-image style="width: 100px; height: 100px" :src="order.imgURL" :fit="'cover'"/>
+              <el-image style="width: 100px; height: 100px;border-radius: 6px" :src="item.imgURLs[0]" :fit="'cover'"/>
             </el-col>
-            <el-col :span="16">
+            <el-col :span="12">
               <el-row>
-                <el-text>订单状态：{{ parseState(order.state) }}</el-text>
+                <el-link @click="router.push(`/storeDetail/${item.storeId}`)">
+                  <el-text line-clamp="1">
+                    <el-icon>
+                      <Goods></Goods>
+                    </el-icon>
+                    {{ item.storeName }}&nbsp;
+                  </el-text>
+                  <el-text>
+                    <el-icon>
+                      <ArrowRight/>
+                    </el-icon>
+                  </el-text>
+                </el-link>
               </el-row>
+              <div style="height: 55px"></div>
               <el-row>
-                <el-text>订单编号：{{ order.orderSerialNumber }}</el-text>
               </el-row>
+
               <el-row>
-                <el-text>下单时间：{{ order.createTime }}</el-text>
               </el-row>
+
+            </el-col>
+            <el-col :span="4">
               <el-row>
-                <el-text>订单金额：{{ order.totalAfter }}￥</el-text>&nbsp;&nbsp;
-                <el-text tag="del" size="small" v-if="order.totalAfter!=order.total">{{ order.total }}￥</el-text>
+                <el-input-number v-model="numArray.products[getNumArrayIdx(item.productId)].num" :min="1" :max="99"
+                                 size="small"
+                                 @change="handleChange"/>
+              </el-row>
+              <div style="height: 55px"></div>
+              <el-row justify="end">
+                <el-button v-if="true" size="small" type="danger" style="margin-right: 10px"
+                           @click="showRemoveConfirmDialog=true;toRemoveId=item.productId;toRemoveName=item.productName"
+                           plain>
+                  <el-icon>
+                    <Minus/>
+                  </el-icon>
+                </el-button>
               </el-row>
             </el-col>
           </el-row>
         </el-card>
+
       </el-row>
     </div>
     <el-row justify="center">
-      <div>
-        <el-pagination
-            layout="prev, pager, next"
-            :page-count="Math.ceil(totalItems / pageSize)"
-            :current-page="currentPage"
-            @current-change="handlePageChange"
-            @size-change="handleSizeChange"
-        />
-      </div>
+
+
     </el-row>
   </el-main>
 
+  <PayDialog ref="payDialog" @payment-finish=""></PayDialog>
+
+  <transition name="el-fade-in-linear">
+    <el-card class="float-card" shadow="never" v-if="checked.length>0">
+      <el-row justify="center">
+        <el-text style="margin-top: 5px" line-clamp="1">总金额：{{ priceBefore }}&nbsp;￥</el-text>
+      </el-row>
+      <el-row justify="center">
+        <el-tag type="primary" style="margin-top: 10px" v-if="priceAfter!=priceBefore">可使用优惠</el-tag>
+      </el-row>
+      <el-row justify="center">
+        <el-text style="margin-top: 10px" v-if="priceAfter!=priceBefore" line-clamp="1">预计到手价：{{ priceAfter }}&nbsp;￥</el-text>
+      </el-row>
+      <div style="height: 120px"></div>
+      <el-row justify="center">
+        <el-button type="primary" @click="toPay">点我去支付</el-button>
+      </el-row>
+      <el-row>
+      </el-row>
+      <el-row></el-row>
+
+    </el-card>
+  </transition>
 
   <el-dialog
-      v-model="showCommentInput"
-      title="分享您对商品的评价"
-      width=40%
-      :before-close="handleDialogClose"
-      :close-on-click-modal="false"
+      v-model="showRemoveConfirmDialog"
+      width=30%
+      @close="toRemoveName='';toRemoveId=0"
+      style="border-radius: 6px"
   >
-    <div style="text-align: center">
-      <el-rate v-model="rate"/>
-    </div>
-    <br>
-    <el-input v-model="comment" class="input" placeholder="在这里写下您的评价"
-              type="textarea" :rows="3" resize="none"/>
-
-    <template #footer>
-      <div class="dialog-footer">
-        <el-button @click="handleDialogClose">取消</el-button>
-        <el-button type="primary" @click="handleDialogConfirm">
-          确认评价
-        </el-button>
-      </div>
+    <template #header>
+      <el-text size="large">移除：{{ toRemoveName }}</el-text>
     </template>
+    <template #footer>
+      <el-button @click="showRemoveConfirmDialog=false">取消</el-button>
+      <el-button @click="handleRemove" type="danger">从购物车移除</el-button>
+    </template>
+
   </el-dialog>
 
-
-  <ConfirmDialog ref="confirmDialog" @complete="handlePayComplete"></ConfirmDialog>
 
 </template>
 
@@ -268,6 +239,15 @@ function parseState(stateStr: string): string {
 
 .card {
   margin: 5px;
+}
+
+.float-card {
+  position: fixed;
+  right: 100px;
+  bottom: 100px;
+  height: 300px;
+  width: 210px;
+  border-radius: 6px
 }
 
 

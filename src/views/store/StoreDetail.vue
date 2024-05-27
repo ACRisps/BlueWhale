@@ -164,8 +164,6 @@ function getCouponCnt() {
           </template>
           <el-image :src="product.imgURLs[0]" alt="" class="img" :fit="'cover'"/>
         </el-card>
-
-
       </el-row>
 
     </el-main>
@@ -284,5 +282,6 @@ a {
 .img {
   width: 100%;
   height: 210px;
+  border-radius: 6px
 }
 </style>
