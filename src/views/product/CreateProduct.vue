@@ -1,12 +1,38 @@
 <!--Lab2新增-创建商品界面-->
 <script setup lang="ts">
-import {ref} from 'vue';
+import {ref,computed} from 'vue';
 import {uploadImage} from '../../api/tools';
 
 import {UploadFilled} from "@element-plus/icons-vue";
 import {uploadProductInfo} from "../../api/product.ts";
 
 import "../../style/base.css"
+
+// 创建商品按钮可用性
+const CreateDisabled = computed(() => {
+  return !(priceLogic.value&&numberLogic.value&&hasProductName.value&&
+      hasProductIntro.value&&hasProductType.value&&hasProductNumber.value
+      &&hasProductPrice.value&&is_price&&is_number&&productType.value!=null
+      &&productIntro.value!=null &&productName.value!=null);
+});
+//是否文本框为空
+
+const hasProductName = computed(()=>productName.value!='')
+const is_number = computed(()=>number.value!=null)
+const hasProductIntro = computed(()=>productIntro.value!='')
+const hasProductType = computed(()=>productType.value!='')
+const hasProductNumber = computed(()=>number.value!='')
+const hasProductPrice = computed(()=>price.value!='')
+const is_price = computed(()=>price.value!=null)
+//设置规则
+const ProductPrice = /^\d+(\.\d{1,2})?$/;
+const ProductNumber = /^\d+$/;
+
+
+//设置逻辑
+const priceLogic = computed(()=>ProductPrice.test(price.value))
+const numberLogic = computed(()=>ProductNumber.test(number.value))
+
 
 const storeId = sessionStorage.getItem('userStoreId');
 
@@ -16,9 +42,9 @@ const imageFileList = ref([] as any);
 // 存返回的imgUrl
 const imgURLs = ref([] as any);
 
-let productName = ref('');
-let productIntro = ref('');
-let productType = ref('');
+let productName = ref();
+let productIntro = ref();
+let productType = ref();
 let number = ref();
 let price = ref();
 
@@ -103,6 +129,7 @@ function handleProductInfo() {
     <el-row justify="center">
       <el-form style="width: 540px">
         <el-form-item label="商品图片">
+
           <el-upload
               v-model:file-list="imageFileList"
               :limit="5"
@@ -122,21 +149,56 @@ function handleProductInfo() {
         </el-form-item>
 
         <el-form-item label="商品名称">
+
+          <label v-if="!hasProductName" for="name" class="error-warn">
+            商品名称为空
+          </label>
           <el-input v-model="productName" class="input" placeholder="商品名" clearable/>
         </el-form-item>
+
         <el-form-item label="商品价格">
+          <label v-if="!hasProductPrice" for="price" class="error-warn">
+            价格为空
+          </label>
+          <label v-else-if="!is_price" for="price">
+          </label>
+          <label v-else-if="!priceLogic" for="price" class="error-warn" >
+            价格格式不合法
+          </label>
           <el-input v-model="price" class="input" placeholder="多少钱？单位：元"
                     type="textarea" :rows="1" resize="none"/>
         </el-form-item>
+
         <el-form-item label="商品类型">
-          <el-input v-model="productType" class="input" placeholder="FOOD"
-                    type="textarea" :rows="1" resize="none"/>
+
+          <el-select id="ProductType" v-model="productType" placeholder="请选择">
+            <el-option value="FOOD" label="食物"/>
+            <el-option value="CLOTHES" label="衣物"/>
+            <el-option value="FURNITURE" label="家具"/>
+            <el-option value="ELECTRONICS" label="电子产品"/>
+            <el-option value="ENTERTAINMENT" label="娱乐"/>
+            <el-option value="SPORTS" label="运动"/>
+            <el-option value="LUXURY" label="奢侈品"/>
+          </el-select>
+<!--          <el-input v-model="productType" class="input" placeholder="FOOD"-->
+<!--                    type="textarea" :rows="1" resize="none"/>-->
         </el-form-item>
         <el-form-item label="库存数量">
+          <label v-if="!hasProductNumber" for="number" class="error-warn">
+            数量为空
+          </label>
+          <label v-else-if="!is_number" for="number">
+          </label>
+          <label v-else-if="!numberLogic" for="number" class="error-warn" >
+            数量格式不合法
+          </label>
           <el-input v-model="number" class="input" placeholder="现有库存数"
                     type="textarea" :rows="1" resize="none"/>
         </el-form-item>
         <el-form-item label="商品简介">
+          <label v-if="!hasProductIntro" for="price" class="error-warn">
+            商品简介为空
+          </label>
           <el-input v-model="productIntro" class="input" placeholder="在这里写下商品简介"
                     type="textarea" :rows="5" resize="none"/>
         </el-form-item>
@@ -144,7 +206,8 @@ function handleProductInfo() {
         <el-row justify="center">
           <el-col :span="3"/>
           <el-col :span="5">
-            <el-button type="primary" @click="handleChangeUltimate" :loading="loading"
+
+            <el-button type="primary" @click="handleChangeUltimate" :disabled=CreateDisabled :loading="loading"
             >点击创建
             </el-button>
           </el-col>
@@ -160,6 +223,9 @@ function handleProductInfo() {
 <style scoped>
 .input {
   width: 500px;
+}
+.error-warn {
+  color: #f89898;
 }
 
 </style>
