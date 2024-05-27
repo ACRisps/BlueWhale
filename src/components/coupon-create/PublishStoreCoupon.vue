@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {ref} from 'vue';
+import {ref,computed} from 'vue';
 
 import {uploadCouponInfo} from "../../api/coupon.ts";
 
@@ -15,12 +15,55 @@ let couponNum = ref();
 
 const loading = ref(false);
 
+//按钮的可用性
+const CreateDisabled = computed(() => {
+  return !(hasFull&&hasTimeArray&&hasReduction&&timeArray.value!=null&&full.value!=null
+  &&reduction.value!=null&&couponNum.value!=null&&hasCoupon);
+});
+const isTimeArrayInput = computed(()=>{
+  if ((hasTimeArray&&timeArray.value!=null))
+  {
+    return true;
+  }
+})
+const isFullInput = computed(()=>{
+  if (hasFull&&full.value!=null)
+  {
+    return true;
+  }
+})
+const isReductionInput = computed(()=>{
+  if (hasReduction&&reduction.value!=null)
+  {
+    return true;
+  }
+})
+const isCouponNumInput = computed(()=>{
+
+  if (hasCoupon&&couponNum.value!=null)
+  {
+    return true;
+  }
+
+})
+//是否为空
+const hasTimeArray = computed(()=>timeArray.value!='')
+const hasFull = computed(()=>full.value!='')
+const hasReduction = computed(()=>reduction.value!='')
+const hasCoupon = computed(()=>couponNum.value!='')
+//判断合法规则
+const numRule = /^[1-9]\d*$/
+//判断合法性
+const fullLogic = computed(()=>numRule.test(full.value))
+const reductionLogic = computed(()=>numRule.test(reduction.value))
+const couponNumLogic = computed(()=>numRule.test(couponNum.value))
 // 清空缓存
 function clearCache() {
   couponType.value = 'FULL_REDUCTION';
   timeArray.value = null;
   full.value = null;
   reduction.value = null;
+  couponNum.value = undefined;
 }
 
 function handlePublish() {
@@ -77,6 +120,9 @@ function handleCouponInfo() {
         </el-form-item>
 
         <el-form-item label="起止日期">
+          <label v-if="!hasTimeArray&&isTimeArrayInput" for="time" class="error-warn">
+            日期为空
+          </label>
           <el-date-picker
               v-model="timeArray"
               type="daterange"
@@ -88,21 +134,40 @@ function handleCouponInfo() {
         </el-form-item>
 
         <el-form-item label="消费达到" v-if="couponType=='FULL_REDUCTION'">
+          <label v-if="!hasFull&&isFullInput" for="full" class="error-warn">
+            金额为空
+          </label>
+          <label v-else-if="!fullLogic&&isFullInput" for="full" class="error-warn">
+            金额不合法
+          </label>
           <el-input v-model="full" class="input" placeholder="满多少 （单位：元）"
                     type="number"/>
         </el-form-item>
         <el-form-item label="折扣金额" v-if="couponType=='FULL_REDUCTION'">
+          <label v-if="!hasReduction&&isReductionInput" for="time" class="error-warn">
+            折扣金额为空
+          </label>
+          <label v-else-if="!reductionLogic&&isReductionInput" for="time" class="error-warn">
+            折扣金额不合法
+          </label>
           <el-input v-model="reduction" class="input" placeholder="减多少 （单位：元）"
                     type="number"/>
         </el-form-item>
         <el-form-item label="优惠券数">
+          <label v-if="!hasCoupon&&isCouponNumInput" for="couponNum" class="error-warn">
+            优惠券数为空
+          </label>
+          <label v-else-if="!couponNumLogic&&isCouponNumInput" for="couponNum" class="error-warn">
+            优惠券数不合法
+          </label>
+
           <el-input v-model="couponNum" class="input" placeholder="发多少张"
                     type="number"/>
         </el-form-item>
         <el-row justify="center">
           <el-col :span="3"/>
           <el-col :span="5">
-            <el-button type="primary" @click="handlePublish" :loading="loading"
+            <el-button type="primary" @click="handlePublish" :disabled="CreateDisabled" :loading="loading"
             >点击创建
             </el-button>
           </el-col>
@@ -118,5 +183,7 @@ function handleCouponInfo() {
 .input {
   width: 500px;
 }
-
+.error-warn {
+  color: #f89898;
+}
 </style>
