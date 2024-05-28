@@ -3,6 +3,7 @@ import {ref, computed,onMounted} from 'vue'
 import {router} from '../../router'
 import {userRegister} from "../../api/user.ts"
 import {storesPageInfo, type StoresInfo} from "../../api/store.ts";
+import {md5} from "js-md5";
 // 输入框值（需要在前端拦截不合法输入：是否为空+额外规则）
 const name = ref('')
 const identity = ref('')
@@ -61,7 +62,7 @@ function handleRegister() {
     role: identity.value,
     name: name.value,
     phone: tel.value,
-    password: password.value,
+    password: md5(password.value),
     address: address.value,
     storeId: storeId.value
   }).then(res => {

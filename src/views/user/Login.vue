@@ -3,7 +3,7 @@ import {ElForm, ElFormItem} from "element-plus";
 import {ref, computed} from 'vue';
 import {router} from '../../router';
 import {userInfo, userLogin} from "../../api/user.ts";
-
+import {md5} from "js-md5";
 // 输入框值（需要在前端拦截不合法输入：是否为空+额外规则）
 const tel = ref('');
 const password = ref('');
@@ -25,7 +25,7 @@ const loginDisabled = computed(() => {
 function handleLogin() {
   userLogin({
     phone: tel.value,
-    password: password.value
+    password: md5(password.value)
   }).then(res => {
     if (res.data.code === '000') {
       console.log(res);
