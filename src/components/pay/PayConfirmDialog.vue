@@ -21,8 +21,9 @@ function toPay() {
   showDuringPay.value = true;
 }
 
-function getData(id: string) {
+function callDialog(id: string) {
   orderId.value = id;
+  openDialog();
 }
 
 function openDialog() {
@@ -34,7 +35,7 @@ function openDialog() {
   });
 }
 
-defineExpose({openDialog, getData});
+defineExpose({callDialog});
 
 const emit = defineEmits(["complete"]);
 

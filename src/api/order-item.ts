@@ -34,6 +34,7 @@ export type OrderItemInfo = {
     method: string
     state: string
     address: string
+    bind?: boolean
 }
 
 export type OrderItemsInfo = OrderItemInfo[];

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import {onMounted, ref} from "vue";
-import {payDisplayInfo} from "../../api/coupon.ts";
+import {getBestInfo, payDisplayInfo} from "../../api/coupon.ts";
 import {ElTable} from "element-plus";
 import "../../style/base.css";
 import {PayDisplayInfo, PayInfo, ProductsPassInfo} from "../../api/pay.ts";
@@ -19,7 +19,7 @@ import ConfirmDialog from "../../components/pay/PayConfirmDialog.vue";
 
 const confirmDialog = ref();
 
-defineExpose({openDialog, getData});
+defineExpose({callPayDialog});
 const emit = defineEmits(['payment-finish']);
 
 const payBasicInfo = ref<PayInfo>({stores: [], couponId: 0, method: "DELIVERY"});
@@ -32,10 +32,12 @@ const method = ref('PICKUP');
 const showDialog = ref(false);
 
 function refreshInfo() {
+  console.log("这是给后端的：");
+  console.log(payBasicInfo.value);
   payDisplayInfo(payBasicInfo.value).then(res => {
     payDetailedInfo.value = res.data.result;
-    // console.log("这是后端返回的：");
-    // console.log(payDetailedInfo.value);
+    console.log("这是后端返回的：");
+    console.log(payDetailedInfo.value);
   });
 }
 
@@ -61,16 +63,47 @@ const handleRowSelect = (row: any) => {
     }
   }
 
-  // console.log("这是传给后端的：");
-  // console.log(payBasicInfo.value);
+  console.log("这是传给后端的：");
+  console.log(payBasicInfo.value);
   refreshInfo();
 };
 
-function openDialog() {
-  showDialog.value = true;
+
+function getBest() {
+  getBestInfo(payBasicInfo.value).then(res => {
+    if (res.data.code == "000") {
+      ElMessage({
+        message: "已自动选择最佳优惠",
+        type: 'success',
+        center: true,
+      });
+      console.log('666', res.data.result);
+      handleAutoCoupon(res.data.result);
+    } else {
+      ElMessage({
+        message: "请手动选择优惠",
+        type: 'warning',
+        center: true,
+      });
+      refreshInfo();
+    }
+
+  });
 }
 
-function getData(payProducts: ProductsPassInfo) {
+function handleAutoCoupon(autoCouponInfo: PayDisplayInfo) {
+  payBasicInfo.value.couponId = autoCouponInfo.bestCoupon;
+  for (let store of payBasicInfo.value.stores) {
+    for (let storeInAutoInfo of autoCouponInfo.stores) {
+      if (store.storeId == storeInAutoInfo.storeId) {
+        store.couponId = storeInAutoInfo.bestCoupon;
+      }
+    }
+  }
+  refreshInfo();
+}
+
+function callPayDialog(payProducts: ProductsPassInfo) {
   payBasicInfo.value = {stores: [], couponId: 0, method: "DELIVERY"};// ?
   for (let payProduct of payProducts.products) {
     let storeId = payProduct.storeId;
@@ -87,8 +120,9 @@ function getData(payProducts: ProductsPassInfo) {
   }
 
   console.log(payBasicInfo.value);
-
-  refreshInfo();
+  showDialog.value = true;
+  getBest();
+  // refreshInfo();
 }
 
 onMounted(() => {
@@ -116,8 +150,7 @@ function submit() {
       });
       console.log(res.data);
       showDialog.value = false;
-      confirmDialog.value.getData(res.data.result);
-      confirmDialog.value.openDialog();
+      confirmDialog.value.callDialog(res.data.result);
     } else {
       console.log(res.data.msg);
       ElMessage({

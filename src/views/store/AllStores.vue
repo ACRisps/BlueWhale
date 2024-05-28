@@ -38,9 +38,9 @@ onMounted(() => {
       <el-row justify="center">
         <el-card style="width: 800px" class="card" shadow="never">
           <template #header>
-            <el-row>
+            <el-row align="middle">
               <el-col :span="22">
-                {{ store.storeName }}
+                <el-text size="large">{{ store.storeName }}</el-text>
               </el-col>
               <el-col :span="2">
                 <router-link :to="'/storeDetail/'+store.storeId" v-slot="{navigate}" class="no-link">

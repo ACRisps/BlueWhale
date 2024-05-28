@@ -72,12 +72,11 @@ function handleNumDialogConfirm() {
 
 
 function handlePayImmediately() {
-  payDialog.value.getData({
+  payDialog.value.callPayDialog({
     products: [
       {productId: productDetail.value.productId, num: buyNum, storeId: productDetail.value.storeId},
     ]
   });
-  payDialog.value.openDialog();
 }
 
 function handlePaymentFinish() {

@@ -42,12 +42,14 @@ export interface StoreDisplayInfo {
     storeName: string;
     products: ProductDisplayInfo[];
     coupons: any[];
+    bestCoupon: number;
 }
 
 export interface PayDisplayInfo {
     stores: StoreDisplayInfo[];
     method: "DELIVERY" | "PICKUP";
     coupons: any[];
+    bestCoupon: number;
     totalBefore: number;
     totalAfter: number;
 }
