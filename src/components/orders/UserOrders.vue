@@ -68,8 +68,7 @@ const confirmDialog = ref();
 function handleToPay(orderSerialNumber: string) {
 
   getMultiOrder(orderSerialNumber).then(res => {
-    confirmDialog.value.openDialog();
-    confirmDialog.value.getData(res.data.result);
+    confirmDialog.value.callDialog(res.data.result);
   });
 
 }

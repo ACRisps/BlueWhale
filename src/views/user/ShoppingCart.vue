@@ -7,7 +7,7 @@ import {getShoppingCart, removeCartItem} from "../../api/shopping-cart.ts";
 import {router} from "../../router";
 import {ProductsPassInfo} from "../../api/pay.ts";
 import PayDialog from "../../components/pay/PayDialogPlus.vue";
-import {getBest} from "../../api/coupon.ts";
+import {getBestPrice} from "../../api/coupon.ts";
 
 const cartItems = ref([] as any);
 const checked = ref([] as number[]);
@@ -51,7 +51,7 @@ function getNumArrayIdx(id: number) {
 }
 
 function handleChange() {
-  getBest(resArray.value).then(res => {
+  getBestPrice(resArray.value).then(res => {
     console.log(res.data);
     priceBefore.value = res.data.result.totalBefore;
     priceAfter.value = res.data.result.totalAfter;
@@ -61,8 +61,7 @@ function handleChange() {
 const payDialog = ref();
 
 function toPay() {
-  payDialog.value.getData(resArray.value);
-  payDialog.value.openDialog();
+  payDialog.value.callPayDialog(resArray.value);
 }
 
 let toRemoveId = 0;
@@ -200,9 +199,8 @@ function handleRemove() {
         <el-tag type="primary" style="margin-top: 10px" v-if="priceAfter!=priceBefore">可使用优惠</el-tag>
       </el-row>
       <el-row justify="center">
-        <el-text style="margin-top: 10px" v-if="priceAfter!=priceBefore" line-clamp="1">预计到手：{{
-            priceAfter
-          }}&nbsp;￥
+        <el-text style="margin-top: 10px;height: 20px" v-if="priceAfter!=priceBefore">预计到手：<span
+            style="color: #f78989;font-size: 19px">{{priceAfter }}</span>&nbsp;￥
         </el-text>
       </el-row>
       <div style="height: 120px"></div>
@@ -254,8 +252,9 @@ function handleRemove() {
   position: fixed;
   right: 100px;
   bottom: 100px;
-  width: 210px;
-  border-radius: 6px
+  min-width: 210px;
+  max-width: 250px;
+  border-radius: 9px
 }
 
 

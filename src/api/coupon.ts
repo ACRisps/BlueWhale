@@ -94,7 +94,17 @@ export const payDisplayInfo = async (payload: PayInfo) => {
         });
 };
 
-export const getBest = async (payload: ProductsPassInfo) => {
+export const getBestInfo = async (payload: PayInfo) => {
+    return axios.post(`${COUPON_MODULE}/bestInfo`, payload)
+        .then(res => {
+            return res;
+        })
+        .catch(err => {
+            return err.response;
+        });
+};
+
+export const getBestPrice = async (payload: ProductsPassInfo) => {
     return axios.post(`${COUPON_MODULE}/best`, payload)
         .then(res => {
             return res;
