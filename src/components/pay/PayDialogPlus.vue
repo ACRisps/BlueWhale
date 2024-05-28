@@ -32,10 +32,12 @@ const method = ref('PICKUP');
 const showDialog = ref(false);
 
 function refreshInfo() {
+  console.log("这是给后端的：");
+  console.log(payBasicInfo.value);
   payDisplayInfo(payBasicInfo.value).then(res => {
     payDetailedInfo.value = res.data.result;
-    // console.log("这是后端返回的：");
-    // console.log(payDetailedInfo.value);
+    console.log("这是后端返回的：");
+    console.log(payDetailedInfo.value);
   });
 }
 
@@ -61,8 +63,8 @@ const handleRowSelect = (row: any) => {
     }
   }
 
-  // console.log("这是传给后端的：");
-  // console.log(payBasicInfo.value);
+  console.log("这是传给后端的：");
+  console.log(payBasicInfo.value);
   refreshInfo();
 };
 
@@ -75,7 +77,8 @@ function getBest() {
         type: 'success',
         center: true,
       });
-      payDetailedInfo.value = res.data.result;
+      console.log('666', res.data.result);
+      handleAutoCoupon(res.data.result);
     } else {
       ElMessage({
         message: "请手动选择优惠",
@@ -84,9 +87,20 @@ function getBest() {
       });
       refreshInfo();
     }
-    // console.log("这是后端返回的：");
-    // console.log(payDetailedInfo.value);
+
   });
+}
+
+function handleAutoCoupon(autoCouponInfo: PayDisplayInfo) {
+  payBasicInfo.value.couponId = autoCouponInfo.bestCoupon;
+  for (let store of payBasicInfo.value.stores) {
+    for (let storeInAutoInfo of autoCouponInfo.stores) {
+      if (store.storeId == storeInAutoInfo.storeId) {
+        store.couponId = storeInAutoInfo.bestCoupon;
+      }
+    }
+  }
+  refreshInfo();
 }
 
 function callPayDialog(payProducts: ProductsPassInfo) {
