@@ -2,6 +2,7 @@
 import {onMounted, ref} from "vue";
 import {payDisplayInfo} from "../../api/coupon.ts";
 import {ElTable} from "element-plus";
+import "../../style/base.css";
 import {PayDisplayInfo, PayInfo, ProductsPassInfo} from "../../api/pay.ts";
 import {uploadOrder} from "../../api/order.ts";
 import {
@@ -225,7 +226,7 @@ function handleClose() {
       @close="handleClose"
       :close-on-click-modal="false"
       top="10vh"
-      style="border-radius: 10px;"
+      class="radius1"
   >
     <el-row justify="center">
       <el-col style="text-align: center">

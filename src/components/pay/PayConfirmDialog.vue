@@ -1,7 +1,5 @@
-// 开发中，暂时搁置
-
 <script setup lang="ts">
-
+import "../../style/base.css";
 import {Clock, Wallet} from "@element-plus/icons-vue";
 import {ref} from "vue";
 import {orderConfirm} from "../../api/order.ts";
@@ -38,7 +36,6 @@ function openDialog() {
 
 defineExpose({openDialog, getData});
 
-
 const emit = defineEmits(["complete"]);
 
 function handlePayComplete() {
@@ -54,14 +51,14 @@ function handlePayComplete() {
       title="确认订单"
       width=40%
       :close-on-click-modal="false"
-      style="border-radius: 9px;"
+      class="radius0"
   >
     <el-scrollbar style="height: 200px" v-loading="loading">
       <el-row justify="center">
         <el-text style="margin: 10px" size="large">{{ confirmInfo.totalAfterCoupon }}&nbsp;￥</el-text>
       </el-row>
       <el-row justify="center" v-for="product in confirmInfo.products">
-        <el-text>{{ product.productName }}&nbsp;*{{product.num}}</el-text>
+        <el-text>{{ product.productName }}&nbsp;*{{ product.num }}</el-text>
       </el-row>
     </el-scrollbar>
     <el-row justify="center">
@@ -79,10 +76,10 @@ function handlePayComplete() {
       title="等待完成支付"
       width=40%
       :close-on-click-modal="false"
-      style="border-radius: 9px;"
+      class="radius1"
   >
     <el-row justify="center">
-      <div style="margin-top: 20px;margin-bottom: 30px">
+      <div class="waiting-icon">
         <el-icon :size="20">
           <Wallet/>
         </el-icon>
@@ -110,5 +107,8 @@ function handlePayComplete() {
 </template>
 
 <style scoped>
-
+.waiting-icon {
+  margin-top: 20px;
+  margin-bottom: 30px
+}
 </style>

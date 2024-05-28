@@ -70,13 +70,13 @@ function parseState(stateStr: string): string {
 </script>
 
 <template>
-  <el-main class="main">
+  <el-main class="main-without-aside">
     <el-row justify="center">
       <div class="staff-title">在这里查看您的商店收到的订单</div>
     </el-row>
     <div v-for="order in orderList">
       <el-row justify="center">
-        <el-card style="width: 800px" class="card">
+        <el-card class="common-card" shadow="never">
           <template #header>
             <el-row>
               <el-col :span="21">
@@ -137,17 +137,5 @@ function parseState(stateStr: string): string {
 
 
 <style scoped>
-.main {
-  position: absolute;
-  right: 0;
-  left: 0;
-  top: 52px;
-  bottom: 0;
-  overflow-y: scroll;
-}
-
-.card {
-  margin: 5px;
-}
 
 </style>

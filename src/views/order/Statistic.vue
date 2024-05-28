@@ -203,7 +203,7 @@ let option3 = ref(data3);
 </script>
 
 <template>
-  <el-main class="main" id="main">
+  <el-main class="main-without-aside" id="main">
     <el-row justify="center" v-if="role=='CEO'">
       <div class="admin-title">在这里查看商场报表</div>
     </el-row>
@@ -218,7 +218,7 @@ let option3 = ref(data3);
             <div class="statistic-card">
               <el-statistic :value="turnoverCntOutput">
                 <template #title>
-                  <div style="display: inline-flex; align-items: center">
+                  <div class="statistic-title-div">
                     <span v-if="role=='CEO'">累计平台流水</span>
                     <span v-if="role=='STAFF'">累计商店流水</span>
                     <el-tooltip
@@ -248,7 +248,7 @@ let option3 = ref(data3);
               <div style="height: 25px"/>
               <el-statistic :value="monthTurnoverCntOutput">
                 <template #title>
-                  <div style="display: inline-flex; align-items: center">
+                  <div class="statistic-title-div">
                     <span v-if="role=='CEO'">上月平台流水</span>
                     <span v-if="role=='STAFF'">上月商店流水</span>
                     <el-tooltip
@@ -296,7 +296,7 @@ let option3 = ref(data3);
             <div class="statistic-card">
               <el-statistic :value="orderCntOutput">
                 <template #title>
-                  <div style="display: inline-flex; align-items: center">
+                  <div class="statistic-title-div">
                     累计订单数
                     <el-tooltip
                         v-if="role=='CEO'"
@@ -325,7 +325,7 @@ let option3 = ref(data3);
               <div style="height: 25px"/>
               <el-statistic :value="monthOrderCntOutput">
                 <template #title>
-                  <div style="display: inline-flex; align-items: center">
+                  <div class="statistic-title-div">
                     上月订单数
                     <el-tooltip
                         v-if="role=='CEO'"
@@ -372,7 +372,7 @@ let option3 = ref(data3);
             <div class="statistic-card">
               <el-statistic :value="customerCntOutput">
                 <template #title>
-                  <div style="display: inline-flex; align-items: center">
+                  <div class="statistic-title-div">
                     累计顾客数
                     <el-tooltip
                         v-if="role=='CEO'"
@@ -401,7 +401,7 @@ let option3 = ref(data3);
               <div style="height: 25px"/>
               <el-statistic :value="monthCustomerCntOutput">
                 <template #title>
-                  <div style="display: inline-flex; align-items: center">
+                  <div class="statistic-title-div">
                     上月顾客数
                     <el-tooltip
                         v-if="role=='CEO'"
@@ -462,10 +462,7 @@ let option3 = ref(data3);
                 </el-icon>
               </el-button>
             </div>
-
           </el-col>
-
-
           <el-col :span="6"></el-col>
           <el-col :span="6" style="text-align: right">
             <el-button type="primary" size="small" @click="handleTableExport" :loading="loading">导出订单报表
@@ -475,8 +472,7 @@ let option3 = ref(data3);
       </el-card>
     </el-row>
     <el-row justify="center">
-      <el-divider style="margin-top: 120px;margin-bottom: 30px;
-      width: 90%; ">
+      <el-divider class="divider">
         <el-text size="large" style="color: dodgerblue">
           <el-icon>
             <PieChart/>
@@ -544,11 +540,15 @@ let option3 = ref(data3);
   margin: 10px;
 }
 
-.main{
-  overflow-y: scroll;
-  position: absolute;
-  left:0;right: 0;
-  top: 52px;bottom: 0;
+.divider {
+  margin-top: 120px;
+  margin-bottom: 30px;
+  width: 90%;
+}
+
+.statistic-title-div {
+  display: inline-flex;
+  align-items: center
 }
 
 </style>
