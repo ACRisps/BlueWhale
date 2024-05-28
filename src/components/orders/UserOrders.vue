@@ -163,9 +163,9 @@ function parseState(stateStr: string): string {
       <el-row justify="center">
         <el-card class="common-card" shadow="never">
           <template #header>
-            <el-row>
+            <el-row align="middle">
               <el-col :span="21">
-                <el-text size="large">{{ order.productName }}</el-text>
+                <el-text size="large" >{{ order.productName }}</el-text>
                 <el-text>&nbsp;*{{ order.productNumber }}</el-text>
               </el-col>
               <el-col :span="3" style="text-align: center">
@@ -202,8 +202,17 @@ function parseState(stateStr: string): string {
                 <el-text>下单时间：{{ order.createTime }}</el-text>
               </el-row>
               <el-row>
-                <el-text>订单金额：{{ order.totalAfter }}￥</el-text>&nbsp;&nbsp;
-                <el-text tag="del" size="small" v-if="order.totalAfter!=order.total">{{ order.total }}￥</el-text>
+                <el-text>订单金额：</el-text>
+                <el-text tag="del" v-if="order.totalAfter!=order.total" style="margin-right: 3px">
+                  {{ order.total }}￥
+                </el-text>
+                <el-text>{{ order.totalAfter }}￥</el-text>
+                <el-text>
+                  <el-tag type="primary" size="small" class="bind-reminder-tag" v-if="order.totalAfter!=order.total">
+                    折扣
+                  </el-tag>
+                  <el-tag type="warning" size="small" class="bind-reminder-tag" v-else-if="order.bind">捆绑折扣</el-tag>
+                </el-text>
               </el-row>
             </el-col>
           </el-row>
@@ -255,5 +264,7 @@ function parseState(stateStr: string): string {
 
 
 <style scoped>
-
+.bind-reminder-tag {
+  margin-left: 10px;
+}
 </style>

@@ -112,7 +112,7 @@ function handleRemove() {
       <el-row justify="center">
         <el-card style="width: 800px" class="card" shadow="never">
           <template #header>
-            <el-row>
+            <el-row align="middle">
               <el-col :span="2" style="text-align: center">
                 <el-checkbox-group v-model="checked" @change="handleChange">
                   <el-checkbox label="" :value="item.productId" size="large">
@@ -120,7 +120,7 @@ function handleRemove() {
                 </el-checkbox-group>
               </el-col>
               <el-col :span="20">
-                <el-text size="large" style="display: flex;margin-top: 7px">
+                <el-text size="large">
                   {{ item.productName }}
                 </el-text>
               </el-col>
