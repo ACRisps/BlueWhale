@@ -78,62 +78,6 @@ function handlePayImmediately() {
     ]
   });
   payDialog.value.openDialog();
-
-  //
-  // uploadOrderItem
-  // ({
-  //       productName: productDetail.value.productName,
-  //       storeId: productDetail.value.storeId,
-  //       productPrice: productDetail.value.price,
-  //       productNumber: buyNum.value,
-  //       orderSerialNumber: "",
-  //       deliverSerialNumber: "",
-  //       total: String(parseFloat(productPrice.value) * buyNum.value),
-  //       productId: productDetail.value.productId,
-  //       imgURL: productDetail.value.imgURLs[0],
-  //       userPhone: phone,
-  //       method: getMethod(),
-  //       state: state.value,
-  //       address: address.value
-  //     }
-  // ).then(res => {
-  //       if (res.data.code == '000') {
-  //         let orders = ref([] as String[]);
-  //         orders.value.push(res.data.result);
-  //         //应该再包装成大订单
-  //         uploadOrderContainer({
-  //           orders: orders.value,
-  //           method: getMethod(),
-  //           state: state.value,
-  //           storeId: productDetail.value.storeId,
-  //           totalAfterCoupon: String(parseFloat(productPrice.value) * buyNum.value),
-  //           totalBeforeCoupon: String(parseFloat(productPrice.value) * buyNum.value),
-  //           userPhone: phone,
-  //           address: address.value
-  //         }).then(res => {
-  //           if (res.data.code == '000') {
-  //             {
-  //               showBuyOptions.value = false;
-  //               buyNum.value = 1;
-  //             }
-  //             ElMessage({
-  //               message: "订单已提交，等待支付",
-  //               type: 'success',
-  //               center: true,
-  //             });
-  //             callPayDialog();
-  //             payDialog.value.getData(res.data.result);
-  //           } else {
-  //             ElMessage({
-  //               message: "产生订单失败（" + res.data.msg + "）",
-  //               type: 'warning',
-  //               center: true,
-  //             });
-  //           }
-  //         });
-  //       }
-  //     }
-  // );
 }
 
 function handlePaymentFinish() {
@@ -142,6 +86,7 @@ function handlePaymentFinish() {
   //   type: 'success',
   //   center: true,
   // });
+  console.log('finish');
 }
 
 function handleAdd2Cart() {
@@ -293,7 +238,7 @@ function handleAdd2Cart() {
   </el-dialog>
 
 
-  <PayDialog v-if="role=='CUSTOMER'" ref="payDialog" @payment-finish="handlePaymentFinish"></PayDialog>
+  <PayDialog v-if="role=='CUSTOMER'" ref="payDialog" @payment-finish="handlePaymentFinish()"></PayDialog>
 </template>
 
 

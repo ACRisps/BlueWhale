@@ -18,3 +18,26 @@
     font-size: large;
     color: cornflowerblue;
 }
+
+.common-card {
+    width: 800px;
+    margin: 6px;
+}
+
+.main-without-aside {
+    position: absolute;
+    right: 0;
+    left: 0;
+    top: 52px;
+    bottom: 0;
+    overflow-y: scroll;
+}
+
+
+.radius0 {
+    border-radius: 6px;
+}
+
+.radius1 {
+    border-radius: 9px;
+}

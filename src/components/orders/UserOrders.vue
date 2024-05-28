@@ -66,23 +66,7 @@ const confirmDialog = ref();
 
 
 function handleToPay(orderSerialNumber: string) {
-  // uploadPayItem(orderSerialNumber).then(res => {
-  //   console.log(res.data);
-  //   // if (res.data.code == '000') {
-  //   //   ElMessage({
-  //   //     message: "支付成功",
-  //   //     type: 'success',
-  //   //     center: true,
-  //   //   });
-  //   //   loadOrders(currentPage.value);
-  //   // } else {
-  //   //   ElMessage({
-  //   //     message: "支付失败（" + res.data.msg + "）",
-  //   //     type: 'warning',
-  //   //     center: true,
-  //   //   });
-  //   // }
-  // });
+
   getMultiOrder(orderSerialNumber).then(res => {
     confirmDialog.value.openDialog();
     confirmDialog.value.getData(res.data.result);
@@ -129,7 +113,6 @@ function handleDialogConfirm() {
     });
     return;
   }
-  // showCommentInput.value = false;
   uploadCommemt({
     productId: selectedProductId.value,
     content: comment.value,
@@ -173,13 +156,13 @@ function parseState(stateStr: string): string {
 </script>
 
 <template>
-  <el-main class="main">
+  <el-main class="main-without-aside">
     <el-row justify="center">
       <div class="customer-title">在这里查看您下的订单</div>
     </el-row>
     <div v-for="order in orderList">
       <el-row justify="center">
-        <el-card style="width: 800px" class="card" shadow="never">
+        <el-card class="common-card" shadow="never">
           <template #header>
             <el-row>
               <el-col :span="21">
@@ -273,18 +256,5 @@ function parseState(stateStr: string): string {
 
 
 <style scoped>
-.main {
-  position: absolute;
-  right: 0;
-  left: 0;
-  top: 52px;
-  bottom: 0;
-  overflow-y: scroll;
-}
-
-.card {
-  margin: 5px;
-}
-
 
 </style>

@@ -50,11 +50,12 @@ function logout() {
         :ellipsis-icon="Menu"
         :ellipsis="false"
     >
-      <el-menu-item index="/homePage"><img
-          style="width: 30px"
-          src="/src/assets/blueWhale.svg"
-          alt="Element logo"
-      />&nbsp;&nbsp; 首页&nbsp;
+      <el-menu-item index="/homePage">
+        <img
+            class="bw-icon"
+            src="/src/assets/blueWhale.svg"
+            alt="Element logo"
+        />&nbsp;&nbsp; 首页&nbsp;
       </el-menu-item>
 
       <el-menu-item index="/search">
@@ -147,5 +148,8 @@ function logout() {
   height: 50px;
 }
 
+.bw-icon{
+  width: 30px;
+}
 
 </style>

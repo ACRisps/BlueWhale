@@ -229,16 +229,15 @@ function couponContentFormatter(row: any) {
                   </el-button>
                 </template>
                 <template #default="scope">
-                  <el-icon v-if="scope.row==currentRow" style="" :size="20">
+                  <el-icon v-if="scope.row==currentRow" :size="20">
                     <CircleCheckFilled/>
                   </el-icon>
 
-                  <el-icon v-else style="" :size="20">
+                  <el-icon v-else :size="20">
                     <CirclePlus/>
                   </el-icon>
                 </template>
               </el-table-column>
-              <!--              <el-table-column type="selection"/>-->
             </el-table>
           </el-row>
         </el-collapse-item>
