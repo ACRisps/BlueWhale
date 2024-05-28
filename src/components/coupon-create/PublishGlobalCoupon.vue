@@ -6,35 +6,30 @@ import "../../style/base.css"
 
 //按钮的可用性
 const CreateDisabled = computed(() => {
-  if (couponType.value=='FULL_REDUCTION')
-  {
-    return !(hasTimeArray.value&&hasFull.value && hasReduction.value && full.value != null
-        && reduction.value != null && couponNum.value != null && hasCoupon.value&&timeArray.value!=null);
-  }else {
-    return !(couponNum.value != null && hasCoupon.value&&hasTimeArray.value&&timeArray.value!=null)
-  }
+  return !(hasFull&&hasTimeArray&&hasReduction&&timeArray.value!=null&&full.value!=null
+      &&reduction.value!=null&&couponNum.value!=null&&hasCoupon);
 });
 const isTimeArrayInput = computed(()=>{
-  if ((hasTimeArray.value&&timeArray.value!=null))
+  if ((hasTimeArray&&timeArray.value!=null))
   {
     return true;
   }
 })
 const isFullInput = computed(()=>{
-  if (hasFull.value&&full.value!=null)
+  if (hasFull&&full.value!=null)
   {
     return true;
   }
 })
 const isReductionInput = computed(()=>{
-  if (hasReduction.value&&reduction.value!=null)
+  if (hasReduction&&reduction.value!=null)
   {
     return true;
   }
 })
 const isCouponNumInput = computed(()=>{
 
-  if (hasCoupon.value&&couponNum.value!=null)
+  if (hasCoupon&&couponNum.value!=null)
   {
     return true;
   }

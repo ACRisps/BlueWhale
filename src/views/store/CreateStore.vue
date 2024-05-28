@@ -10,25 +10,10 @@ const CreateDisabled = computed(() => {
   return !(hasIntro.value&&hasAddress.value&&hasName.value&&storeIntro.value!=null&&storeName.value!=null
   &&storeAddress.value!=null);
 });
-const isAddressInput = computed(()=>
-{
-  if (hasAddress.value&&storeAddress.value!=null)
+const isInput = computed(()=>{
+  if (hasName||hasAddress||hasIntro)
   {
-    return true
-  }
-})
-const isNameInput = computed(()=>
-{
-  if (hasName.value&&storeName.value!=null)
-  {
-    return true
-  }
-})
-const isIntroInput = computed(()=>
-{
-  if (hasIntro.value&&storeIntro.value!=null)
-  {
-    return true
+    return true;
   }
 })
 //判断是否为空
@@ -146,20 +131,20 @@ function handleStoreInfo() {
         </el-form-item>
 
         <el-form-item label="商店名称">
-          <label v-if="storeName!=null&&!isNameInput" for="name" class="error-warn">
+          <label v-if="!hasName&&isInput" for="name" class="error-warn">
             商店名为空
           </label>
           <el-input v-model="storeName" class="input" placeholder="给商店取个好听的名字" clearable/>
         </el-form-item>
         <el-form-item label="商店地址">
-          <label v-if="storeAddress!=null&&!isAddressInput" for="address" class="error-warn">
+          <label v-if="!hasAddress&&isInput" for="address" class="error-warn">
             商店地址为空
           </label>
           <el-input v-model="storeAddress" class="input" placeholder="在这里写下商店地址"
                     type="textarea" :rows="2" resize="none"/>
         </el-form-item>
         <el-form-item label="商店简介">
-        <label v-if="storeIntro!=null&&!isIntroInput" for="intro" class="error-warn">
+          <label v-if="!hasIntro&&isInput" for="intro" class="error-warn">
             商店简介为空
           </label>
           <el-input v-model="storeIntro" class="input" placeholder="在这里写下商店简介"
