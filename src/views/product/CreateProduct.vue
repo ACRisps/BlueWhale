@@ -75,10 +75,11 @@ function resetImgCache() {
 function clearCache() {
   imgURLs.value = [];
   imageFileList.value = [];
-  productName.value = '';
-  productIntro.value = '';
-  productType.value = '';
+  productName.value = null;
+  productIntro.value = null;
+  productType.value = null;
   price.value = null;
+  number.value = null;
 }
 
 function handleExceed() {
@@ -152,8 +153,9 @@ function handleProductInfo() {
 
           <label v-if="!hasProductName" for="name" class="error-warn">
             商品名称为空
+
           </label>
-          <el-input v-model="productName" class="input" placeholder="商品名" clearable/>
+          <el-input v-model="productName" :class="{'error-warn-input' :!hasProductName}" class="input" placeholder="商品名" clearable/>
         </el-form-item>
 
         <el-form-item label="商品价格">
@@ -165,7 +167,7 @@ function handleProductInfo() {
           <label v-else-if="!priceLogic" for="price" class="error-warn" >
             价格格式不合法
           </label>
-          <el-input v-model="price" class="input" placeholder="多少钱？单位：元"
+          <el-input v-model="price" class="input" :class="{'error-warn-input' :!hasProductPrice||(!priceLogic&&hasProductPrice&&is_price)}"placeholder="多少钱？单位：元"
                     type="textarea" :rows="1" resize="none"/>
         </el-form-item>
 
@@ -192,14 +194,14 @@ function handleProductInfo() {
           <label v-else-if="!numberLogic" for="number" class="error-warn" >
             数量格式不合法
           </label>
-          <el-input v-model="number" class="input" placeholder="现有库存数"
+          <el-input v-model="number" class="input" :class="{'error-warn-input' :!hasProductNumber||(!numberLogic&&is_number&&hasProductNumber)}"placeholder="现有库存数"
                     type="textarea" :rows="1" resize="none"/>
         </el-form-item>
         <el-form-item label="商品简介">
           <label v-if="!hasProductIntro" for="price" class="error-warn">
             商品简介为空
           </label>
-          <el-input v-model="productIntro" class="input" placeholder="在这里写下商品简介"
+          <el-input v-model="productIntro" class="input" :class="{'error-warn-input' :!hasProductIntro}" placeholder="在这里写下商品简介"
                     type="textarea" :rows="5" resize="none"/>
         </el-form-item>
 
@@ -227,5 +229,7 @@ function handleProductInfo() {
 .error-warn {
   color: #f89898;
 }
-
+.error-warn-input {
+  --el-input-focus-border-color: red;
+}
 </style>

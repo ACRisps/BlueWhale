@@ -61,9 +61,9 @@ function resetImgCache() {
 function clearCache() {
   imgURLs.value = [];
   imageFileList.value = [];
-  storeName.value = '';
-  storeIntro.value = '';
-  storeAddress.value = '';
+  storeName.value = null;
+  storeIntro.value = null;
+  storeAddress.value = null;
 }
 
 function handleExceed() {
@@ -134,20 +134,20 @@ function handleStoreInfo() {
           <label v-if="!hasName&&isInput" for="name" class="error-warn">
             商店名为空
           </label>
-          <el-input v-model="storeName" class="input" placeholder="给商店取个好听的名字" clearable/>
+          <el-input v-model="storeName" class="input" :class="{'error-warn-input' :!hasName&&isInput}" placeholder="给商店取个好听的名字" clearable/>
         </el-form-item>
         <el-form-item label="商店地址">
           <label v-if="!hasAddress&&isInput" for="address" class="error-warn">
             商店地址为空
           </label>
-          <el-input v-model="storeAddress" class="input" placeholder="在这里写下商店地址"
+          <el-input v-model="storeAddress" class="input" :class="{'error-warn-input' :!hasAddress&&isInput}" placeholder="在这里写下商店地址"
                     type="textarea" :rows="2" resize="none"/>
         </el-form-item>
         <el-form-item label="商店简介">
           <label v-if="!hasIntro&&isInput" for="intro" class="error-warn">
             商店简介为空
           </label>
-          <el-input v-model="storeIntro" class="input" placeholder="在这里写下商店简介"
+          <el-input v-model="storeIntro" class="input" :class="{'error-warn-input' :!hasIntro&&isInput}" placeholder="在这里写下商店简介"
                     type="textarea" :rows="5" resize="none"/>
         </el-form-item>
 
@@ -181,5 +181,8 @@ function handleStoreInfo() {
 
 .error-warn {
   color: #f89898;
+}
+.error-warn-input {
+  --el-input-focus-border-color: red;
 }
 </style>
