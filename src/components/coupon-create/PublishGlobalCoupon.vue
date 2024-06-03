@@ -6,30 +6,35 @@ import "../../style/base.css"
 
 //按钮的可用性
 const CreateDisabled = computed(() => {
-  return !(hasFull&&hasTimeArray&&hasReduction&&timeArray.value!=null&&full.value!=null
-      &&reduction.value!=null&&couponNum.value!=null&&hasCoupon);
+  if (couponType.value == 'FULL_REDUCTION'){
+    return !(hasFull.value && hasTimeArray.value && hasReduction.value && timeArray.value != null && full.value != null
+        && reduction.value != null && couponNum.value != null && hasCoupon.value&&couponNumLogic.value&&fullLogic.value&&reductionLogic.value);
+  }else {
+    return !( hasTimeArray.value  && timeArray.value != null
+       && couponNum.value != null && hasCoupon.value&&couponNumLogic.value);
+  }
 });
 const isTimeArrayInput = computed(()=>{
-  if ((hasTimeArray&&timeArray.value!=null))
+  if (timeArray.value!=null)
   {
     return true;
   }
 })
 const isFullInput = computed(()=>{
-  if (hasFull&&full.value!=null)
+  if (full.value!=null)
   {
     return true;
   }
 })
 const isReductionInput = computed(()=>{
-  if (hasReduction&&reduction.value!=null)
+  if (reduction.value!=null)
   {
     return true;
   }
 })
 const isCouponNumInput = computed(()=>{
 
-  if (hasCoupon&&couponNum.value!=null)
+  if (couponNum.value!=null)
   {
     return true;
   }
@@ -142,7 +147,9 @@ function handleCouponInfo() {
           <label v-else-if="!fullLogic&&isFullInput" for="full" class="error-warn">
             金额不合法
           </label>
-          <el-input v-model="full" class="input" placeholder="满多少 （单位：元）"
+          <el-input v-model="full" class="input" :class="{'error-warn-input' :(!hasFull&&isFullInput)||(
+
+          !fullLogic&&isFullInput)}" placeholder="满多少 （单位：元）"
                     type="number"/>
         </el-form-item>
         <el-form-item label="折扣金额" v-if="couponType=='FULL_REDUCTION'">
@@ -153,7 +160,9 @@ function handleCouponInfo() {
           <label v-else-if="!reductionLogic&&isReductionInput" for="time" class="error-warn">
             折扣金额不合法
           </label>
-          <el-input v-model="reduction" class="input" placeholder="减多少 （单位：元）"
+          <el-input v-model="reduction" class="input" :class="{'error-warn-input' :(!hasReduction&&isReductionInput)||(
+
+          !reductionLogic&&isReductionInput)}" placeholder="减多少 （单位：元）"
                     type="number"/>
         </el-form-item>
         <el-form-item label="优惠券数">
@@ -164,7 +173,9 @@ function handleCouponInfo() {
           <label v-else-if="!couponNumLogic&&isCouponNumInput" for="couponNum" class="error-warn">
             优惠券数不合法
           </label>
-          <el-input v-model="couponNum" class="input" placeholder="发多少张"
+          <el-input v-model="couponNum"  :class="{'error-warn-input' :(!hasCoupon&&isCouponNumInput)||(
+
+          !couponNumLogic&&isCouponNumInput)}" class="input" placeholder="发多少张"
                     type="number"/>
         </el-form-item>
         <el-row justify="center">
@@ -185,6 +196,9 @@ function handleCouponInfo() {
 <style scoped>
 .input {
   width: 500px;
+}
+.error-warn-input {
+  --el-input-focus-border-color: red;
 }
 .error-warn {
   color: #f89898;

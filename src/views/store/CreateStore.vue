@@ -11,7 +11,7 @@ const CreateDisabled = computed(() => {
   &&storeAddress.value!=null);
 });
 const isInput = computed(()=>{
-  if (hasName||hasAddress||hasIntro)
+  if (hasName.value||hasAddress.value||hasIntro.value)
   {
     return true;
   }
