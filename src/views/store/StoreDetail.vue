@@ -111,8 +111,8 @@ function getCouponCnt() {
       <el-row justify="center" align="middle" style="margin-top: 10px;margin-bottom: 20px">
         <el-col :span="1"></el-col>
         <el-col :span="3" style="text-align: center">
-          <el-button circle>
-            <el-icon @click="router.push('/allStore')" :size="20">
+          <el-button circle @click="router.push('/allStore')">
+            <el-icon  :size="20">
               <ArrowLeft/>
             </el-icon>
           </el-button>

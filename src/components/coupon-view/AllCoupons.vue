@@ -2,7 +2,7 @@
 import {onMounted, ref} from "vue";
 import {couponsInfo} from "../../api/coupon.ts";
 import {progressColors} from "../../style/style.ts";
-import "../../style/base.css"
+import "../../style/base.css";
 
 const couponData = ref();
 
@@ -66,7 +66,7 @@ function couponContentFormatter(row: any) {
         <el-table-column label="领取状态">
           <template #default="scope">
             <el-progress :percentage="scope.row.allCouponNum==0?0:scope.row.currentCouponNum*100/scope.row.allCouponNum"
-                         :color="progressColors">
+                         :color="progressColors" style="width: 90%;margin: auto">
               <el-text size="small">{{ scope.row.currentCouponNum }} / {{ scope.row.allCouponNum }}</el-text>
             </el-progress>
 
@@ -101,7 +101,7 @@ function couponContentFormatter(row: any) {
 <style scoped>
 
 .coupon-table {
-  width: 60%;
+  width: 70%;
   margin: 20px;
 }
 

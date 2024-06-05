@@ -137,13 +137,13 @@ function handleDialogConfirm() {
 
 function parseState(stateStr: string): string {
   if (stateStr == 'UNPAID') {
-    return '已下单&未支付';
+    return '已下单，等待支付';
   } else if (stateStr == 'UNSEND') {
-    return '已支付&未发货';
+    return '已支付，等待发货';
   } else if (stateStr == 'UNGET') {
-    return '已发货&未签收';
+    return '已发货，等待签收';
   } else if (stateStr == 'UNCOMMENT') {
-    return '已签收&未评价';
+    return '已签收，等待您的评价';
   } else if (stateStr == 'DONE') {
     return '订单已完成';
   } else if (stateStr == 'CANCEL') {
@@ -164,17 +164,20 @@ function parseState(stateStr: string): string {
         <el-card class="common-card" shadow="never">
           <template #header>
             <el-row align="middle">
-              <el-col :span="21">
+              <el-col :span="16">
                 <el-text size="large" >{{ order.productName }}</el-text>
                 <el-text>&nbsp;*{{ order.productNumber }}</el-text>
               </el-col>
-              <el-col :span="3" style="text-align: center">
+              <el-col :span="8" style="text-align: end" >
                 <el-button type="primary" v-if="order.state=='UNCOMMENT'"
                            @click="handleToCommentButton(order.orderSerialNumber,order.productId)">评论
                 </el-button>
                 <el-button type="primary" v-else-if="order.state=='UNGET'"
                            @click="handleToGet(order.orderSerialNumber)">签收
                 </el-button>
+<!--                <el-button type="danger" v-else-if="order.state=='UNPAID'"-->
+<!--                           @click="console.log(order.orderSerialNumber)">取消-->
+<!--                </el-button>-->
                 <el-button type="primary" v-else-if="order.state=='UNPAID'"
                            @click="handleToPay(order.orderSerialNumber)">支付
                 </el-button>

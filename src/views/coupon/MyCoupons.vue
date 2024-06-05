@@ -3,7 +3,7 @@ import {onMounted, ref} from "vue";
 import {userCouponsInfo,} from "../../api/coupon.ts";
 import {ArrowRight} from "@element-plus/icons-vue";
 import {router} from "../../router";
-
+import "../../style/base.css"
 const couponData = ref();
 
 const currentPage = ref(1);
@@ -54,7 +54,7 @@ function couponContentFormatter(row: any) {
 <template>
   <el-main>
     <el-row justify="center">
-      <div class="title">在这里查看已领取的优惠券</div>
+      <div class="customer-title">在这里查看已领取的优惠券 (●'◡'●)</div>
     </el-row>
     <el-row justify="center">
       <el-table :data="couponData" class="coupon-table" :cell-style="{'text-align':'center'}"
@@ -105,12 +105,5 @@ function couponContentFormatter(row: any) {
 .coupon-table {
   width: 60%;
   margin: 20px;
-}
-
-.title {
-  margin-top: 10px;
-  margin-bottom: 40px;
-  font-size: large;
-  color: cornflowerblue;
 }
 </style>

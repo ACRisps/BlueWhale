@@ -1,21 +1,22 @@
 .admin-title {
-    margin-top: 10px;
+    margin-top: 20px;
     margin-bottom: 40px;
     font-size: large;
     color: mediumpurple;
 }
 
 .staff-title {
-    margin-top: 10px;
+    margin-top: 20px;
     margin-bottom: 40px;
     font-size: large;
     color: darkgreen;
 }
 
 .customer-title {
-    margin-top: 10px;
+    margin-top: 20px;
     margin-bottom: 40px;
     font-size: large;
+    /*font-family: serif;*/
     color: cornflowerblue;
 }
 

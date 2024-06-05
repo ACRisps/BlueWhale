@@ -4,11 +4,11 @@ import {ArrowRight, Goods, Search} from "@element-plus/icons-vue";
 import {router} from "../router";
 
 const toSearch = () => {
-  router.push("/search");
+  router.push({path: "/search"});
 };
 
 const toAllStore = () => {
-  router.push("/allStore");
+  router.push({path: "/allStore"});
 };
 
 </script>
@@ -56,12 +56,5 @@ const toAllStore = () => {
 </template>
 
 <style scoped>
-.bg-image {
-  background-image: url("../assets/shopping-1s-1084px.svg");
 
-}
-
-.bg-cover {
-  background-color: rgba(256, 256, 256, 0.7);
-}
 </style>

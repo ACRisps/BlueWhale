@@ -5,7 +5,7 @@ import {uploadCouponInfo} from "../../api/coupon.ts";
 import "../../style/base.css"
 
 //按钮的可用性
-const CreateDisabled = computed(() => {
+const createDisabled = computed(() => {
   if (couponType.value == 'FULL_REDUCTION'){
     return !(hasFull.value && hasTimeArray.value && hasReduction.value && timeArray.value != null && full.value != null
         && reduction.value != null && couponNum.value != null && hasCoupon.value&&couponNumLogic.value&&fullLogic.value&&reductionLogic.value);
@@ -181,7 +181,7 @@ function handleCouponInfo() {
         <el-row justify="center">
           <el-col :span="3"/>
           <el-col :span="5">
-            <el-button type="primary" @click="handlePublish" :disabled="CreateDisabled" :loading="loading"
+            <el-button type="primary" @click="handlePublish" :disabled="createDisabled" :loading="loading"
             >点击创建
             </el-button>
           </el-col>

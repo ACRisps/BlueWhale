@@ -3,7 +3,7 @@ import {computed, ref} from 'vue';
 import {userInfo, userInfoUpdate} from '../../api/user.ts';
 import {parseRole, parseTime} from "../../utils";
 import {router} from '../../router';
-// import {UserFilled} from "@element-plus/icons-vue";
+import "../../style/base.css";
 
 const role = sessionStorage.getItem("role");
 const name = ref('');
@@ -97,15 +97,12 @@ function updatePassword() {
 
 <template>
   <el-main class="main-container">
-    <el-card class="aside-card">
+    <el-card class="aside-card radius1" shadow="never">
       <div class="avatar-area">
-        <!--        <el-avatar :icon="UserFilled" :size="80">-->
-        <!--          {{name}}-->
-        <!--        </el-avatar>-->
         <el-avatar :size="80">
           {{ name }}
         </el-avatar>
-        <span class="avatar-text"> 欢迎您，{{ name }}</span>
+        <span class="avatar-text"> 欢迎，{{ name }}</span>
       </div>
 
       <el-divider></el-divider>
@@ -145,7 +142,7 @@ function updatePassword() {
       </el-descriptions>
     </el-card>
 
-    <el-card v-if="displayInfoCard" class="change-card">
+    <el-card v-if="displayInfoCard" class="change-card radius1" shadow="never">
       <template #header>
         <div class="card-header">
           <span>个人信息</span>
@@ -173,7 +170,7 @@ function updatePassword() {
       </el-form>
     </el-card>
 
-    <el-card v-if="!displayInfoCard" class="change-card">
+    <el-card v-if="!displayInfoCard" class="change-card radius1" shadow="never">
       <template #header>
         <div class="card-header">
           <span>修改密码</span>
@@ -222,6 +219,12 @@ function updatePassword() {
   justify-content: center;
 }
 
+.aside-card{
+  width: 25%;
+  height: 60%;
+  margin: 20px 0;
+}
+
 .card-header {
   display: flex;
   align-items: center;
@@ -229,7 +232,9 @@ function updatePassword() {
 }
 
 .change-card {
-  width: 66%;
+  width: 50%;
+  margin: 20px;
+  height: 90%;
 }
 
 .avatar-area {
@@ -242,7 +247,7 @@ function updatePassword() {
 .avatar-text {
   font-size: x-large;
   font-weight: bolder;
-  padding-right: 40px;
+  margin-right: auto;
 }
 
 

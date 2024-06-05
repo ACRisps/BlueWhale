@@ -89,7 +89,7 @@ function handleRegister() {
   <el-main class="main-frame bg-image">
     <el-card class="login-card">
       <div>
-        <h1>创建一个新的账户</h1>
+        <h1>创建新的账户</h1>
 
         <el-form>
           <el-row>

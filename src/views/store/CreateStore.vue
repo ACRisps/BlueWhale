@@ -1,28 +1,24 @@
 <!--Lab2新增-创建商店界面-->
 <script setup lang="ts">
-import {ref,computed} from 'vue';
+import {ref, computed} from 'vue';
 import {uploadImage} from '../../api/tools';
 import {uploadStoreInfo} from '../../api/store.ts';
 
 import {UploadFilled} from "@element-plus/icons-vue";
 //按钮是否可用
-const CreateDisabled = computed(() => {
-  return !(hasIntro.value&&hasAddress.value&&hasName.value&&storeIntro.value!=null&&storeName.value!=null
-  &&storeAddress.value!=null);
+const createDisabled = computed(() => {
+  return !(hasIntro.value && hasAddress.value && hasName.value && storeIntro.value != null && storeName.value != null
+      && storeAddress.value != null);
 });
-const isInput = computed(()=>{
-  if (hasName.value||hasAddress.value||hasIntro.value)
-  {
+const isInput = computed(() => {
+  if (hasName.value || hasAddress.value || hasIntro.value) {
     return true;
   }
-})
+});
 //判断是否为空
-const hasAddress = computed(()=>storeAddress.value!='')
-const hasName = computed(()=>storeName.value!='')
-const hasIntro = computed(()=>storeIntro.value!='')
-
-
-
+const hasAddress = computed(() => storeAddress.value != '');
+const hasName = computed(() => storeName.value != '');
+const hasIntro = computed(() => storeIntro.value != '');
 
 // v-model 绑定file-list
 const imageFileList = ref([] as any);
@@ -73,7 +69,6 @@ function handleExceed() {
 function uploadHttpRequest() {
   return new XMLHttpRequest();
 }
-
 
 function handleStoreInfo() {
   uploadStoreInfo({
@@ -134,27 +129,30 @@ function handleStoreInfo() {
           <label v-if="!hasName&&isInput" for="name" class="error-warn">
             商店名为空
           </label>
-          <el-input v-model="storeName" class="input" :class="{'error-warn-input' :!hasName&&isInput}" placeholder="给商店取个好听的名字" clearable/>
+          <el-input v-model="storeName" class="input" :class="{'error-warn-input' :!hasName&&isInput}"
+                    placeholder="给商店取个好听的名字" clearable/>
         </el-form-item>
         <el-form-item label="商店地址">
           <label v-if="!hasAddress&&isInput" for="address" class="error-warn">
             商店地址为空
           </label>
-          <el-input v-model="storeAddress" class="input" :class="{'error-warn-input' :!hasAddress&&isInput}" placeholder="在这里写下商店地址"
+          <el-input v-model="storeAddress" class="input" :class="{'error-warn-input' :!hasAddress&&isInput}"
+                    placeholder="在这里写下商店地址"
                     type="textarea" :rows="2" resize="none"/>
         </el-form-item>
         <el-form-item label="商店简介">
           <label v-if="!hasIntro&&isInput" for="intro" class="error-warn">
             商店简介为空
           </label>
-          <el-input v-model="storeIntro" class="input" :class="{'error-warn-input' :!hasIntro&&isInput}" placeholder="在这里写下商店简介"
+          <el-input v-model="storeIntro" class="input" :class="{'error-warn-input' :!hasIntro&&isInput}"
+                    placeholder="在这里写下商店简介"
                     type="textarea" :rows="5" resize="none"/>
         </el-form-item>
 
         <el-row justify="center">
           <el-col :span="3"/>
           <el-col :span="5">
-            <el-button type="primary" @click="handleChangeUltimate" :disabled="CreateDisabled" :loading="loading"
+            <el-button type="primary" @click="handleChangeUltimate" :disabled="createDisabled" :loading="loading"
             >点击创建
             </el-button>
           </el-col>
@@ -182,6 +180,7 @@ function handleStoreInfo() {
 .error-warn {
   color: #f89898;
 }
+
 .error-warn-input {
   --el-input-focus-border-color: red;
 }

@@ -137,7 +137,7 @@ function receiveCoupon(id: number) {
 <style scoped>
 
 .coupon-table {
-  width: 70%;
+  width: 80%;
   margin: 20px;
 }
 
