@@ -10,7 +10,7 @@ export type commentInfo = {
     [property: string]: any;
 }
 
-export const uploadCommemt = (payload: commentInfo) => {
+export const uploadCommemt = async (payload: commentInfo) => {
     return axios.post(`${ORDER_MODULE}/orderItems/comment`, payload,)
         .then(res => {
             return res;

@@ -29,12 +29,12 @@ export interface StoreInfoDetail {
     products: ProductInfo[];
     storeId: number;
     storeName: string;
-    grade: string
+    grade: string;
 
     [property: string]: any;
 }
 
-export const uploadStoreInfo = (payload: StoreInfo) => {
+export const uploadStoreInfo = async (payload: StoreInfo) => {
     return axios.post(`${STORE_MODULE}/create`, payload,)
         .then(res => {
             return res;
@@ -46,7 +46,7 @@ export const uploadStoreInfo = (payload: StoreInfo) => {
 };
 
 // 获取商店列表
-export const storesPageInfo = (page: number, size: number) => {
+export const storesPageInfo = async (page: number, size: number) => {
     return axios.get(`${STORE_MODULE}`, {params: {page: page, size: size}})
         .then(res => {
             return res;
@@ -56,7 +56,7 @@ export const storesPageInfo = (page: number, size: number) => {
         });
 };
 
-export const storeInfoDetail = (storeId: number) => {
+export const storeInfoDetail = async (storeId: number) => {
     return axios.get(`${STORE_MODULE}/getStoreDetail`, {params: {storeId: storeId}})
         .then(res => {
             return res;

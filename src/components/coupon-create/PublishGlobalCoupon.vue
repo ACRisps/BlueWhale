@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import {ref,computed} from 'vue';
-
 import {uploadCouponInfo} from "../../api/coupon.ts";
 import "../../style/base.css"
 

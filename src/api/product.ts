@@ -50,7 +50,7 @@ export type ProductSearchInfo = {
     [property: string]: any;
 }
 
-export const uploadProductInfo = (payload: ProductUploadInfo) => {
+export const uploadProductInfo = async (payload: ProductUploadInfo) => {
     return axios.post(`${PRODUCT_MODULE}/create`, payload,)
         .then(res => {
             return res;
@@ -61,7 +61,7 @@ export const uploadProductInfo = (payload: ProductUploadInfo) => {
         );
 };
 
-export const productInfoDetail = (productId: number) => {
+export const productInfoDetail = async (productId: number) => {
     return axios.get(`${PRODUCT_MODULE}/getProductDetail`, {params: {productId: productId}})
         .then(res => {
             return res;
@@ -71,7 +71,7 @@ export const productInfoDetail = (productId: number) => {
         });
 };
 
-export const uploadProductNumUpdate = (payload: ProductNumUpdateInfo) => {
+export const uploadProductNumUpdate = async (payload: ProductNumUpdateInfo) => {
     return axios.post(`${PRODUCT_MODULE}`, payload,)
         .then(res => {
             return res;
@@ -82,7 +82,7 @@ export const uploadProductNumUpdate = (payload: ProductNumUpdateInfo) => {
         );
 };
 
-export const searchProduct = (payload: ProductSearchInfo, page: number, size: number) => {
+export const searchProduct = async (payload: ProductSearchInfo, page: number, size: number) => {
     return axios.get(`${PRODUCT_MODULE}/select`, {
         params: {
             name: payload.name,
