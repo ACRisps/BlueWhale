@@ -5,7 +5,6 @@ import {uploadImage} from '../../api/tools';
 
 import {UploadFilled} from "@element-plus/icons-vue";
 import {uploadProductInfo} from "../../api/product.ts";
-
 import "../../style/base.css";
 
 // 创建商品按钮可用性
@@ -123,7 +122,7 @@ function handleProductInfo() {
 
 
 <template>
-  <el-main>
+  <el-main class="main-without-aside">
     <el-row justify="center">
       <div class="staff-title">在这里为您的商店创建商品</div>
     </el-row>

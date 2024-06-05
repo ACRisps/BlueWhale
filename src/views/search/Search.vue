@@ -160,10 +160,10 @@ function handleClearFilter() {
                    v-for="product in searchResult" shadow="hover">
             <template #header>
               <el-row>
-                <el-col :span="20">
+                <el-col :span="16">
                   <el-text line-clamp="1">{{ product.productName }}</el-text>
                 </el-col>
-                <el-col :span="4" style="text-align: center">
+                <el-col :span="8" style="text-align: end">
                   <el-text line-clamp="1">{{ product.price }}￥</el-text>
                 </el-col>
               </el-row>
@@ -201,15 +201,14 @@ function handleClearFilter() {
     </el-row>
 
     <el-row justify="center" v-else-if="showDetail">
-      <div>
-        <el-pagination
-            layout="prev, pager, next"
-            :page-count="Math.ceil(totalItems / pageSize)"
-            :current-page="currentPage"
-            @current-change="handlePageChange"
-            @size-change="handleSizeChange"
-        />
-      </div>
+      <div style="height: 90px"></div>
+      <el-pagination
+          layout="prev, pager, next"
+          :page-count="Math.ceil(totalItems / pageSize)"
+          :current-page="currentPage"
+          @current-change="handlePageChange"
+          @size-change="handleSizeChange"
+      />
     </el-row>
 
 
@@ -274,6 +273,9 @@ function handleClearFilter() {
       />
     </el-row>
     <el-row>
+      <div style="height: 10px"></div>
+    </el-row>
+    <el-row>
       <el-text>最高价格</el-text>
     </el-row>
     <el-row>
@@ -308,7 +310,6 @@ function handleClearFilter() {
       <Filter/>
     </el-icon>
   </el-button>
-
 
 
 </template>

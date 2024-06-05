@@ -165,19 +165,19 @@ function parseState(stateStr: string): string {
           <template #header>
             <el-row align="middle">
               <el-col :span="16">
-                <el-text size="large" >{{ order.productName }}</el-text>
+                <el-text size="large">{{ order.productName }}</el-text>
                 <el-text>&nbsp;*{{ order.productNumber }}</el-text>
               </el-col>
-              <el-col :span="8" style="text-align: end" >
+              <el-col :span="8" style="text-align: end">
                 <el-button type="primary" v-if="order.state=='UNCOMMENT'"
                            @click="handleToCommentButton(order.orderSerialNumber,order.productId)">评论
                 </el-button>
                 <el-button type="primary" v-else-if="order.state=='UNGET'"
                            @click="handleToGet(order.orderSerialNumber)">签收
                 </el-button>
-<!--                <el-button type="danger" v-else-if="order.state=='UNPAID'"-->
-<!--                           @click="console.log(order.orderSerialNumber)">取消-->
-<!--                </el-button>-->
+                <!--                <el-button type="danger" v-else-if="order.state=='UNPAID'"-->
+                <!--                           @click="console.log(order.orderSerialNumber)">取消-->
+                <!--                </el-button>-->
                 <el-button type="primary" v-else-if="order.state=='UNPAID'"
                            @click="handleToPay(order.orderSerialNumber)">支付
                 </el-button>
@@ -210,11 +210,12 @@ function parseState(stateStr: string): string {
                   {{ order.total }}￥
                 </el-text>
                 <el-text>{{ order.totalAfter }}￥</el-text>
-                <el-text>
-                  <el-tag type="primary" size="small" class="bind-reminder-tag" v-if="order.totalAfter!=order.total">
+                <el-text v-if="order.totalAfter!=order.total">
+                  <el-tag type="warning" size="small" class="bind-reminder-tag" v-if="order.bind">捆绑折扣</el-tag>
+                  <el-tag type="primary" size="small" class="bind-reminder-tag" v-else>
                     折扣
                   </el-tag>
-                  <el-tag type="warning" size="small" class="bind-reminder-tag" v-else-if="order.bind">捆绑折扣</el-tag>
+
                 </el-text>
               </el-row>
             </el-col>

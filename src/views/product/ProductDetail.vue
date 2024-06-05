@@ -11,6 +11,8 @@ import {parseTime} from "../../utils";
 import PayDialog from "../../components/pay/PayDialogPlus.vue";
 import {add2ShoppingCart} from "../../api/shopping-cart.ts";
 
+import "../../style/base.css";
+
 
 const productDetail = ref({} as ProductInfo);
 const grade = ref();
@@ -159,7 +161,7 @@ function handleAdd2Cart() {
       <el-row style="height: 40%"></el-row>
 
       <el-row justify="center" style="margin: 10px">
-        <el-text size="large">ONLY {{ productDetail.price }} ¥&nbsp;!
+        <el-text class="price-text">{{ productDetail.price }} ¥
         </el-text>
       </el-row>
       <el-row justify="center" style="margin-top: 20px">
@@ -184,7 +186,7 @@ function handleAdd2Cart() {
     <el-main class="page-main">
       <el-row justify="center">
         <el-col :span="24" v-for="url in productDetail.imgURLs" style="text-align: center">
-          <el-image :src="url" alt="" :fit="'cover'" class="img"/>
+          <el-image :src="url" alt="" :fit="'cover'" class="img radius0"/>
         </el-col>
       </el-row>
       <el-row justify="center">
@@ -197,21 +199,21 @@ function handleAdd2Cart() {
           </el-text>
         </el-divider>
       </el-row>
-      <el-row>
-        <el-col :span="24" v-for="comment in productDetail.productComments" class="comment-box">
-          <el-row justify="center">
-            <el-text>{{ comment.userName }}&nbsp;&nbsp;&nbsp;&nbsp;{{ parseTime(comment.createTime) }}&nbsp;&nbsp;&nbsp;&nbsp;{{
-                comment.grade
-              }}⭐
-            </el-text>
-          </el-row>
-          <el-row justify="center">
-            <el-text line-clamp="3" style="max-width: 50%">
-              {{ comment.content }}
-            </el-text>
-          </el-row>
-        </el-col>
-      </el-row>
+
+      <div v-for="comment in productDetail.productComments" class="comment-box radius0">
+        <el-row justify="center">
+          <el-text>{{ comment.userName }}&nbsp;&nbsp;&nbsp;&nbsp;{{ parseTime(comment.createTime) }}&nbsp;&nbsp;&nbsp;&nbsp;{{
+              comment.grade
+            }}⭐
+          </el-text>
+        </el-row>
+        <el-row justify="center">
+          <el-text line-clamp="3" style="max-width: 70%">
+            {{ comment.content }}
+          </el-text>
+        </el-row>
+      </div>
+
       <el-backtop style="position: fixed; right: 30px;bottom: 160px" :visibility-height="100" target=".page-main"/>
     </el-main>
   </el-container>
@@ -249,8 +251,11 @@ function handleAdd2Cart() {
 }
 
 .comment-box {
+  width: 70%;
   text-align: center;
-  margin: 10px;
+  margin: 12px auto;
+  padding: 6px;
+  background-color: aliceblue;
 }
 
 .comment-title-text {
@@ -289,5 +294,10 @@ function handleAdd2Cart() {
   height: 500px;
   width: 600px;
   margin: 20px;
+}
+
+.price-text {
+  font-size: x-large;
+  font-family: fantasy;
 }
 </style>

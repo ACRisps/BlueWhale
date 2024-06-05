@@ -5,6 +5,8 @@ import {uploadImage} from '../../api/tools';
 import {uploadStoreInfo} from '../../api/store.ts';
 
 import {UploadFilled} from "@element-plus/icons-vue";
+import "../../style/base.css";
+
 //按钮是否可用
 const createDisabled = computed(() => {
   return !(hasIntro.value && hasAddress.value && hasName.value && storeIntro.value != null && storeName.value != null
@@ -100,7 +102,7 @@ function handleStoreInfo() {
 
 
 <template>
-  <el-main>
+  <el-main class="main-without-aside">
     <el-row justify="center">
       <div class="title">在这里创建新商店</div>
     </el-row>

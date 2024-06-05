@@ -312,7 +312,7 @@ function handleClose() {
                         :header-cell-style="{'text-align':'center',height:'50px'}"
                         empty-text="暂无可用优惠 >_<"
                         @row-click="row=>handleRowSelect(row)" :row-class-name="tableRowClassName"
-                        max-height="250">
+                        max-height="200">
                 <el-table-column prop="couponType" label="优惠类型" :formatter="couponTypeFormatter"/>
                 <el-table-column prop="expiredTime" label="截止日期"/>
                 <el-table-column label="折扣明细" :formatter="couponContentFormatter"/>
@@ -356,7 +356,7 @@ function handleClose() {
         <el-table :data="payDetailedInfo?.coupons" style="width: 72%" :cell-style="{'text-align':'center'}"
                   :header-cell-style="{'text-align':'center',height:'50px'}"
                   empty-text="暂无可用优惠 >_<" :row-class-name="tableRowClassName"
-                  @row-click="row=>handleRowSelect(row)" max-height="250">
+                  @row-click="row=>handleRowSelect(row)" max-height="240">
           <el-table-column prop="couponType" label="优惠类型" :formatter="couponTypeFormatter"/>
           <el-table-column prop="expiredTime" label="截止日期"/>
           <el-table-column label="折扣明细" :formatter="couponContentFormatter"/>
