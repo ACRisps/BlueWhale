@@ -11,7 +11,7 @@ export type commentInfo = {
 }
 
 export const uploadComment = async (payload: commentInfo) => {
-    return axios.post(`${COMMENT_MODULE}/addComment`, payload,)
+    return axios.post(`${COMMENT_MODULE}`, payload,)
         .then(res => {
             return res;
         })
