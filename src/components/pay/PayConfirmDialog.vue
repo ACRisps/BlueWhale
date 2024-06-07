@@ -67,7 +67,13 @@ function handlePayComplete() {
     </el-row>
     <template #footer>
       <div class="dialog-footer" style="margin-top: 5px">
-        <el-button type="primary" @click="toPay" :disabled="loading">付款</el-button>
+        <el-button type="primary" @click="toPay" :disabled="loading">
+          <img style="width: 20px"
+               src="/src/assets/alipay.svg"
+               alt="alipay"
+          />
+          &nbsp;付款
+        </el-button>
       </div>
     </template>
   </el-dialog>

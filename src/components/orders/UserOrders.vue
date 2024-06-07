@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import {onMounted, ref} from 'vue';
 import {type OrderItemsInfo, orderItemPageInfo, orderItemGet} from '../../api/order-item.ts';
-import {uploadCommemt} from "../../api/comment.ts";
+import {uploadComment} from "../../api/comment.ts";
 import "../../style/base.css";
 import ConfirmDialog from "../pay/PayConfirmDialog.vue";
 import {getMultiOrder} from "../../api/order.ts";
@@ -112,7 +112,7 @@ function handleDialogConfirm() {
     });
     return;
   }
-  uploadCommemt({
+  uploadComment({
     productId: selectedProductId.value,
     content: comment.value,
     orderSerialNumber: selectedOrderSerial.value,

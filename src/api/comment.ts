@@ -1,5 +1,5 @@
 import {axios} from "../utils/request.ts";
-import {ORDER_MODULE} from "./_prefix.ts";
+import {COMMENT_MODULE} from "./_prefix.ts";
 
 
 export type commentInfo = {
@@ -10,8 +10,8 @@ export type commentInfo = {
     [property: string]: any;
 }
 
-export const uploadCommemt = async (payload: commentInfo) => {
-    return axios.post(`${ORDER_MODULE}/orderItems/comment`, payload,)
+export const uploadComment = async (payload: commentInfo) => {
+    return axios.post(`${COMMENT_MODULE}/addComment`, payload,)
         .then(res => {
             return res;
         })

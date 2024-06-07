@@ -9,6 +9,8 @@ export const STORE_MODULE = `${API_MODULE}/stores`;
 //商品模块
 export const PRODUCT_MODULE = `${API_MODULE}/products`;
 
+export const COMMENT_MODULE = `${API_MODULE}/comment`;
+
 export const ORDER_MODULE = `${API_MODULE}/orders`;
 
 export const PAY_MODULE = `${API_MODULE}/pay`;

@@ -72,7 +72,7 @@ export const productInfoDetail = async (productId: number) => {
 };
 
 export const uploadProductNumUpdate = async (payload: ProductNumUpdateInfo) => {
-    return axios.post(`${PRODUCT_MODULE}`, payload,)
+    return axios.post(`${PRODUCT_MODULE}`, payload)
         .then(res => {
             return res;
         })
